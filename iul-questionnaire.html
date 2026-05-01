@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldLife — IUL Planning Questionnaire</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+:root{
+  --bg:#f7f5f0;--white:#fff;--text:#1a1714;--muted:#6b6560;
+  --border:#ddd9d2;--border2:#c8c3bb;
+  --accent:#1a3a6b;--al:#e8eef8;--al2:#d0dcf5;
+  --gold:#b8832a;--gl:#fdf4e3;
+  --green:#1a6b3a;--grl:#e8f4ed;
+  --red:#c0392b;--purple:#6b3fa0;--pl:#f0eaf8;
+  --teal:#0d7377;--tl:#e0f5f5;
+  --shadow:0 2px 16px rgba(0,0,0,.08)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--accent);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff}
+.hdr-tag{font-size:11px;color:rgba(255,255,255,.65);letter-spacing:1px;text-transform:uppercase}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0e2244 0%,#1a3a6b 50%,#6b3fa0 100%);padding:48px 32px 64px;text-align:center;color:#fff}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:38px;line-height:1.2;margin-bottom:10px}
+.hero-title em{font-style:italic;color:#c9b88a}
+.hero-sub{font-size:14px;opacity:.75;max-width:520px;margin:0 auto 22px;line-height:1.7}
+.hero-features{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.hf{display:flex;align-items:center;gap:6px;font-size:12px;opacity:.7;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:20px}
+
+/* PROGRESS */
+.prog-wrap{max-width:760px;margin:0 auto;padding:0 16px}
+.prog-outer{height:5px;background:var(--border);border-radius:3px;margin:20px 0 0}
+.prog-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;transition:width .4s ease}
+.steps-row{display:flex;justify-content:space-between;margin-top:10px}
+.sd{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.sd-circle{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--muted);transition:all .3s}
+.sd.done .sd-circle{background:var(--green);border-color:var(--green);color:#fff}
+.sd.active .sd-circle{background:var(--accent);border-color:var(--accent);color:#fff}
+.sd-label{font-size:9px;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+
+/* FORM */
+.fw{max-width:760px;margin:-28px auto 52px;padding:0 16px}
+.fc{background:var(--white);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.sh{padding:22px 28px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.sn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.st{font-size:16px;font-weight:600}
+.ss{font-size:12px;color:var(--muted);margin-top:2px}
+.sb{padding:24px 28px}
+
+/* FIELDS */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.f label{font-size:11px;font-weight:600;color:var(--text);letter-spacing:.4px;text-transform:uppercase}
+.req{color:var(--red);margin-left:2px}
+.f input,.f select,.f textarea{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,58,107,.07)}
+.f input::placeholder,.f textarea::placeholder{color:#bbb}
+.f textarea{resize:vertical;min-height:72px}
+.ferr{font-size:11px;color:var(--red);margin-top:3px;display:none}
+
+/* SECTION */
+.sdiv{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:7px;margin:20px 0 14px;display:flex;align-items:center;gap:8px}
+.sdiv::before{content:'';width:3px;height:14px;background:linear-gradient(var(--accent),var(--purple));border-radius:2px;display:inline-block}
+
+/* YES/NO */
+.yn{display:flex;gap:8px;margin-top:5px}
+.yn-btn{padding:8px 22px;border-radius:7px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--white);color:var(--muted)}
+.yn-btn:hover{border-color:var(--accent);color:var(--accent)}
+.yn-btn.yes.selected{background:var(--grl);border-color:var(--green);color:var(--green)}
+.yn-btn.no.selected{background:#fdf0ee;border-color:var(--red);color:var(--red)}
+
+/* EXPAND */
+.expbox{background:#f9f8f5;border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-top:10px;display:none}
+.expbox.show{display:block}
+
+/* INFO BOXES */
+.info{background:var(--al);border:1px solid var(--al2);border-radius:9px;padding:12px 15px;font-size:12px;color:var(--accent);line-height:1.65;margin-bottom:14px}
+.info strong{font-weight:600}
+.tip{background:var(--gl);border:1px solid #e8d5a0;border-radius:9px;padding:12px 15px;font-size:12px;color:#7a5a10;line-height:1.65;margin-bottom:14px}
+.purple-box{background:var(--pl);border:1px solid #d4b8f0;border-radius:9px;padding:12px 15px;font-size:12px;color:var(--purple);line-height:1.65;margin-bottom:14px}
+
+/* RANGE SLIDER */
+.range-wrap{margin-top:6px}
+.range-val{text-align:center;font-size:20px;font-weight:500;color:var(--accent);margin-bottom:8px}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s;background:var(--white);color:var(--muted)}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.selected{background:var(--al);border-color:var(--accent);color:var(--accent);font-weight:500}
+.chip.sel-purple.selected{background:var(--pl);border-color:var(--purple);color:var(--purple)}
+.chip.sel-gold.selected{background:var(--gl);border-color:var(--gold);color:var(--gold)}
+.chip.sel-green.selected{background:var(--grl);border-color:var(--green);color:var(--green)}
+
+/* PRIORITY MATRIX */
+.matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.matrix-item{border:2px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s}
+.matrix-item:hover{border-color:var(--accent)}
+.matrix-item.selected{border-color:var(--accent);background:var(--al)}
+.mi-title{font-size:13px;font-weight:500;margin-bottom:3px}
+.mi-desc{font-size:11px;color:var(--muted);line-height:1.4}
+
+/* FOOTER */
+.sf{padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:#fafaf8}
+.btn-back{background:none;border:1.5px solid var(--border2);border-radius:8px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer}
+.btn-back:hover{border-color:var(--accent);color:var(--accent)}
+.btn-next{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;border:none;border-radius:8px;padding:11px 30px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next:hover{opacity:.9}
+.btn-submit{background:linear-gradient(135deg,var(--gold),#d4a030);color:#fff;border:none;border-radius:8px;padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:12px}
+
+/* PAGE */
+.sp{display:none}.sp.active{display:block}
+
+/* SUMMARY CARDS */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sum-card{background:#f9f8f5;border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+.sum-card-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.sum-card-val{font-size:15px;font-weight:500;color:var(--text)}
+.sum-card-val.accent{color:var(--accent)}
+.sum-card-val.gold{color:var(--gold)}
+.sum-card-val.green{color:var(--green)}
+.sum-card-val.purple{color:var(--purple)}
+
+/* ILLUSTRATION SUMMARY */
+.illus-box{background:linear-gradient(135deg,#0e2244,#1a3a6b);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:16px}
+.illus-title{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:14px;opacity:.9}
+.illus-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.illus-row:last-child{border-bottom:none}
+.illus-key{font-size:12px;opacity:.7}
+.illus-val{font-size:14px;font-weight:500;color:#c9b88a}
+
+/* SUCCESS */
+.succ{display:none;padding:48px 28px;text-align:center}
+.succ-icon{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:34px}
+.next-steps{background:var(--al);border-radius:12px;padding:18px 22px;text-align:left;max-width:440px;margin:20px auto 0}
+.ns-item{display:flex;gap:10px;margin-bottom:10px;font-size:13px;line-height:1.55}
+.ns-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--red);color:#fff;border-radius:9px;padding:11px 16px;font-size:13px;z-index:999;display:none;max-width:280px}
+.toast.show{display:block;animation:su .3s ease}
+@keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media(max-width:600px){.fr{grid-template-columns:1fr}.fr3{grid-template-columns:1fr}.hero{padding:36px 16px 52px}.hero-title{font-size:28px}.sb{padding:16px}.sh{padding:16px 16px 12px}.sf{padding:12px 16px}.matrix{grid-template-columns:1fr}.sum-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">🛡 ShieldLife</div>
+  <div class="hdr-tag">IUL Planning Questionnaire</div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">Confidential · For Agent Use</div>
+  <h1 class="hero-title">IUL Client <em>Discovery</em></h1>
+  <p class="hero-sub">Complete this questionnaire with your client to gather everything needed for a precise, personalized Indexed Universal Life illustration.</p>
+  <div class="hero-features">
+    <div class="hf">📊 Illustration-Ready Output</div>
+    <div class="hf">🔒 Confidential</div>
+    <div class="hf">⚡ Willie Ashford III · ShieldLife</div>
+    <div class="hf">📞 1-708-742-7047</div>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div style="height:18px"></div>
+  <div class="prog-outer"><div class="prog-inner" id="prog" style="width:12%"></div></div>
+  <div class="steps-row">
+    <div class="sd active" id="sd1"><div class="sd-circle">1</div><div class="sd-label">Client</div></div>
+    <div class="sd" id="sd2"><div class="sd-circle">2</div><div class="sd-label">Financial</div></div>
+    <div class="sd" id="sd3"><div class="sd-circle">3</div><div class="sd-label">Goals</div></div>
+    <div class="sd" id="sd4"><div class="sd-circle">4</div><div class="sd-label">Risk</div></div>
+    <div class="sd" id="sd5"><div class="sd-circle">5</div><div class="sd-label">Health</div></div>
+    <div class="sd" id="sd6"><div class="sd-circle">6</div><div class="sd-label">IUL Design</div></div>
+    <div class="sd" id="sd7"><div class="sd-circle">7</div><div class="sd-label">Summary</div></div>
+  </div>
+</div>
+
+<div class="fw">
+<div class="fc">
+
+<!-- STEP 1: Client Profile -->
+<div class="sp active" id="s1">
+  <div class="sh"><div class="sn">1</div><div><div class="st">Client Profile</div><div class="ss">Step 1 of 7 — Basic client information</div></div></div>
+  <div class="sb">
+    <div class="info"><strong>Agent note:</strong> This section establishes the client's profile. Age and health class are the two biggest factors affecting IUL premium and illustration projections.</div>
+    <div class="sdiv">Personal Information</div>
+    <div class="fr3">
+      <div class="f"><label>First Name <span class="req">*</span></label><input id="fn" placeholder="John"/><div class="ferr" id="fn-err">Required</div></div>
+      <div class="f"><label>Middle Initial</label><input id="mi" placeholder="A" maxlength="2"/></div>
+      <div class="f"><label>Last Name <span class="req">*</span></label><input id="ln" placeholder="Smith"/><div class="ferr" id="ln-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Date of Birth <span class="req">*</span></label><input id="dob" type="date" onchange="calcAge()"/><div class="ferr" id="dob-err">Required</div></div>
+      <div class="f"><label>Current Age (auto-calculated)</label><input id="age" placeholder="Will calculate from DOB" readonly style="background:#f5f5f5"/></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Gender <span class="req">*</span></label>
+        <select id="gen"><option value="">Select...</option><option>Male</option><option>Female</option></select>
+        <div class="ferr" id="gen-err">Required</div>
+      </div>
+      <div class="f"><label>Marital Status</label>
+        <select id="ms"><option value="">Select...</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Phone <span class="req">*</span></label><input id="ph" placeholder="(708) 555-0100"/><div class="ferr" id="ph-err">Required</div></div>
+      <div class="f"><label>Email <span class="req">*</span></label><input id="em" type="email" placeholder="john@email.com"/><div class="ferr" id="em-err">Required</div></div>
+    </div>
+    <div class="f"><label>Address</label><input id="addr" placeholder="Street address, City, State, ZIP"/></div>
+    <div class="fr">
+      <div class="f"><label>Occupation</label><input id="occ" placeholder="e.g. Nurse, Business owner, Teacher"/></div>
+      <div class="f"><label>Employer</label><input id="emp" placeholder="Company name (optional)"/></div>
+    </div>
+    <div class="sdiv">Dependents</div>
+    <div class="fr">
+      <div class="f"><label>Number of dependents</label><input id="deps" type="number" min="0" placeholder="0"/></div>
+      <div class="f"><label>Ages of dependents</label><input id="dep-ages" placeholder="e.g. 5, 8, 12"/></div>
+    </div>
+    <div class="f"><label>Spouse / Partner age (if applicable)</label><input id="spouse-age" type="number" placeholder="e.g. 38"/></div>
+    <div class="sdiv">Tobacco Use</div>
+    <div class="f"><label>Does the client currently use tobacco or nicotine? <span class="req">*</span></label>
+      <div class="yn" id="tob-yn">
+        <button class="yn-btn yes" onclick="ynSel('tob','yes','tob-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('tob','no','tob-detail')">No</button>
+      </div>
+      <div class="ferr" id="tob-err">Required</div>
+    </div>
+    <div class="expbox" id="tob-detail">
+      <div class="fr">
+        <div class="f"><label>Type</label><select id="tob-type"><option value="">Select...</option><option>Cigarettes</option><option>Cigars (occasional)</option><option>Vaping / E-cigarettes</option><option>Chewing tobacco</option><option>Nicotine patches/gum</option></select></div>
+        <div class="f"><label>How long / How often</label><input id="tob-amt" placeholder="e.g. 1 pack/day for 10 years"/></div>
+      </div>
+      <div class="tip">⚠️ Tobacco use significantly increases premiums. Non-tobacco rates are typically 2–3x lower. If client quit 12+ months ago, they may qualify for non-tobacco rates with some carriers.</div>
+    </div>
+    <div class="f"><label>Used tobacco in the past 5 years?</label>
+      <div class="yn" id="tob-past-yn">
+        <button class="yn-btn yes" onclick="ynSel('tob-past','yes',null)">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('tob-past','no',null)">No</button>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span style="font-size:12px;color:var(--muted)">Step 1 of 7</span><button class="btn-next" onclick="nx(1)">Continue →</button></div>
+</div>
+
+<!-- STEP 2: Financial Picture -->
+<div class="sp" id="s2">
+  <div class="sh"><div class="sn">2</div><div><div class="st">Financial Picture</div><div class="ss">Step 2 of 7 — Income, assets, debts, and existing coverage</div></div></div>
+  <div class="sb">
+    <div class="info"><strong>Agent note:</strong> Understanding the full financial picture helps design the right premium amount and ensures the IUL complements — not duplicates — existing coverage.</div>
+    <div class="sdiv">Income</div>
+    <div class="fr">
+      <div class="f"><label>Annual Gross Income <span class="req">*</span></label>
+        <select id="income"><option value="">Select...</option><option>Under $30,000</option><option>$30,000 – $50,000</option><option>$50,000 – $75,000</option><option>$75,000 – $100,000</option><option>$100,000 – $150,000</option><option>$150,000 – $250,000</option><option>$250,000 – $500,000</option><option>Over $500,000</option></select>
+        <div class="ferr" id="income-err">Required</div>
+      </div>
+      <div class="f"><label>Spouse / Partner Annual Income</label>
+        <select id="sp-income"><option value="">Select...</option><option>N/A — no spouse</option><option>Under $30,000</option><option>$30,000 – $50,000</option><option>$50,000 – $75,000</option><option>$75,000 – $100,000</option><option>$100,000 – $150,000</option><option>$150,000+</option></select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Income Type</label>
+        <div class="chips" id="inc-type-chips">
+          <div class="chip" onclick="togChip(this,'inc-type')">W-2 Employee</div>
+          <div class="chip" onclick="togChip(this,'inc-type')">Self-Employed / 1099</div>
+          <div class="chip" onclick="togChip(this,'inc-type')">Business Owner</div>
+          <div class="chip" onclick="togChip(this,'inc-type')">Retired</div>
+          <div class="chip" onclick="togChip(this,'inc-type')">Multiple sources</div>
+        </div>
+      </div>
+    </div>
+    <div class="f"><label>Is income stable, growing, or variable?</label>
+      <div class="chips">
+        <div class="chip sel-green" onclick="selChipGroup(this,'inc-stab')">Stable / Predictable</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'inc-stab')">Growing steadily</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'inc-stab')">Variable / Seasonal</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'inc-stab')">Declining / Uncertain</div>
+      </div>
+    </div>
+    <div class="sdiv">Current Savings & Assets</div>
+    <div class="purple-box">💡 <strong>Key question:</strong> If client has NO retirement savings, the IUL becomes their primary retirement vehicle — design for maximum cash accumulation with minimum death benefit.</div>
+    <div class="f"><label>Current retirement savings total</label>
+      <select id="ret-savings"><option value="">Select...</option><option value="none">$0 — No retirement savings</option><option>Under $10,000</option><option>$10,000 – $50,000</option><option>$50,000 – $100,000</option><option>$100,000 – $250,000</option><option>$250,000 – $500,000</option><option>Over $500,000</option></select>
+    </div>
+    <div class="f"><label>Existing retirement accounts (select all that apply)</label>
+      <div class="chips" id="ret-accts">
+        <div class="chip" onclick="togChip(this,'ret-accts')">None</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">401(k)</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">403(b)</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">Traditional IRA</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">Roth IRA</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">Pension</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">457 Plan</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">SEP IRA</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">Brokerage/Stocks</div>
+        <div class="chip" onclick="togChip(this,'ret-accts')">Real Estate</div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Employer 401(k) match available?</label>
+        <div class="yn" id="match-yn">
+          <button class="yn-btn yes" onclick="ynSel('match','yes','match-detail')">Yes</button>
+          <button class="yn-btn no" onclick="ynSel('match','no','match-detail')">No</button>
+          <button class="yn-btn" onclick="ynSel('match','na','match-detail')" style="color:var(--muted)">N/A</button>
+        </div>
+      </div>
+      <div class="f"><label>Currently maxing out 401(k)?</label>
+        <div class="yn" id="max401-yn">
+          <button class="yn-btn yes" onclick="ynSel('max401','yes',null)">Yes</button>
+          <button class="yn-btn no" onclick="ynSel('max401','no',null)">No</button>
+        </div>
+      </div>
+    </div>
+    <div class="expbox show" id="match-detail" style="display:block">
+      <div class="tip">💡 <strong>If employer match is available and NOT maxed:</strong> Always recommend client maximize the employer match FIRST before funding an IUL. Free money beats everything. IUL is the next layer after the match is maxed.</div>
+    </div>
+    <div class="f"><label>Total liquid savings / emergency fund</label>
+      <select id="liquid"><option value="">Select...</option><option>Under $5,000</option><option>$5,000 – $15,000</option><option>$15,000 – $50,000</option><option>$50,000 – $100,000</option><option>Over $100,000</option></select>
+    </div>
+    <div class="sdiv">Debts & Liabilities</div>
+    <div class="f"><label>Monthly debt obligations (total)</label>
+      <select id="debt-mo"><option value="">Select...</option><option>Under $500/mo</option><option>$500 – $1,000/mo</option><option>$1,000 – $2,000/mo</option><option>$2,000 – $3,500/mo</option><option>Over $3,500/mo</option></select>
+    </div>
+    <div class="f"><label>Types of debt (select all that apply)</label>
+      <div class="chips">
+        <div class="chip" onclick="togChip(this,'debt')">Mortgage</div>
+        <div class="chip" onclick="togChip(this,'debt')">Car loan</div>
+        <div class="chip" onclick="togChip(this,'debt')">Student loans</div>
+        <div class="chip" onclick="togChip(this,'debt')">Credit cards</div>
+        <div class="chip" onclick="togChip(this,'debt')">Business debt</div>
+        <div class="chip" onclick="togChip(this,'debt')">Medical debt</div>
+        <div class="chip" onclick="togChip(this,'debt')">No significant debt</div>
+      </div>
+    </div>
+    <div class="sdiv">Existing Life Insurance</div>
+    <div class="f"><label>Does client have existing life insurance?</label>
+      <div class="yn" id="exins-yn">
+        <button class="yn-btn yes" onclick="ynSel('exins','yes','exins-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('exins','no','exins-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="exins-detail">
+      <div class="fr">
+        <div class="f"><label>Type of existing policy</label>
+          <select id="exins-type"><option value="">Select...</option><option>Term Life</option><option>Whole Life</option><option>Group / Employer Life</option><option>IUL (existing)</option><option>Universal Life</option><option>Variable Life</option></select>
+        </div>
+        <div class="f"><label>Death benefit amount</label><input id="exins-db" placeholder="e.g. $250,000"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Monthly premium</label><input id="exins-prem" placeholder="e.g. $85/mo"/></div>
+        <div class="f"><label>Cash value (if any)</label><input id="exins-cv" placeholder="e.g. $12,000 or None"/></div>
+      </div>
+      <div class="f"><label>Is this policy staying or being replaced?</label>
+        <div class="yn" id="exins-keep-yn">
+          <button class="yn-btn yes" onclick="ynSel('exins-keep','yes',null)">Keeping it</button>
+          <button class="yn-btn no" onclick="ynSel('exins-keep','no',null)">Replacing it</button>
+        </div>
+      </div>
+    </div>
+    <div class="sdiv">Monthly Budget for IUL</div>
+    <div class="f"><label>What can the client comfortably contribute monthly? <span class="req">*</span></label>
+      <div class="range-wrap">
+        <div class="range-val" id="budget-val">$300 / month</div>
+        <input type="range" id="budget-range" min="100" max="5000" step="50" value="300" oninput="updBudget()"/>
+        <div class="range-labels"><span>$100</span><span>$500</span><span>$1,000</span><span>$2,500</span><span>$5,000+</span></div>
+      </div>
+    </div>
+    <div class="f"><label>Budget flexibility?</label>
+      <div class="chips">
+        <div class="chip sel-green" onclick="selChipGroup(this,'budget-flex')">Fixed — can't go higher</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'budget-flex')">Flexible — can increase annually</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'budget-flex')">Wants to overfund (max cash value)</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'budget-flex')">Open — show me options</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(2)">← Back</button><button class="btn-next" onclick="nx(2)">Continue →</button></div>
+</div>
+
+<!-- STEP 3: Goals & Objectives -->
+<div class="sp" id="s3">
+  <div class="sh"><div class="sn">3</div><div><div class="st">Goals & Objectives</div><div class="ss">Step 3 of 7 — Retirement timeline and income needs</div></div></div>
+  <div class="sb">
+    <div class="info"><strong>Agent note:</strong> Goals drive the illustration design. A client wanting maximum retirement income needs a different design than one prioritizing death benefit protection.</div>
+    <div class="sdiv">Primary Goals — What matters most?</div>
+    <div class="f"><label>Select the client's PRIMARY reason for an IUL (pick top 2)</label>
+      <div class="matrix">
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🏖 Tax-Free Retirement Income</div><div class="mi-desc">Build a tax-free income stream in retirement using policy loans</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🛡 Family Protection + Growth</div><div class="mi-desc">Death benefit protection while building tax-advantaged cash value</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">📈 Supplement 401(k) / IRA</div><div class="mi-desc">Additional tax-free bucket alongside existing retirement accounts</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🏦 Tax-Free Savings Vehicle</div><div class="mi-desc">No contribution limits, tax-free growth, no RMDs — beats Roth limits</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">💼 Business Planning</div><div class="mi-desc">Key person, buy-sell, executive bonus, or business succession</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🎓 College Funding</div><div class="mi-desc">Tax-free withdrawals for education, won't affect FAFSA</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🏠 Legacy / Estate Planning</div><div class="mi-desc">Pass wealth to heirs or charity tax-free</div></div>
+        <div class="matrix-item" onclick="togMatrix(this,'goal')"><div class="mi-title">🔐 Living Benefits / LTC</div><div class="mi-desc">Access death benefit early for chronic illness, critical illness, or LTC</div></div>
+      </div>
+    </div>
+    <div class="sdiv">Retirement Timeline</div>
+    <div class="fr">
+      <div class="f"><label>Target retirement age <span class="req">*</span></label>
+        <select id="ret-age"><option value="">Select...</option><option>55</option><option>57</option><option>59</option><option>60</option><option>62</option><option>65</option><option>67</option><option>70</option><option>Other</option></select>
+        <div class="ferr" id="ret-age-err">Required</div>
+      </div>
+      <div class="f"><label>Years until retirement (auto)</label><input id="yrs-to-ret" placeholder="Calculates from age + retirement age" readonly style="background:#f5f5f5"/></div>
+    </div>
+    <div class="f"><label>How long does client plan to pay premiums?</label>
+      <div class="chips">
+        <div class="chip sel-purple" onclick="selChipGroup(this,'pay-period')">Pay until retirement</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'pay-period')">10-pay (10 years only)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'pay-period')">20-pay (20 years only)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'pay-period')">Flexible — ongoing</div>
+      </div>
+    </div>
+    <div class="sdiv">Retirement Income Needs</div>
+    <div class="f"><label>Desired monthly income IN retirement</label>
+      <div class="range-wrap">
+        <div class="range-val" id="ret-income-val">$3,000 / month</div>
+        <input type="range" id="ret-income-range" min="500" max="20000" step="250" value="3000" oninput="updRetIncome()"/>
+        <div class="range-labels"><span>$500</span><span>$2,500</span><span>$5,000</span><span>$10,000</span><span>$20K+</span></div>
+      </div>
+    </div>
+    <div class="f"><label>Expected Social Security income in retirement</label>
+      <select id="ss-income"><option value="">Select...</option><option>Unknown / Not sure</option><option>Under $1,000/mo</option><option>$1,000 – $1,500/mo</option><option>$1,500 – $2,000/mo</option><option>$2,000 – $2,500/mo</option><option>Over $2,500/mo</option><option>No Social Security expected</option></select>
+    </div>
+    <div class="f"><label>Will client have a pension?</label>
+      <div class="yn" id="pension-yn">
+        <button class="yn-btn yes" onclick="ynSel('pension','yes','pension-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('pension','no','pension-detail')">No</button>
+        <button class="yn-btn" onclick="ynSel('pension','unknown','pension-detail')" style="color:var(--muted)">Not sure</button>
+      </div>
+    </div>
+    <div class="expbox" id="pension-detail">
+      <div class="fr">
+        <div class="f"><label>Estimated pension amount</label><input id="pension-amt" placeholder="e.g. $1,800/month"/></div>
+        <div class="f"><label>Pension starts at age</label><input id="pension-age" placeholder="e.g. 60"/></div>
+      </div>
+    </div>
+    <div class="f"><label>How long does client expect to live? (planning horizon)</label>
+      <div class="chips">
+        <div class="chip sel-gold" onclick="selChipGroup(this,'life-exp')">To age 80</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'life-exp')">To age 85</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'life-exp')">To age 90</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'life-exp')">To age 95</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'life-exp')">To age 100+</div>
+      </div>
+    </div>
+    <div class="sdiv">Death Benefit Needs</div>
+    <div class="f"><label>How important is the death benefit vs. cash accumulation?</label>
+      <div class="chips">
+        <div class="chip sel-purple" onclick="selChipGroup(this,'db-priority')">Death benefit is primary (family protection)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'db-priority')">Equal priority — both matter</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'db-priority')">Cash accumulation is primary (retirement focus)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'db-priority')">Minimum death benefit — max cash value</div>
+      </div>
+    </div>
+    <div class="f"><label>How much death benefit does the client need?</label>
+      <select id="db-needed"><option value="">Select...</option><option>Minimum required (TEFRA/DEFRA/CVAT)</option><option>$100,000 – $250,000</option><option>$250,000 – $500,000</option><option>$500,000 – $1,000,000</option><option>$1,000,000 – $2,000,000</option><option>Over $2,000,000</option><option>Whatever the illustration supports</option></select>
+    </div>
+    <div class="f"><label>Who are the intended beneficiaries?</label>
+      <input id="beneficiary" placeholder="e.g. Spouse and children, Trust, Business partner"/>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(3)">← Back</button><button class="btn-next" onclick="nx(3)">Continue →</button></div>
+</div>
+
+<!-- STEP 4: Risk Tolerance & Market Attitude -->
+<div class="sp" id="s4">
+  <div class="sh"><div class="sn">4</div><div><div class="st">Risk Tolerance & Market Attitude</div><div class="ss">Step 4 of 7 — Indexing strategy and floor/cap preferences</div></div></div>
+  <div class="sb">
+    <div class="info"><strong>Agent note:</strong> This section helps determine which indexing strategy to illustrate. Most IUL illustrations use the S&P 500 1-year point-to-point with a cap and 0% floor.</div>
+    <div class="sdiv">Overall Risk Tolerance</div>
+    <div class="f"><label>How does the client feel about market risk?</label>
+      <div class="matrix">
+        <div class="matrix-item" onclick="selMatrix(this,'risk')"><div class="mi-title">😰 Very Conservative</div><div class="mi-desc">Hates any risk. Values safety above all. OK with lower returns for guarantee.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'risk')"><div class="mi-title">🙂 Conservative</div><div class="mi-desc">Prefers safety but OK with modest growth. Doesn't want to lose principal ever.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'risk')"><div class="mi-title">😊 Moderate</div><div class="mi-desc">Balanced approach. Wants growth but with downside protection.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'risk')"><div class="mi-title">😎 Growth-Oriented</div><div class="mi-desc">Prioritizes long-term growth. Understands caps but wants maximum upside.</div></div>
+      </div>
+    </div>
+    <div class="f"><label>Has the client ever experienced significant investment losses?</label>
+      <div class="yn" id="mkt-loss-yn">
+        <button class="yn-btn yes" onclick="ynSel('mkt-loss','yes','mkt-loss-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('mkt-loss','no','mkt-loss-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="mkt-loss-detail">
+      <div class="f"><label>How did they react to the loss?</label>
+        <div class="chips">
+          <div class="chip" onclick="togChip(this,'loss-react')">Panicked and sold</div>
+          <div class="chip" onclick="togChip(this,'loss-react')">Held on but very stressed</div>
+          <div class="chip" onclick="togChip(this,'loss-react')">Stayed calm and held</div>
+          <div class="chip" onclick="togChip(this,'loss-react')">Bought more on the dip</div>
+        </div>
+      </div>
+    </div>
+    <div class="sdiv">IUL Index Strategy Preferences</div>
+    <div class="purple-box">📊 <strong>IUL key feature:</strong> The 0% floor means the client NEVER loses money due to market downturns. In a bad year, they earn 0% — not negative. In good years, they earn up to the cap rate.</div>
+    <div class="f"><label>Which indexing strategy does the client prefer?</label>
+      <div class="chips">
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">S&P 500 (most common, 1-year point-to-point)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">S&P 500 with multiplier (higher cap, higher cost)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">Bloomberg US Dynamic Balance (lower cap, smoother)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">Global / International index</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">Fixed account (guaranteed rate, no market link)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">Split between multiple strategies</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'index-strat')">Agent recommendation — whatever is best</div>
+      </div>
+    </div>
+    <div class="f"><label>Preferred illustration crediting rate assumption</label>
+      <div class="chips">
+        <div class="chip sel-gold" onclick="selChipGroup(this,'illus-rate')">Conservative (5–6%)</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'illus-rate')">Moderate (6–7%) — most common</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'illus-rate')">Optimistic (7–8%)</div>
+        <div class="chip sel-gold" onclick="selChipGroup(this,'illus-rate')">Show all 3 scenarios</div>
+      </div>
+    </div>
+    <div class="tip">💡 Regulators require illustrations to show at least the current declared rate AND a reduced rate. Always show at least 2 scenarios to set realistic expectations.</div>
+    <div class="sdiv">Loan Strategy for Retirement Income</div>
+    <div class="f"><label>Preferred loan type for retirement income distribution</label>
+      <div class="chips">
+        <div class="chip sel-purple" onclick="selChipGroup(this,'loan-type')">Wash / Zero-Cost Loan (most popular)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'loan-type')">Variable Loan (participation continues)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'loan-type')">Fixed Loan (simple, predictable)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'loan-type')">Agent recommendation</div>
+      </div>
+    </div>
+    <div class="sdiv">Additional Features</div>
+    <div class="f"><label>Which riders / features are important? (select all that apply)</label>
+      <div class="chips">
+        <div class="chip" onclick="togChip(this,'riders')">Chronic Illness / LTC Rider</div>
+        <div class="chip" onclick="togChip(this,'riders')">Critical Illness Rider</div>
+        <div class="chip" onclick="togChip(this,'riders')">Terminal Illness Rider</div>
+        <div class="chip" onclick="togChip(this,'riders')">Waiver of Premium (disability)</div>
+        <div class="chip" onclick="togChip(this,'riders')">Children's Term Rider</div>
+        <div class="chip" onclick="togChip(this,'riders')">Guaranteed Insurability</div>
+        <div class="chip" onclick="togChip(this,'riders')">Return of Premium</div>
+        <div class="chip" onclick="togChip(this,'riders')">Overloan Protection</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(4)">← Back</button><button class="btn-next" onclick="nx(4)">Continue →</button></div>
+</div>
+
+<!-- STEP 5: Health Assessment -->
+<div class="sp" id="s5">
+  <div class="sh"><div class="sn">5</div><div><div class="st">Health Assessment</div><div class="ss">Step 5 of 7 — Underwriting risk class estimation</div></div></div>
+  <div class="sb">
+    <div class="info"><strong>Agent note:</strong> Health class directly impacts premium. Estimating the likely health class helps you design a realistic illustration before formal underwriting.</div>
+    <div class="sdiv">Height & Weight</div>
+    <div class="fr">
+      <div class="f"><label>Height</label><input id="ht" placeholder='e.g. 5&apos;10"'/></div>
+      <div class="f"><label>Weight (lbs)</label><input id="wt" type="number" placeholder="175"/></div>
+    </div>
+    <div class="sdiv">Estimated Health Class</div>
+    <div class="f"><label>Based on client's health, what health class do you expect?</label>
+      <div class="matrix">
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">⭐ Preferred Plus / Super Preferred</div><div class="mi-desc">Excellent health. No significant conditions. Ideal weight. Non-tobacco. Best rates.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">✅ Preferred</div><div class="mi-desc">Very good health. Minor conditions well-controlled. Slightly elevated BP OK.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">📋 Standard Plus</div><div class="mi-desc">Good health. Some controlled conditions. Slightly overweight but healthy otherwise.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">📄 Standard</div><div class="mi-desc">Average health. Controlled diabetes, blood pressure, cholesterol. Average weight.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">⚠️ Substandard / Table Rated</div><div class="mi-desc">Below average health. Multiple conditions, recent treatments. Higher premiums expected.</div></div>
+        <div class="matrix-item" onclick="selMatrix(this,'health-class')"><div class="mi-title">❓ Unknown — Need Full Assessment</div><div class="mi-desc">Not sure. Complete full medical application to determine class.</div></div>
+      </div>
+    </div>
+    <div class="sdiv">Key Health Conditions</div>
+    <div class="f"><label>Existing conditions (select all that apply)</label>
+      <div class="chips">
+        <div class="chip" onclick="togChip(this,'conditions')">None — excellent health</div>
+        <div class="chip" onclick="togChip(this,'conditions')">High blood pressure (controlled)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">High cholesterol (controlled)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Type 2 Diabetes (controlled)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Type 1 Diabetes</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Heart disease (history)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Cancer (history)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Obesity (BMI 30+)</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Sleep apnea</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Mental health condition</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Thyroid condition</div>
+        <div class="chip" onclick="togChip(this,'conditions')">Other condition</div>
+      </div>
+    </div>
+    <div class="f"><label>Any medications that could affect underwriting?</label>
+      <div class="yn" id="medsflag-yn">
+        <button class="yn-btn yes" onclick="ynSel('medsflag','yes','medsflag-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('medsflag','no','medsflag-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="medsflag-detail">
+      <div class="f"><label>List key medications:</label><textarea id="medsflag-list" placeholder="e.g. Metformin for diabetes, Lisinopril for blood pressure..."></textarea></div>
+    </div>
+    <div class="f"><label>Any family history that could impact underwriting? (parents with early heart disease, cancer, etc.)</label>
+      <div class="yn" id="famhx-yn">
+        <button class="yn-btn yes" onclick="ynSel('famhx','yes','famhx-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('famhx','no','famhx-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="famhx-detail">
+      <div class="f"><label>Describe family history:</label><textarea id="famhx-info" placeholder="e.g. Father passed at 58 from heart attack, mother had breast cancer at 52..."></textarea></div>
+    </div>
+    <div class="sdiv">Carrier Preferences</div>
+    <div class="f"><label>Any carrier preferences or exclusions?</label>
+      <div class="chips">
+        <div class="chip" onclick="togChip(this,'carrier')">No preference — best product wins</div>
+        <div class="chip" onclick="togChip(this,'carrier')">North American</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Nationwide</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Pacific Life</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Mutual of Omaha</div>
+        <div class="chip" onclick="togChip(this,'carrier')">John Hancock</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Allianz</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Lincoln Financial</div>
+        <div class="chip" onclick="togChip(this,'carrier')">Transamerica</div>
+        <div class="chip" onclick="togChip(this,'carrier')">AIG / American General</div>
+      </div>
+    </div>
+    <div class="f"><label>Is the client open to a medical exam?</label>
+      <div class="chips">
+        <div class="chip sel-green" onclick="selChipGroup(this,'exam')">Yes — fully underwritten (best rates)</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'exam')">Prefers no-exam if possible</div>
+        <div class="chip sel-green" onclick="selChipGroup(this,'exam')">No exam required (simplified issue)</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(5)">← Back</button><button class="btn-next" onclick="nx(5)">Continue →</button></div>
+</div>
+
+<!-- STEP 6: IUL Design Parameters -->
+<div class="sp" id="s6">
+  <div class="sh"><div class="sn">6</div><div><div class="st">IUL Illustration Design</div><div class="ss">Step 6 of 7 — Parameters for your illustration software</div></div></div>
+  <div class="sb">
+    <div class="purple-box">✦ <strong>This section produces the exact inputs for your illustration software.</strong> Review each field carefully — these numbers go directly into the design.</div>
+    <div class="sdiv">Illustration Parameters</div>
+    <div class="fr">
+      <div class="f"><label>Face Amount / Death Benefit</label><input id="face-amt" placeholder="e.g. $500,000"/></div>
+      <div class="f"><label>Death Benefit Option</label>
+        <select id="db-option"><option value="">Select...</option><option>Option A / Level (DB stays flat)</option><option>Option B / Increasing (DB = face + cash value)</option><option>Start B, switch to A at retirement</option></select>
+      </div>
+    </div>
+    <div class="tip">💡 <strong>Option A (Level):</strong> Lower cost of insurance = more cash value. Better for accumulation-focused clients. <strong>Option B (Increasing):</strong> Higher death benefit = more protection but higher cost. Better for pure protection needs.</div>
+    <div class="fr">
+      <div class="f"><label>Monthly Premium</label><input id="illus-prem" placeholder="e.g. $300/mo"/></div>
+      <div class="f"><label>Annual Premium (auto)</label><input id="illus-prem-ann" placeholder="Calculates from monthly" readonly style="background:#f5f5f5"/></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Premium Start Age</label><input id="prem-start" placeholder="Client's current age"/></div>
+      <div class="f"><label>Premium Stop Age (pay-to age)</label><input id="prem-stop" placeholder="e.g. 65"/></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Income Distribution Start Age</label><input id="dist-start" placeholder="e.g. 65"/></div>
+      <div class="f"><label>Income Distribution End Age</label><input id="dist-end" placeholder="e.g. 90 or 100"/></div>
+    </div>
+    <div class="f"><label>Target Annual Distribution Amount</label><input id="dist-amt" placeholder="e.g. $36,000/year ($3,000/mo)"/></div>
+    <div class="sdiv">Illustration Rate Scenarios</div>
+    <div class="f"><label>Show illustration at these assumed rates (select all to run)</label>
+      <div class="chips">
+        <div class="chip" onclick="togChip(this,'illus-rates')">4% (very conservative)</div>
+        <div class="chip selected" onclick="togChip(this,'illus-rates')">5.5% (conservative)</div>
+        <div class="chip selected" onclick="togChip(this,'illus-rates')">6.5% (moderate — recommended)</div>
+        <div class="chip selected" onclick="togChip(this,'illus-rates')">7.5% (optimistic)</div>
+        <div class="chip" onclick="togChip(this,'illus-rates')">Current declared rate</div>
+        <div class="chip" onclick="togChip(this,'illus-rates')">Guaranteed (worst case)</div>
+      </div>
+    </div>
+    <div class="sdiv">Solve For</div>
+    <div class="f"><label>What do you want the illustration to SOLVE FOR?</label>
+      <div class="chips">
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Maximum income at retirement age</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Target income of $[X]/month</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Specific death benefit amount</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Minimum premium for target death benefit</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Maximum premium (overfund / MEC limit)</div>
+        <div class="chip sel-purple" onclick="selChipGroup(this,'solve-for')">Show standard premium — just run the numbers</div>
+      </div>
+    </div>
+    <div class="sdiv">Agent Notes</div>
+    <div class="f"><label>Special circumstances or anything unique about this case?</label>
+      <textarea id="agent-notes" placeholder="e.g. Client is self-employed with irregular income, wants ability to skip premiums. Interested in 1035 exchange from existing whole life. Has a health condition that may affect underwriting class. Key person coverage for business..."></textarea>
+    </div>
+    <div class="f"><label>Competing products being considered?</label>
+      <textarea id="competing" placeholder="e.g. Client comparing to Roth IRA, 401(k), whole life, annuity..."></textarea>
+    </div>
+    <div class="f"><label>Client objections or concerns to address in illustration?</label>
+      <textarea id="objections" placeholder="e.g. Concerned about caps limiting upside. Wants to compare to S&P 500 direct investing. Worried about policy lapsing in retirement..."></textarea>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(6)">← Back</button><button class="btn-next" onclick="nx(6)">Continue →</button></div>
+</div>
+
+<!-- STEP 7: Summary -->
+<div class="sp" id="s7">
+  <div class="sh"><div class="sn">7</div><div><div class="st">Illustration Summary</div><div class="ss">Step 7 of 7 — Review and submit to agent</div></div></div>
+  <div class="sb">
+    <div id="illus-summary"></div>
+    <div class="sdiv">Confirm & Submit</div>
+    <div class="f"><label>Agent Name</label><input id="agent-name" value="Willie Ashford III" /></div>
+    <div class="fr">
+      <div class="f"><label>Date of Appointment</label><input id="appt-date" type="date"/></div>
+      <div class="f"><label>Follow-up Appointment Date</label><input id="followup-date" type="date"/></div>
+    </div>
+    <div class="f"><label>Client Acknowledgment — Type Client's Full Name</label>
+      <input id="client-sig" placeholder="Client types their name to confirm information is accurate"/>
+    </div>
+    <button class="btn-submit" onclick="submitForm()">📊 Generate Illustration Summary →</button>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(7)">← Back</button><span style="font-size:12px;color:var(--muted)">🔒 Secure & Confidential</span></div>
+</div>
+
+<!-- SUCCESS -->
+<div class="succ" id="succ">
+  <div class="succ-icon">📊</div>
+  <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px">Ready for Illustration!</h2>
+  <p style="color:var(--muted);font-size:14px;line-height:1.65;max-width:420px;margin:0 auto 20px" id="succ-msg">All information has been submitted to Willie Ashford III. The illustration will be prepared and presented to the client.</p>
+  <div class="next-steps">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Next Steps for Agent</div>
+    <div class="ns-item"><div class="ns-num">1</div><div>Run the illustration in your carrier software using the parameters from Step 6.</div></div>
+    <div class="ns-item"><div class="ns-num">2</div><div>Prepare at least 2 rate scenarios (conservative + moderate). Show guaranteed column.</div></div>
+    <div class="ns-item"><div class="ns-num">3</div><div>Address client's specific objections and goals identified in the questionnaire.</div></div>
+    <div class="ns-item"><div class="ns-num">4</div><div>Present illustration at follow-up appointment. Have application ready to close.</div></div>
+  </div>
+  <div style="margin-top:20px;font-size:13px;color:var(--muted)">Questions? Call Willie: <strong style="color:var(--accent)">1-708-742-7047</strong></div>
+</div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cur=1;
+const STEPS=7;
+const ynVals={};
+let matrixSels={};
+
+function updProg(){
+  const pct=Math.round(((cur-1)/STEPS)*100);
+  document.getElementById('prog').style.width=pct+'%';
+  for(let i=1;i<=STEPS;i++){
+    const sd=document.getElementById('sd'+i);
+    if(!sd)continue;
+    sd.classList.remove('active','done');
+    if(i<cur)sd.classList.add('done');
+    else if(i===cur)sd.classList.add('active');
+  }
+}
+function sw(){
+  document.querySelectorAll('.sp').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('s'+cur);
+  if(el)el.classList.add('active');
+  updProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function nx(from){if(!validate(from))return;cur=from+1;if(cur===7)bldSummary();sw();}
+function pv(from){cur=from-1;sw();}
+
+function ynSel(key,val,expandId){
+  ynVals[key]=val;
+  const row=document.getElementById(key+'-yn');
+  if(row){row.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('selected'));const btn=row.querySelector('.yn-btn.'+val);if(btn)btn.classList.add('selected');}
+  if(expandId){const box=document.getElementById(expandId);if(box)box.classList.toggle('show',val==='yes');}
+  const err=document.getElementById(key+'-err');if(err)err.style.display='none';
+}
+
+function togChip(el,group){el.classList.toggle('selected');}
+function selChipGroup(el,group){
+  el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function togMatrix(el,group){
+  const max=2;
+  const selected=el.parentElement.querySelectorAll('.matrix-item.selected');
+  if(el.classList.contains('selected')){el.classList.remove('selected');}
+  else if(selected.length<max){el.classList.add('selected');}
+  else{showToast('Select up to 2 priorities.');}
+}
+function selMatrix(el,group){
+  el.parentElement.querySelectorAll('.matrix-item').forEach(m=>m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function calcAge(){
+  const dob=document.getElementById('dob').value;
+  if(!dob)return;
+  const today=new Date();const bd=new Date(dob);
+  let age=today.getFullYear()-bd.getFullYear();
+  const m=today.getMonth()-bd.getMonth();
+  if(m<0||(m===0&&today.getDate()<bd.getDate()))age--;
+  document.getElementById('age').value=age+' years old';
+  updYrsToRet();
+}
+function updYrsToRet(){
+  const ageEl=document.getElementById('age').value;
+  const retAge=document.getElementById('ret-age')?.value;
+  if(ageEl&&retAge&&retAge!=='Other'){
+    const age=parseInt(ageEl);const ret=parseInt(retAge);
+    if(!isNaN(age)&&!isNaN(ret))document.getElementById('yrs-to-ret').value=(ret-age)+' years';
+  }
+}
+document.addEventListener('change',function(e){if(e.target.id==='ret-age')updYrsToRet();});
+
+function updBudget(){
+  const v=parseInt(document.getElementById('budget-range').value);
+  document.getElementById('budget-val').textContent='$'+v.toLocaleString()+' / month';
+  const ann=v*12;
+  document.getElementById('illus-prem').value='$'+v+'/mo';
+  document.getElementById('illus-prem-ann').value='$'+ann.toLocaleString()+'/year';
+}
+function updRetIncome(){
+  const v=parseInt(document.getElementById('ret-income-range').value);
+  document.getElementById('ret-income-val').textContent='$'+v.toLocaleString()+' / month';
+  document.getElementById('dist-amt').value='$'+(v*12).toLocaleString()+'/year ($'+v.toLocaleString()+'/mo)';
+}
+
+function validate(step){
+  clearErrs();
+  let ok=true;let firstErr=null;
+  function req(id,msg){const el=document.getElementById(id);if(!el)return;if(!el.value||!el.value.trim()){el.style.border='1.5px solid var(--red)';const e=document.getElementById(id+'-err');if(e){e.textContent=msg||'Required';e.style.display='block';}if(!firstErr)firstErr=el;ok=false;}}
+  function reqYN(key,msg){if(!ynVals[key]){const e=document.getElementById(key+'-err');if(e){e.textContent=msg||'Required';e.style.display='block';}ok=false;}}
+  if(step===1){req('fn');req('ln');req('dob');req('gen','Select gender');req('ph');req('em');reqYN('tob');}
+  if(step===2){req('income','Select income range');}
+  if(step===3){req('ret-age','Select retirement age');}
+  if(!ok){if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});showToast('Please complete required fields.');}
+  return ok;
+}
+function clearErrs(){
+  document.querySelectorAll('.ferr').forEach(e=>e.style.display='none');
+  document.querySelectorAll('input,select').forEach(e=>e.style.border='');
+}
+
+function bldSummary(){
+  const g=id=>document.getElementById(id)?.value||'—';
+  const budget=document.getElementById('budget-range')?.value||'300';
+  const retIncome=document.getElementById('ret-income-range')?.value||'3000';
+  const goals=Array.from(document.querySelectorAll('.matrix-item.selected')).map(el=>el.querySelector('.mi-title').textContent).join(', ')||'—';
+  const conditions=Array.from(document.querySelectorAll('.chips .chip.selected')).map(el=>el.textContent.trim()).slice(0,6).join(', ')||'—';
+
+  document.getElementById('illus-summary').innerHTML=`
+    <div class="illus-box">
+      <div class="illus-title">📊 IUL Illustration Parameters</div>
+      <div class="illus-row"><span class="illus-key">Client</span><span class="illus-val">${g('fn')} ${g('ln')}</span></div>
+      <div class="illus-row"><span class="illus-key">Age / DOB</span><span class="illus-val">${g('age')} · ${g('dob')}</span></div>
+      <div class="illus-row"><span class="illus-key">Gender</span><span class="illus-val">${g('gen')}</span></div>
+      <div class="illus-row"><span class="illus-key">Tobacco</span><span class="illus-val">${ynVals['tob']||'—'}</span></div>
+      <div class="illus-row"><span class="illus-key">Annual Income</span><span class="illus-val">${g('income')}</span></div>
+      <div class="illus-row"><span class="illus-key">Monthly Premium</span><span class="illus-val">$${parseInt(budget).toLocaleString()}/mo · $${(parseInt(budget)*12).toLocaleString()}/yr</span></div>
+      <div class="illus-row"><span class="illus-key">Retirement Age</span><span class="illus-val">${g('ret-age')} · ${g('yrs-to-ret')}</span></div>
+      <div class="illus-row"><span class="illus-key">Target Income</span><span class="illus-val">$${parseInt(retIncome).toLocaleString()}/mo · $${(parseInt(retIncome)*12).toLocaleString()}/yr</span></div>
+      <div class="illus-row"><span class="illus-key">Death Benefit</span><span class="illus-val">${g('db-needed')}</span></div>
+      <div class="illus-row"><span class="illus-key">DB Option</span><span class="illus-val">${g('db-option')}</span></div>
+      <div class="illus-row"><span class="illus-key">Goals</span><span class="illus-val">${goals}</span></div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-card"><div class="sum-card-label">Premium Start Age</div><div class="sum-card-val accent">${g('prem-start')||g('age')}</div></div>
+      <div class="sum-card"><div class="sum-card-label">Premium Stop Age</div><div class="sum-card-val accent">${g('prem-stop')}</div></div>
+      <div class="sum-card"><div class="sum-card-label">Distribution Start</div><div class="sum-card-val gold">${g('dist-start')||g('ret-age')}</div></div>
+      <div class="sum-card"><div class="sum-card-label">Distribution End</div><div class="sum-card-val gold">${g('dist-end')}</div></div>
+      <div class="sum-card"><div class="sum-card-label">Face Amount</div><div class="sum-card-val purple">${g('face-amt')}</div></div>
+      <div class="sum-card"><div class="sum-card-label">Expected Health Class</div><div class="sum-card-val green">${document.querySelector('#s5 .matrix-item.selected .mi-title')?.textContent||'—'}</div></div>
+    </div>`;
+  document.getElementById('agent-name').value='Willie Ashford III';
+  document.getElementById('appt-date').value=new Date().toISOString().split('T')[0];
+}
+
+async function submitForm(){
+  const g=id=>document.getElementById(id)?.value||'';
+  const budget=document.getElementById('budget-range')?.value||'300';
+  const retIncome=document.getElementById('ret-income-range')?.value||'3000';
+  const btn=document.querySelector('.btn-submit');
+  btn.textContent='Submitting...';btn.disabled=true;
+  try{
+    await fetch('https://formspree.io/f/meevjplq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:'IUL Questionnaire — '+g('fn')+' '+g('ln'),
+        client_name:g('fn')+' '+g('ln'),
+        dob:g('dob'),age:g('age'),gender:g('gen'),
+        phone:g('ph'),email:g('em'),
+        occupation:g('occ'),marital_status:g('ms'),
+        dependents:g('deps'),dependent_ages:g('dep-ages'),
+        tobacco:ynVals['tob']||'—',
+        annual_income:g('income'),
+        retirement_savings:g('ret-savings'),
+        monthly_budget:'$'+parseInt(budget)+'/mo',
+        annual_budget:'$'+(parseInt(budget)*12)+'/yr',
+        retirement_age:g('ret-age'),
+        years_to_retirement:g('yrs-to-ret'),
+        target_monthly_income:'$'+parseInt(retIncome)+'/mo',
+        death_benefit_needed:g('db-needed'),
+        db_option:g('db-option'),
+        face_amount:g('face-amt'),
+        premium_start:g('prem-start'),
+        premium_stop:g('prem-stop'),
+        distribution_start:g('dist-start'),
+        distribution_end:g('dist-end'),
+        distribution_amount:g('dist-amt'),
+        existing_retirement_accounts:g('ret-savings'),
+        existing_insurance:ynVals['exins']||'no',
+        health_conditions:'See questionnaire',
+        agent_notes:g('agent-notes'),
+        competing_products:g('competing'),
+        client_objections:g('objections'),
+        client_signature:g('client-sig'),
+        appointment_date:g('appt-date'),
+        followup_date:g('followup-date'),
+        submitted_at:new Date().toLocaleString(),
+        agent:'Willie Ashford III — 1-708-742-7047'
+      })
+    });
+  }catch(e){console.log(e);}
+  document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
+  document.getElementById('succ').style.display='block';
+  document.getElementById('prog').style.width='100%';
+  document.querySelectorAll('.sd').forEach(d=>d.classList.add('done'));
+  document.getElementById('succ-msg').textContent=`Questionnaire complete for ${g('fn')} ${g('ln')}. All parameters are ready for the IUL illustration. Follow-up appointment: ${g('followup-date')||'TBD'}.`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+// Init defaults
+document.getElementById('appt-date').value=new Date().toISOString().split('T')[0];
+updBudget();updRetIncome();
+</script>
+</body>
+</html>

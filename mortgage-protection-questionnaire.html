@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldLife — Mortgage Protection Planning</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+:root{--bg:#f5f8f0;--white:#fff;--text:#1a1a14;--muted:#6b6560;--border:#ddd9d2;--border2:#c8c3bb;--accent:#1a5c2a;--al:#e8f4ed;--gold:#b8832a;--gl:#fdf4e3;--green:#1a5c2a;--grl:#e8f4ed;--red:#c0392b;--blue:#1a3a6b;--shadow:0 2px 16px rgba(0,0,0,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:var(--accent);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff}
+.hdr-phone{font-size:13px;color:rgba(255,255,255,.75)}
+.hero{background:linear-gradient(135deg,#0e3a1a,#1a5c2a,#2d7a3e);padding:44px 32px 60px;text-align:center;color:#fff}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:34px;margin-bottom:10px}
+.hero-title em{font-style:italic;color:#c9b88a}
+.hero-sub{font-size:14px;opacity:.75;max-width:480px;margin:0 auto 20px;line-height:1.65}
+.trust{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.ti{font-size:11px;opacity:.65;display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.08);padding:5px 11px;border-radius:20px}
+.prog-wrap{max-width:700px;margin:0 auto;padding:0 16px}
+.prog-outer{height:4px;background:var(--border);border-radius:2px;margin:18px 0 0}
+.prog-inner{height:100%;background:var(--gold);border-radius:2px;transition:width .4s}
+.steps-row{display:flex;justify-content:space-between;margin-top:8px}
+.sd{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.sd-c{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--muted);transition:all .3s}
+.sd.done .sd-c{background:var(--green);border-color:var(--green);color:#fff}
+.sd.active .sd-c{background:var(--accent);border-color:var(--accent);color:#fff}
+.sd-l{font-size:9px;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.fw{max-width:700px;margin:-24px auto 48px;padding:0 16px}
+.fc{background:var(--white);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.sh{padding:20px 26px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sn{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.st{font-size:15px;font-weight:600}
+.ss{font-size:12px;color:var(--muted);margin-top:2px}
+.sb{padding:22px 26px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.f label{font-size:11px;font-weight:600;color:var(--text);letter-spacing:.4px;text-transform:uppercase}
+.req{color:var(--red);margin-left:2px}
+.f input,.f select,.f textarea{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,92,42,.07)}
+.ferr{font-size:11px;color:var(--red);margin-top:3px;display:none}
+.sdiv{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:7px;margin:18px 0 12px;display:flex;align-items:center;gap:8px}
+.sdiv::before{content:'';width:3px;height:14px;background:var(--accent);border-radius:2px}
+.yn{display:flex;gap:8px;margin-top:5px}
+.yn-btn{padding:8px 22px;border-radius:7px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--white);color:var(--muted)}
+.yn-btn.yes.selected{background:var(--grl);border-color:var(--green);color:var(--green)}
+.yn-btn.no.selected{background:#fdf0ee;border-color:var(--red);color:var(--red)}
+.expbox{background:#f9f8f5;border:1px solid var(--border);border-radius:8px;padding:13px 15px;margin-top:9px;display:none}
+.expbox.show{display:block}
+.info{background:var(--al);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--green);line-height:1.6;margin-bottom:12px}
+.tip{background:var(--gl);border-radius:8px;padding:11px 14px;font-size:12px;color:#7a5a10;line-height:1.6;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.chip{padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;transition:all .15s;background:var(--white);color:var(--muted)}
+.chip.selected{background:var(--al);border-color:var(--accent);color:var(--accent);font-weight:500}
+.range-wrap{margin-top:6px}
+.range-val{text-align:center;font-size:22px;font-weight:500;color:var(--accent);margin-bottom:8px}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+.sf{padding:14px 26px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:#fafaf8}
+.btn-back{background:none;border:1.5px solid var(--border2);border-radius:8px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer}
+.btn-next{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-submit{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
+.tcpa{background:#f0f4ff;border:1.5px solid #b8c8f0;border-radius:10px;padding:14px 16px;font-size:11px;color:#334;line-height:1.75;margin:14px 0}
+.tcpa strong{color:var(--blue)}
+.tcpa-check{display:flex;gap:10px;align-items:flex-start;margin-top:10px;font-size:12px;color:var(--text);cursor:pointer}
+.tcpa-check input{margin-top:2px;width:16px;height:16px;flex-shrink:0;cursor:pointer}
+.sp{display:none}.sp.active{display:block}
+.succ{display:none;padding:44px 26px;text-align:center}
+.succ-icon{width:68px;height:68px;border-radius:50%;background:var(--grl);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.ns{background:var(--al);border-radius:11px;padding:16px 20px;text-align:left;max-width:420px;margin:18px auto 0}
+.ni{display:flex;gap:9px;margin-bottom:9px;font-size:13px;line-height:1.5}
+.nn{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--red);color:#fff;border-radius:9px;padding:11px 15px;font-size:13px;z-index:999;display:none}
+.toast.show{display:block;animation:su .3s ease}
+@keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(max-width:600px){.fr{grid-template-columns:1fr}.sb{padding:16px}.sh{padding:14px 16px 12px}.sf{padding:12px 16px}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-logo">🛡 ShieldLife</div>
+  <div class="hdr-phone">1-708-742-7047</div>
+</header>
+<div class="hero">
+  <div class="hero-badge">Mortgage Protection Planning</div>
+  <h1 class="hero-title">Protect Your <em>Home</em> & Your Family</h1>
+  <p class="hero-sub">Complete this form so Willie Ashford III can design a mortgage protection plan that keeps your family in their home — no matter what happens.</p>
+  <div class="trust">
+    <div class="ti">🏠 Coverage up to $2,000,000</div>
+    <div class="ti">✓ Pays off your mortgage</div>
+    <div class="ti">✓ Disability protection included</div>
+    <div class="ti">🔒 Secure & Confidential</div>
+  </div>
+</div>
+<div class="prog-wrap">
+  <div style="height:16px"></div>
+  <div class="prog-outer"><div class="prog-inner" id="prog" style="width:14%"></div></div>
+  <div class="steps-row">
+    <div class="sd active" id="sd1"><div class="sd-c">1</div><div class="sd-l">Personal</div></div>
+    <div class="sd" id="sd2"><div class="sd-c">2</div><div class="sd-l">Mortgage</div></div>
+    <div class="sd" id="sd3"><div class="sd-c">3</div><div class="sd-l">Coverage</div></div>
+    <div class="sd" id="sd4"><div class="sd-c">4</div><div class="sd-l">Health</div></div>
+    <div class="sd" id="sd5"><div class="sd-c">5</div><div class="sd-l">Beneficiary</div></div>
+    <div class="sd" id="sd6"><div class="sd-c">6</div><div class="sd-l">Review</div></div>
+  </div>
+</div>
+<div class="fw"><div class="fc">
+
+<!-- STEP 1 -->
+<div class="sp active" id="s1">
+  <div class="sh"><div class="sn">1</div><div><div class="st">Personal Information</div><div class="ss">Step 1 of 6</div></div></div>
+  <div class="sb">
+    <div class="fr">
+      <div class="f"><label>First Name <span class="req">*</span></label><input id="fn" placeholder="James"/><div class="ferr" id="fn-err">Required</div></div>
+      <div class="f"><label>Last Name <span class="req">*</span></label><input id="ln" placeholder="Williams"/><div class="ferr" id="ln-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Date of Birth <span class="req">*</span></label><input id="dob" type="date" onchange="calcAge()"/><div class="ferr" id="dob-err">Required</div></div>
+      <div class="f"><label>Age</label><input id="age" readonly style="background:#f5f5f5" placeholder="Auto-calculated"/></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Gender <span class="req">*</span></label><select id="gen"><option value="">Select...</option><option>Male</option><option>Female</option></select><div class="ferr" id="gen-err">Required</div></div>
+      <div class="f"><label>Marital Status <span class="req">*</span></label><select id="ms"><option value="">Select...</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select><div class="ferr" id="ms-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Phone <span class="req">*</span></label><input id="ph" type="tel" placeholder="(708) 555-0100"/><div class="ferr" id="ph-err">Required</div></div>
+      <div class="f"><label>Email <span class="req">*</span></label><input id="em" type="email" placeholder="james@email.com"/><div class="ferr" id="em-err">Required</div></div>
+    </div>
+    <div class="f"><label>Home Address (property being protected) <span class="req">*</span></label><input id="addr" placeholder="Street, City, State, ZIP"/><div class="ferr" id="addr-err">Required</div></div>
+    <div class="sdiv">Co-Applicant / Spouse</div>
+    <div class="f"><label>Is there a co-borrower on the mortgage?</label>
+      <div class="yn" id="co-yn"><button class="yn-btn yes" onclick="ynSel('co','yes','co-d')">Yes</button><button class="yn-btn no" onclick="ynSel('co','no','co-d')">No</button></div>
+    </div>
+    <div class="expbox" id="co-d">
+      <div class="fr">
+        <div class="f"><label>Co-borrower Full Name</label><input id="co-name" placeholder="Full name"/></div>
+        <div class="f"><label>Co-borrower Date of Birth</label><input id="co-dob" type="date"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Co-borrower Gender</label><select id="co-gen"><option value="">Select...</option><option>Male</option><option>Female</option></select></div>
+        <div class="f"><label>Co-borrower Tobacco use?</label>
+          <div class="yn" id="co-tob-yn"><button class="yn-btn yes" onclick="ynSel('co-tob','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('co-tob','no',null)">No</button></div>
+        </div>
+      </div>
+      <div class="tip">💡 We can cover both borrowers under one policy or separate policies. Willie will recommend the most cost-effective option.</div>
+    </div>
+    <div class="sdiv">Tobacco Use</div>
+    <div class="f"><label>Do you currently use tobacco or nicotine? <span class="req">*</span></label>
+      <div class="yn" id="tob-yn"><button class="yn-btn yes" onclick="ynSel('tob','yes','tob-d')">Yes</button><button class="yn-btn no" onclick="ynSel('tob','no','tob-d')">No</button></div>
+      <div class="ferr" id="tob-err">Required</div>
+    </div>
+    <div class="expbox" id="tob-d"><div class="f"><label>Type and duration</label><input id="tob-info" placeholder="e.g. Cigarettes, 10 years"/></div></div>
+  </div>
+  <div class="sf"><span style="font-size:12px;color:var(--muted)">Step 1 of 6</span><button class="btn-next" onclick="nx(1)">Continue →</button></div>
+</div>
+
+<!-- STEP 2 -->
+<div class="sp" id="s2">
+  <div class="sh"><div class="sn">2</div><div><div class="st">Mortgage Details</div><div class="ss">Step 2 of 6 — Your home loan information</div></div></div>
+  <div class="sb">
+    <div class="info">🏠 Mortgage protection pays off or reduces your mortgage balance if you pass away, become disabled, or suffer a critical illness. Coverage is available up to <strong>$2,000,000</strong>.</div>
+    <div class="sdiv">Loan Information</div>
+    <div class="fr">
+      <div class="f"><label>Current Mortgage Balance <span class="req">*</span></label><input id="mort-bal" placeholder="e.g. $285,000"/><div class="ferr" id="mort-bal-err">Required</div></div>
+      <div class="f"><label>Current Monthly Payment <span class="req">*</span></label><input id="mort-pay" placeholder="e.g. $1,850/mo"/><div class="ferr" id="mort-pay-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Loan Type</label>
+        <select id="loan-type"><option value="">Select...</option><option>30-year fixed</option><option>15-year fixed</option><option>20-year fixed</option><option>ARM (adjustable)</option><option>FHA loan</option><option>VA loan</option><option>Other</option></select>
+      </div>
+      <div class="f"><label>Years Remaining on Loan</label>
+        <select id="loan-yrs"><option value="">Select...</option><option>Under 5 years</option><option>5–10 years</option><option>10–15 years</option><option>15–20 years</option><option>20–25 years</option><option>25–30 years</option></select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Interest Rate</label><input id="loan-rate" placeholder="e.g. 6.5%"/></div>
+      <div class="f"><label>Year Loan Was Taken</label><input id="loan-yr" type="number" placeholder="e.g. 2022"/></div>
+    </div>
+    <div class="f"><label>Lender / Bank Name</label><input id="lender" placeholder="e.g. Chase, Wells Fargo, Bank of America"/></div>
+    <div class="sdiv">Property Information</div>
+    <div class="fr">
+      <div class="f"><label>Property Type</label>
+        <select id="prop-type"><option value="">Select...</option><option>Primary residence</option><option>Second home</option><option>Investment property</option><option>Condo / Townhouse</option><option>Multi-family (2–4 units)</option></select>
+      </div>
+      <div class="f"><label>Estimated Home Value</label><input id="home-val" placeholder="e.g. $350,000"/></div>
+    </div>
+    <div class="f"><label>Do you have a second mortgage or HELOC?</label>
+      <div class="yn" id="heloc-yn"><button class="yn-btn yes" onclick="ynSel('heloc','yes','heloc-d')">Yes</button><button class="yn-btn no" onclick="ynSel('heloc','no','heloc-d')">No</button></div>
+    </div>
+    <div class="expbox" id="heloc-d">
+      <div class="fr">
+        <div class="f"><label>Balance owed</label><input id="heloc-bal" placeholder="e.g. $45,000"/></div>
+        <div class="f"><label>Monthly payment</label><input id="heloc-pay" placeholder="e.g. $350/mo"/></div>
+      </div>
+    </div>
+    <div class="f"><label>Annual household income</label>
+      <select id="hh-income"><option value="">Select...</option><option>Under $40,000</option><option>$40,000 – $60,000</option><option>$60,000 – $80,000</option><option>$80,000 – $100,000</option><option>$100,000 – $150,000</option><option>Over $150,000</option></select>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(2)">← Back</button><button class="btn-next" onclick="nx(2)">Continue →</button></div>
+</div>
+
+<!-- STEP 3 -->
+<div class="sp" id="s3">
+  <div class="sh"><div class="sn">3</div><div><div class="st">Coverage Design</div><div class="ss">Step 3 of 6 — What protection do you need?</div></div></div>
+  <div class="sb">
+    <div class="sdiv">Coverage Amount</div>
+    <div class="f"><label>How much coverage do you want? (Max $2,000,000)</label>
+      <div class="range-wrap">
+        <div class="range-val" id="cov-val">$300,000</div>
+        <input type="range" id="cov-range" min="50000" max="2000000" step="25000" value="300000" oninput="updCov()"/>
+        <div class="range-labels"><span>$50K</span><span>$500K</span><span>$1M</span><span>$1.5M</span><span>$2M</span></div>
+      </div>
+    </div>
+    <div class="tip">💡 We recommend matching your mortgage balance exactly ($<span id="match-tip">current balance</span>), but you can choose more to cover other debts or leave money for your family.</div>
+    <div class="sdiv">Protection Type</div>
+    <div class="f"><label>What events do you want protection for? (select all that apply)</label>
+      <div class="chips">
+        <div class="chip selected" onclick="togChip(this)">Death (pays off mortgage)</div>
+        <div class="chip selected" onclick="togChip(this)">Disability (makes payments if you can't work)</div>
+        <div class="chip" onclick="togChip(this)">Critical illness (heart attack, stroke, cancer)</div>
+        <div class="chip" onclick="togChip(this)">Involuntary unemployment</div>
+        <div class="chip" onclick="togChip(this)">Terminal illness (early payout)</div>
+      </div>
+    </div>
+    <div class="sdiv">Policy Term</div>
+    <div class="f"><label>How long do you need coverage?</label>
+      <div class="chips">
+        <div class="chip" onclick="selCG(this,'term')">Match my loan term (remaining years)</div>
+        <div class="chip" onclick="selCG(this,'term')">10 years</div>
+        <div class="chip" onclick="selCG(this,'term')">15 years</div>
+        <div class="chip" onclick="selCG(this,'term')">20 years</div>
+        <div class="chip" onclick="selCG(this,'term')">30 years</div>
+        <div class="chip" onclick="selCG(this,'term')">To age 65</div>
+      </div>
+    </div>
+    <div class="sdiv">Existing Coverage</div>
+    <div class="f"><label>Do you have any existing life insurance?</label>
+      <div class="yn" id="exins-yn"><button class="yn-btn yes" onclick="ynSel('exins','yes','exins-d')">Yes</button><button class="yn-btn no" onclick="ynSel('exins','no','exins-d')">No</button></div>
+    </div>
+    <div class="expbox" id="exins-d">
+      <div class="fr">
+        <div class="f"><label>Type of coverage</label><select id="exins-type"><option value="">Select...</option><option>Term life</option><option>Whole life</option><option>Group / employer</option><option>IUL</option><option>Other</option></select></div>
+        <div class="f"><label>Death benefit amount</label><input id="exins-amt" placeholder="e.g. $200,000"/></div>
+      </div>
+    </div>
+    <div class="sdiv">Budget</div>
+    <div class="f"><label>Comfortable monthly premium range</label>
+      <div class="chips">
+        <div class="chip" onclick="selCG(this,'budget')">Under $50/mo</div>
+        <div class="chip" onclick="selCG(this,'budget')">$50 – $100/mo</div>
+        <div class="chip" onclick="selCG(this,'budget')">$100 – $200/mo</div>
+        <div class="chip" onclick="selCG(this,'budget')">$200 – $350/mo</div>
+        <div class="chip" onclick="selCG(this,'budget')">Over $350/mo</div>
+        <div class="chip" onclick="selCG(this,'budget')">Show me all options</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(3)">← Back</button><button class="btn-next" onclick="nx(3)">Continue →</button></div>
+</div>
+
+<!-- STEP 4 -->
+<div class="sp" id="s4">
+  <div class="sh"><div class="sn">4</div><div><div class="st">Health Assessment</div><div class="ss">Step 4 of 6 — Determines your rate</div></div></div>
+  <div class="sb">
+    <div class="fr">
+      <div class="f"><label>Height</label><input id="ht" placeholder='5&apos;10"'/></div>
+      <div class="f"><label>Weight (lbs)</label><input id="wt" type="number" placeholder="185"/></div>
+    </div>
+    <div class="sdiv">Medical History</div>
+    <div class="f"><label>High blood pressure? <span class="req">*</span></label>
+      <div class="yn" id="hbp-yn"><button class="yn-btn yes" onclick="ynSel('hbp','yes','hbp-d')">Yes</button><button class="yn-btn no" onclick="ynSel('hbp','no','hbp-d')">No</button></div>
+      <div class="ferr" id="hbp-err">Required</div>
+    </div>
+    <div class="expbox" id="hbp-d">
+      <div class="fr">
+        <div class="f"><label>Current BP reading</label><input id="hbp-rdg" placeholder="e.g. 135/85"/></div>
+        <div class="f"><label>Controlled with medication?</label>
+          <div class="yn" id="hbp-ctrl-yn"><button class="yn-btn yes" onclick="ynSel('hbp-ctrl','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('hbp-ctrl','no',null)">No</button></div>
+        </div>
+      </div>
+      <div class="f"><label>BP medications</label><input id="hbp-meds" placeholder="e.g. Lisinopril 10mg"/></div>
+    </div>
+    <div class="f"><label>Diabetes? <span class="req">*</span></label>
+      <div class="yn" id="diab-yn"><button class="yn-btn yes" onclick="ynSel('diab','yes','diab-d')">Yes</button><button class="yn-btn no" onclick="ynSel('diab','no','diab-d')">No</button></div>
+      <div class="ferr" id="diab-err">Required</div>
+    </div>
+    <div class="expbox" id="diab-d">
+      <div class="fr">
+        <div class="f"><label>Type</label><select id="diab-type"><option>Type 1</option><option>Type 2</option><option>Pre-diabetes</option></select></div>
+        <div class="f"><label>Most recent A1C</label><input id="diab-a1c" placeholder="e.g. 7.0"/></div>
+      </div>
+      <div class="f"><label>Medications / Insulin</label><input id="diab-meds" placeholder="e.g. Metformin 500mg, Insulin"/></div>
+    </div>
+    <div class="f"><label>Heart disease, heart attack, or stroke? <span class="req">*</span></label>
+      <div class="yn" id="heart-yn"><button class="yn-btn yes" onclick="ynSel('heart','yes','heart-d')">Yes</button><button class="yn-btn no" onclick="ynSel('heart','no','heart-d')">No</button></div>
+      <div class="ferr" id="heart-err">Required</div>
+    </div>
+    <div class="expbox" id="heart-d">
+      <div class="fr">
+        <div class="f"><label>Type / event</label><input id="heart-type" placeholder="e.g. Heart attack 2022, stent placed"/></div>
+        <div class="f"><label>Date</label><input id="heart-date" placeholder="Month/Year"/></div>
+      </div>
+      <div class="f"><label>Current medications</label><input id="heart-meds" placeholder="e.g. Metoprolol, Aspirin, Atorvastatin"/></div>
+    </div>
+    <div class="f"><label>Cancer (current or history)? <span class="req">*</span></label>
+      <div class="yn" id="cancer-yn"><button class="yn-btn yes" onclick="ynSel('cancer','yes','cancer-d')">Yes</button><button class="yn-btn no" onclick="ynSel('cancer','no','cancer-d')">No</button></div>
+      <div class="ferr" id="cancer-err">Required</div>
+    </div>
+    <div class="expbox" id="cancer-d">
+      <div class="fr">
+        <div class="f"><label>Type and stage</label><input id="cancer-type" placeholder="e.g. Breast cancer, Stage 2"/></div>
+        <div class="f"><label>Status</label><select id="cancer-status"><option>In remission 1–2 years</option><option>In remission 3–5 years</option><option>In remission 5+ years</option><option>Currently in treatment</option></select></div>
+      </div>
+    </div>
+    <div class="f"><label>Overall health rating</label>
+      <div class="chips">
+        <div class="chip" onclick="selCG(this,'health')">Excellent — no conditions</div>
+        <div class="chip" onclick="selCG(this,'health')">Good — minor controlled conditions</div>
+        <div class="chip" onclick="selCG(this,'health')">Fair — multiple conditions managed</div>
+        <div class="chip" onclick="selCG(this,'health')">Poor — serious conditions</div>
+      </div>
+    </div>
+    <div class="f"><label>Current medications (all)</label>
+      <textarea id="meds" placeholder="List all current prescription medications, dosage, and reason..."></textarea>
+    </div>
+    <div class="f"><label>Any other health conditions?</label>
+      <textarea id="other-health" placeholder="Any other conditions, surgeries, hospitalizations in past 5 years..."></textarea>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(4)">← Back</button><button class="btn-next" onclick="nx(4)">Continue →</button></div>
+</div>
+
+<!-- STEP 5 -->
+<div class="sp" id="s5">
+  <div class="sh"><div class="sn">5</div><div><div class="st">Beneficiary & Contact</div><div class="ss">Step 5 of 6</div></div></div>
+  <div class="sb">
+    <div class="sdiv">Primary Beneficiary</div>
+    <div class="fr">
+      <div class="f"><label>Beneficiary Full Name <span class="req">*</span></label><input id="ben-name" placeholder="Full legal name"/><div class="ferr" id="ben-name-err">Required</div></div>
+      <div class="f"><label>Relationship <span class="req">*</span></label><select id="ben-rel"><option value="">Select...</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select><div class="ferr" id="ben-rel-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Beneficiary Phone</label><input id="ben-ph" placeholder="(708) 555-0100"/></div>
+      <div class="f"><label>Beneficiary Date of Birth</label><input id="ben-dob" type="date"/></div>
+    </div>
+    <div class="sdiv">Preferred Contact</div>
+    <div class="f"><label>Best time to contact you?</label>
+      <div class="chips">
+        <div class="chip" onclick="selCG(this,'ctime')">Morning (8am–12pm)</div>
+        <div class="chip" onclick="selCG(this,'ctime')">Afternoon (12pm–5pm)</div>
+        <div class="chip" onclick="selCG(this,'ctime')">Evening (5pm–8pm)</div>
+        <div class="chip" onclick="selCG(this,'ctime')">Anytime</div>
+      </div>
+    </div>
+    <div class="f"><label>How did you hear about ShieldLife?</label>
+      <select id="src"><option value="">Select...</option><option>Referral</option><option>Google / Search</option><option>Social Media</option><option>Direct mail</option><option>Agent outreach</option><option>Other</option></select>
+    </div>
+    <div class="f"><label>Any questions or special circumstances?</label>
+      <textarea id="notes" placeholder="e.g. Recently refinanced, planning to move in 5 years, want to cover both spouses..."></textarea>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(5)">← Back</button><button class="btn-next" onclick="nx(5)">Continue →</button></div>
+</div>
+
+<!-- STEP 6 -->
+<div class="sp" id="s6">
+  <div class="sh"><div class="sn">6</div><div><div class="st">Review & Authorize</div><div class="ss">Step 6 of 6 — Almost done!</div></div></div>
+  <div class="sb">
+    <div id="rev"></div>
+    <div class="sdiv">TCPA Authorization & Consent</div>
+    <div class="tcpa">
+      <strong>TCPA Disclosure & Authorization</strong><br><br>
+      By submitting this form, I expressly authorize <strong>Willie Ashford III</strong> and <strong>ShieldLife Insurance</strong> (phone: 1-708-742-7047) to contact me regarding mortgage protection insurance quotes and information using the phone number(s) and email I have provided, including:<br><br>
+      • <strong>Phone calls</strong> (including automated/prerecorded messages)<br>
+      • <strong>Text/SMS messages</strong> (including automated messages)<br>
+      • <strong>Email communications</strong><br><br>
+      I understand that my consent is not required as a condition of purchasing any goods or services. I may opt out at any time by replying STOP to any text message or calling 1-708-742-7047. Message and data rates may apply.
+      <label class="tcpa-check"><input type="checkbox" id="tcpa-check" onchange="chkTCPA()"/>
+        <span>I agree to the above TCPA authorization and consent to be contacted by phone, text (SMS), and email by Willie Ashford III / ShieldLife Insurance. <strong>*</strong></span>
+      </label>
+      <div class="ferr" id="tcpa-err" style="display:none">You must agree to the TCPA authorization to continue.</div>
+    </div>
+    <button class="btn-submit" onclick="subForm()">🏠 Get My Free Mortgage Protection Quote →</button>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(6)">← Back</button><span style="font-size:12px;color:var(--muted)">🔒 Encrypted & Secure</span></div>
+</div>
+
+<!-- SUCCESS -->
+<div class="succ" id="succ">
+  <div class="succ-icon">🏠</div>
+  <h2 style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:8px">Your Home Is Protected!</h2>
+  <p style="color:var(--muted);font-size:14px;line-height:1.65;max-width:380px;margin:0 auto 18px" id="succ-msg">Willie Ashford III will contact you shortly with your mortgage protection options.</p>
+  <div class="ns">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">What happens next</div>
+    <div class="ni"><div class="nn">1</div><div>Willie reviews your mortgage details and finds plans that match your balance and budget.</div></div>
+    <div class="ni"><div class="nn">2</div><div>You receive a personalized quote — usually within 1 hour.</div></div>
+    <div class="ni"><div class="nn">3</div><div>Coverage approved and your family's home is protected — in as little as 24 hours.</div></div>
+  </div>
+  <div style="margin-top:16px;font-size:13px;color:var(--muted)">Questions? Call Willie: <strong style="color:var(--accent)">1-708-742-7047</strong></div>
+</div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+let cur=1;const STEPS=6;const ynVals={};
+function updProg(){const p=Math.round(((cur-1)/STEPS)*100);document.getElementById('prog').style.width=p+'%';for(let i=1;i<=STEPS;i++){const s=document.getElementById('sd'+i);if(!s)continue;s.classList.remove('active','done');if(i<cur)s.classList.add('done');else if(i===cur)s.classList.add('active');}}
+function sw(){document.querySelectorAll('.sp').forEach(s=>s.classList.remove('active'));document.getElementById('s'+cur)?.classList.add('active');updProg();window.scrollTo({top:0,behavior:'smooth'});}
+function nx(from){if(!validate(from))return;cur=from+1;if(cur===6)bldRev();sw();}
+function pv(from){cur=from-1;sw();}
+function ynSel(key,val,eid){ynVals[key]=val;const row=document.getElementById(key+'-yn');if(row){row.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('selected'));const b=row.querySelector('.yn-btn.'+val);if(b)b.classList.add('selected');}if(eid){const box=document.getElementById(eid);if(box)box.classList.toggle('show',val==='yes');}const e=document.getElementById(key+'-err');if(e)e.style.display='none';}
+function togChip(el){el.classList.toggle('selected');}
+function selCG(el){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
+function calcAge(){const d=document.getElementById('dob').value;if(!d)return;const t=new Date(),b=new Date(d);let a=t.getFullYear()-b.getFullYear();if(t.getMonth()-b.getMonth()<0||(t.getMonth()-b.getMonth()===0&&t.getDate()<b.getDate()))a--;document.getElementById('age').value=a+' years old';}
+function updCov(){const v=parseInt(document.getElementById('cov-range').value);document.getElementById('cov-val').textContent='$'+v.toLocaleString();document.getElementById('match-tip').textContent=v.toLocaleString();}
+function chkTCPA(){document.getElementById('tcpa-err').style.display='none';}
+function validate(step){
+  clearErrs();let ok=true;let fe=null;
+  function req(id,msg){const el=document.getElementById(id);if(!el||!el.value?.trim()){if(el)el.style.border='1.5px solid var(--red)';const e=document.getElementById(id+'-err');if(e){e.textContent=msg||'Required';e.style.display='block';}if(!fe&&el)fe=el;ok=false;}}
+  function ryn(key){if(!ynVals[key]){const e=document.getElementById(key+'-err');if(e){e.textContent='Please select Yes or No';e.style.display='block';}ok=false;}}
+  if(step===1){req('fn');req('ln');req('dob');req('gen','Select gender');req('ms','Select marital status');req('ph');req('em');req('addr');ryn('tob');}
+  if(step===2){req('mort-bal','Enter mortgage balance');req('mort-pay','Enter monthly payment');}
+  if(step===4){ryn('hbp');ryn('diab');ryn('heart');ryn('cancer');}
+  if(step===5){req('ben-name');req('ben-rel','Select relationship');}
+  if(step===6){if(!document.getElementById('tcpa-check').checked){document.getElementById('tcpa-err').style.display='block';ok=false;}}
+  if(!ok&&fe)fe.scrollIntoView({behavior:'smooth',block:'center'});
+  if(!ok)showToast('Please complete all required fields.');
+  return ok;
+}
+function clearErrs(){document.querySelectorAll('.ferr').forEach(e=>e.style.display='none');document.querySelectorAll('input,select').forEach(e=>e.style.border='');}
+function bldRev(){
+  const g=id=>document.getElementById(id)?.value||'—';
+  const cov=document.getElementById('cov-range')?.value||'300000';
+  document.getElementById('rev').innerHTML=`<div style="background:#f9f8f5;border-radius:10px;padding:14px 16px;margin-bottom:14px"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Summary</div><div style="display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px"><span style="color:var(--muted)">Name:</span><strong>${g('fn')} ${g('ln')}</strong><span style="color:var(--muted)">Phone:</span><span>${g('ph')}</span><span style="color:var(--muted)">Email:</span><span>${g('em')}</span><span style="color:var(--muted)">Mortgage Balance:</span><span>${g('mort-bal')}</span><span style="color:var(--muted)">Coverage:</span><strong style="color:var(--accent)">$${parseInt(cov).toLocaleString()}</strong><span style="color:var(--muted)">Beneficiary:</span><span>${g('ben-name')} (${g('ben-rel')})</span></div></div>`;
+}
+async function subForm(){
+  const g=id=>document.getElementById(id)?.value||'';
+  const cov=document.getElementById('cov-range')?.value||'300000';
+  const btn=document.querySelector('.btn-submit');btn.textContent='Submitting...';btn.disabled=true;
+  try{
+    await fetch('https://formspree.io/f/meevjplq',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({
+      _subject:'Mortgage Protection Lead — '+g('fn')+' '+g('ln'),
+      form_type:'Mortgage Protection Questionnaire',
+      name:g('fn')+' '+g('ln'),dob:g('dob'),age:g('age'),gender:g('gen'),marital_status:g('ms'),
+      phone:g('ph'),email:g('em'),address:g('addr'),
+      tobacco:ynVals['tob']||'no',
+      mortgage_balance:g('mort-bal'),monthly_payment:g('mort-pay'),loan_type:g('loan-type'),years_remaining:g('loan-yrs'),
+      coverage_requested:'$'+parseInt(cov).toLocaleString(),
+      high_blood_pressure:ynVals['hbp']||'no',diabetes:ynVals['diab']||'no',heart:ynVals['heart']||'no',cancer:ynVals['cancer']||'no',
+      medications:g('meds'),other_health:g('other-health'),
+      beneficiary:g('ben-name')+' ('+g('ben-rel')+')',
+      notes:g('notes'),tcpa_consent:'YES — agreed',
+      submitted_at:new Date().toLocaleString(),agent:'Willie Ashford III — 1-708-742-7047'
+    })});
+  }catch(e){console.log(e);}
+  document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
+  document.getElementById('succ').style.display='block';
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('succ-msg').textContent='Thank you, '+g('fn')+'! Willie Ashford III will contact you within 1 hour with your mortgage protection options for $'+parseInt(cov).toLocaleString()+' in coverage.';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+updCov();
+</script>
+</body>
+</html>

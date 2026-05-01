@@ -163,8 +163,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
     <div class="fr">
-      <div class="f"><label>Social Security # <span class="req">*</span></label><input id="ssn" placeholder="XXX-XX-XXXX" maxlength="11"/><div class="ferr" id="ssn-err">Required</div></div>
-      <div class="f"><label>Driver's License #</label><input id="dl" placeholder="Optional"/></div>
+      <div class="f"><label>Date of Birth <span class="req">*</span></label><input id="dob2" type="date"/></div>
+      <div class="f"><label>Occupation <span class="req">*</span></label><input id="occ2" placeholder="e.g. Nurse, Teacher"/></div>
     </div>
     <div class="sdiv">Contact Information</div>
     <div class="f"><label>Street Address <span class="req">*</span></label><input id="addr" placeholder="123 Main Street"/><div class="ferr" id="addr-err">Required</div></div>
@@ -912,7 +912,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div style="background:#f9f8f5;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px">
       By electronically signing and submitting this application, I certify that all information provided is true, complete, and accurate to the best of my knowledge. I understand that any misrepresentation or omission may result in denial or cancellation of coverage. I authorize ShieldLife and Willie Ashford III (1-708-742-7047) to contact me by phone or text regarding this application.
     </div>
-    <button class="btn-submit" onclick="subApp()">🛡 Submit Application →</button>
+    <div style="background:#f0f4ff;border:1.5px solid #b8c8f0;border-radius:10px;padding:14px 16px;font-size:11px;color:#334;line-height:1.75;margin-bottom:14px">
+<strong style="color:#1a3a6b">TCPA Disclosure & Authorization</strong><br><br>
+By submitting this application, I expressly authorize <strong>Willie Ashford III</strong> and <strong>ShieldLife Insurance</strong> (1-708-742-7047) to contact me regarding life insurance using the phone number(s) and email provided, including phone calls, text/SMS messages, and email communications (including automated messages). Consent is not required as a condition of purchase. Opt out anytime by replying STOP or calling 1-708-742-7047.
+<label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;font-size:12px;cursor:pointer"><input type="checkbox" id="app-tcpa" style="margin-top:2px;width:16px;height:16px;flex-shrink:0"/>
+<span>I agree to the TCPA authorization and consent to be contacted by phone, text (SMS), and email. <strong>*</strong></span></label>
+<div style="font-size:11px;color:#c0392b;margin-top:4px;display:none" id="app-tcpa-err">You must agree to continue.</div>
+</div>
+<button class="btn-submit" onclick="subApp()">🛡 Submit Application →</button>
   </div>
   <div class="sf"><button class="btn-back" onclick="pv(7)">← Back</button><span style="font-size:12px;color:var(--muted)">🔒 Encrypted & Secure</span></div>
 </div>
@@ -1014,7 +1021,7 @@ function validate(step){
     req('age','Age required');
     req('gen','Please select gender');
     req('ms','Please select marital status');
-    req('ssn','SSN required');
+    
     req('addr','Address required');
     req('city','City required');
     req('state','State required');
@@ -1129,7 +1136,7 @@ function bldRev(){
 }
 
 async function subApp(){
-  if(!validate(7))return;
+  if(!document.getElementById('app-tcpa').checked){document.getElementById('app-tcpa-err').style.display='block';return;}if(!validate(7))return;
   const btn=document.querySelector('.btn-submit');
   btn.textContent='Submitting...';btn.disabled=true;
   const getVal=id=>document.getElementById(id)?.value||'';
