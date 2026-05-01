@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldLife — Get Your Free Quote</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+:root{--bg:#f5f4f0;--white:#ffffff;--dark:#12100f;--text:#1e1c1a;--muted:#7a7470;--border:#e0dcd6;--accent:#1e3a6e;--al:#e8edf7;--gold:#c9922a;--gl:#fdf6e9;--gr:#1a6641;--grl:#e6f4ec}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:var(--accent);color:#fff;padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.hdr-logo{font-family:'DM Serif Display',serif;font-size:21px}
+.hero{background:var(--accent);color:#fff;padding:52px 40px 72px;text-align:center}
+.he{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:14px}
+.ht{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.15;margin-bottom:12px}
+.ht em{font-style:italic;color:#c9b88a}
+.hs{font-size:15px;opacity:.75;max-width:460px;margin:0 auto 24px;line-height:1.6}
+.tr{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+.tri{font-size:12px;opacity:.7;display:flex;align-items:center;gap:5px}
+.fw{max-width:680px;margin:-30px auto 56px;padding:0 18px}
+.fc{background:var(--white);border-radius:20px;box-shadow:0 8px 36px rgba(0,0,0,.09);overflow:hidden}
+.pb{height:4px;background:var(--border)}
+.pf{height:100%;background:var(--gold);transition:width .4s ease}
+.sh{padding:24px 28px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sn{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.st{font-size:15px;font-weight:600}
+.ss{font-size:12px;color:var(--muted);margin-top:2px}
+.sb2{padding:24px 28px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+.f:last-child{margin-bottom:0}
+.f label{font-size:11px;font-weight:600;color:var(--text);letter-spacing:.3px;text-transform:uppercase}
+.f input,.f select,.f textarea{border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white)}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,58,110,.08)}
+.f input::placeholder{color:#bbb}
+/* POLICY CARDS */
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}
+.pg3{grid-template-columns:1fr 1fr 1fr}
+.pc{border:2px solid var(--border);border-radius:11px;padding:12px 13px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:8px}
+.pc:hover{border-color:var(--accent)}
+.pc.selected{border-color:var(--accent);background:var(--al)}
+.pc input[type=radio]{display:none}
+.pc-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.pc-name{font-size:13px;font-weight:500;margin-bottom:1px}
+.pc-desc{font-size:11px;color:var(--muted);line-height:1.4}
+/* PRODUCT CATEGORIES */
+.cat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:14px 0 7px;display:flex;align-items:center;gap:7px}
+.cat-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* RANGE */
+.rv{text-align:center;font-size:22px;font-weight:500;color:var(--accent);margin-bottom:9px}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:4px;background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:21px;height:21px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.18)}
+.rl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+/* HEALTH */
+.hrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px}
+.hc{padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s}
+.hc.selected{border-color:var(--gr);background:var(--grl);color:var(--gr);font-weight:500}
+.hc:hover{border-color:var(--accent)}
+/* FOOTER */
+.sf{padding:18px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.bb2{background:none;border:1.5px solid var(--border);border-radius:9px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s}
+.bb2:hover{border-color:var(--accent);color:var(--accent)}
+.bn2{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
+.bn2:hover{background:#162e58}
+.bsub{background:var(--gold);color:#fff;border:none;border-radius:9px;padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
+.bsub:hover{background:#b07e20}
+.sp{display:none}.sp.active{display:block}
+.cb{background:#f9f8f5;border-radius:9px;padding:12px 14px;font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6}
+/* SUCCESS */
+.succ{display:none;text-align:center;padding:52px 28px}
+.si{width:68px;height:68px;border-radius:50%;background:var(--grl);margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.ns{background:var(--al);border-radius:11px;padding:18px 22px;text-align:left;max-width:380px;margin:0 auto}
+.ni2{display:flex;gap:10px;margin-bottom:10px;font-size:13px}
+.nn{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+/* REVIEW */
+.rg{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px;background:#f9f8f5;border-radius:10px;padding:16px 18px}
+.rk{color:var(--muted)}
+.rv2{font-weight:500}
+/* SOCIAL PROOF */
+.sp2{background:var(--white);border-radius:14px;padding:20px 24px;margin-top:14px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.pi2{display:flex;gap:11px;margin-bottom:11px;font-size:13px;line-height:1.5}
+.pi2:last-child{margin-bottom:0}
+.pav{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff}
+@media(max-width:600px){.hero{padding:36px 18px 56px}.ht{font-size:28px}.fr{grid-template-columns:1fr}.pg{grid-template-columns:1fr}.pg3{grid-template-columns:1fr}.sb2{padding:18px}.sh{padding:18px 18px 14px}.sf{padding:14px 18px}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-logo">🛡 ShieldLife</div>
+  <div style="font-size:13px;opacity:.8">Questions? 1-708-742-7047</div>
+</header>
+<div class="hero">
+  <div class="he">Free · No Obligation · 2 Minutes</div>
+  <h1 class="ht">Protect what matters <em>most</em> to you.</h1>
+  <p class="hs">Life insurance, mortgage protection & retirement solutions — personalized quotes in minutes.</p>
+  <div class="tr">
+    <div class="tri">✓ No spam, ever</div>
+    <div class="tri">✓ Rates from $12/mo</div>
+    <div class="tri">✓ Licensed agents</div>
+    <div class="tri">✓ A+ BBB Rating</div>
+  </div>
+</div>
+<div class="fw">
+  <div class="fc">
+    <div class="pb"><div class="pf" id="prog" style="width:25%"></div></div>
+
+    <!-- STEP 1: About You -->
+    <div class="sp active" id="s1">
+      <div class="sh"><div class="sn">1</div><div><div class="st">About You</div><div class="ss">Step 1 of 4 — Basic information</div></div></div>
+      <div class="sb2">
+        <div class="fr"><div class="f"><label>First Name</label><input id="fn" placeholder="John"/></div><div class="f"><label>Last Name</label><input id="ln" placeholder="Smith"/></div></div>
+        <div class="fr"><div class="f"><label>Date of Birth</label><input id="dob" type="date"/></div><div class="f"><label>Gender</label><select id="gen"><option value="">Select...</option><option>Male</option><option>Female</option></select></div></div>
+        <div class="fr"><div class="f"><label>Email Address</label><input id="em" type="email" placeholder="john@email.com"/></div><div class="f"><label>Phone Number</label><input id="ph" type="tel" placeholder="(708) 742-7047"/></div></div>
+        <div class="fr"><div class="f"><label>ZIP Code</label><input id="zip" placeholder="60601" style="max-width:160px"/></div><div class="f"><label>Marital Status</label><select id="ms"><option value="">Select...</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div></div>
+      </div>
+      <div class="sf"><span style="font-size:12px;color:var(--muted)">Step 1 of 4</span><button class="bn2" onclick="nx(1)">Continue →</button></div>
+    </div>
+
+    <!-- STEP 2: Product Selection -->
+    <div class="sp" id="s2">
+      <div class="sh"><div class="sn">2</div><div><div class="st">What Are You Looking For?</div><div class="ss">Step 2 of 4 — Select your product</div></div></div>
+      <div class="sb2">
+
+        <div class="cat-label">Life Insurance</div>
+        <div class="pg" style="margin-bottom:4px">
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Term Life"/><span class="pc-icon">📅</span><div><div class="pc-name">Term Life</div><div class="pc-desc">10–30 year coverage. Most affordable option.</div></div></label>
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Whole Life"/><span class="pc-icon">🏦</span><div><div class="pc-name">Whole Life</div><div class="pc-desc">Lifetime coverage + cash value growth.</div></div></label>
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Indexed Universal Life"/><span class="pc-icon">📈</span><div><div class="pc-name">Indexed Universal Life</div><div class="pc-desc">Flexible + market-linked growth potential.</div></div></label>
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Final Expense"/><span class="pc-icon">💙</span><div><div class="pc-name">Final Expense</div><div class="pc-desc">Covers burial and end-of-life costs.</div></div></label>
+        </div>
+
+        <div class="cat-label">Home Protection</div>
+        <div class="pg" style="margin-bottom:4px">
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Mortgage Protection"/><span class="pc-icon">🏠</span><div><div class="pc-name">Mortgage Protection</div><div class="pc-desc">Pays off your mortgage if you pass or become disabled. Protects your family's home.</div></div></label>
+        </div>
+
+        <div class="cat-label">Retirement & Income</div>
+        <div class="pg pg3">
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Fixed Index Annuity"/><span class="pc-icon">🔒</span><div><div class="pc-name">Fixed Index Annuity</div><div class="pc-desc">Market-linked growth with zero downside risk. Ideal pre-retirement.</div></div></label>
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Income Annuity"/><span class="pc-icon">💵</span><div><div class="pc-name">Income Annuity</div><div class="pc-desc">Guaranteed monthly income for life. Never outlive your savings.</div></div></label>
+          <label class="pc" onclick="selP(this)"><input type="radio" name="pol" value="Not sure — help me decide"/><span class="pc-icon">🤔</span><div><div class="pc-name">Not sure yet</div><div class="pc-desc">Our agent will help you find the right fit.</div></div></label>
+        </div>
+
+        <div style="margin-top:18px" id="cov-wrap">
+          <div class="f" style="margin-bottom:0"><label id="cov-label">Coverage / Benefit Amount</label></div>
+          <div class="rv" id="covdisp">$500,000</div>
+          <input type="range" id="covsl" min="25000" max="5000000" step="25000" value="500000" oninput="updCov()"/>
+          <div class="rl"><span id="rmin">$25K</span><span id="rmax">$5M</span></div>
+        </div>
+
+        <div class="f" style="margin-top:16px"><label>Primary Goal</label>
+          <select id="goal">
+            <option value="">Select your primary goal...</option>
+            <option>Income replacement for my family</option>
+            <option>Protect my mortgage / home</option>
+            <option>Supplement retirement income</option>
+            <option>Guaranteed income for life</option>
+            <option>Leave a legacy / estate planning</option>
+            <option>Business key-person coverage</option>
+            <option>Funeral / final expense only</option>
+          </select>
+        </div>
+      </div>
+      <div class="sf"><button class="bb2" onclick="pv(2)">← Back</button><button class="bn2" onclick="nx(2)">Continue →</button></div>
+    </div>
+
+    <!-- STEP 3: Health -->
+    <div class="sp" id="s3">
+      <div class="sh"><div class="sn">3</div><div><div class="st">Health & Lifestyle</div><div class="ss">Step 3 of 4 — Helps us find best rates</div></div></div>
+      <div class="sb2">
+        <div class="f"><label>Overall Health</label>
+          <div class="hrow"><div class="hc" onclick="selHC(this,'hlt')">Excellent</div><div class="hc" onclick="selHC(this,'hlt')">Very Good</div><div class="hc" onclick="selHC(this,'hlt')">Good</div><div class="hc" onclick="selHC(this,'hlt')">Fair</div><div class="hc" onclick="selHC(this,'hlt')">Poor</div></div>
+        </div>
+        <div class="f"><label>Tobacco Use</label>
+          <div class="hrow"><div class="hc" onclick="selHC(this,'tob')">Non-Smoker</div><div class="hc" onclick="selHC(this,'tob')">Former Smoker</div><div class="hc" onclick="selHC(this,'tob')">Current Smoker</div></div>
+        </div>
+        <div class="f"><label>Existing Conditions (select all that apply)</label>
+          <div class="hrow">
+            <div class="hc" onclick="tgHC(this)">None</div>
+            <div class="hc" onclick="tgHC(this)">Diabetes</div>
+            <div class="hc" onclick="tgHC(this)">Heart Disease</div>
+            <div class="hc" onclick="tgHC(this)">Cancer (history)</div>
+            <div class="hc" onclick="tgHC(this)">High Blood Pressure</div>
+            <div class="hc" onclick="tgHC(this)">HIV / AIDS</div>
+            <div class="hc" onclick="tgHC(this)">Dementia</div>
+            <div class="hc" onclick="tgHC(this)">Alzheimer's</div>
+            <div class="hc" onclick="tgHC(this)">Mental Health Issues</div>
+            <div class="hc" onclick="tgCond(this,'other-cond')">Other</div>
+          </div>
+          <div id="other-cond" style="display:none;margin-top:8px"><input id="other-cond-txt" placeholder="Please describe your condition..." style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:DM Sans,sans-serif;font-size:14px;color:var(--text);outline:none;background:var(--white)"/></div>
+        </div>
+        <div class="f" style="margin-top:8px"><label>Prescribed Medications (even if you no longer take them)</label>
+          <div class="hrow">
+            <div class="hc" onclick="selMeds(this,'yes')">Yes</div>
+            <div class="hc" onclick="selMeds(this,'no')">No</div>
+          </div>
+          <div id="meds-box" style="display:none;margin-top:8px"><textarea id="meds-txt" placeholder="Please list your medications..." style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:DM Sans,sans-serif;font-size:14px;color:var(--text);outline:none;background:var(--white);resize:vertical;min-height:70px"></textarea></div>
+        </div>
+        <div class="fr"><div class="f"><label>Height</label><input id="ht2" placeholder='5&apos;10"'/></div><div class="f"><label>Weight (lbs)</label><input id="wt" type="number" placeholder="175"/></div></div>
+        <div id="annuity-extra" style="display:none">
+          <div style="background:var(--gl);border:1px solid #f0e0b8;border-radius:9px;padding:12px 14px;margin-top:4px;font-size:13px;color:#7a5a10">
+            <strong>💵 Annuity/Retirement note:</strong> For Fixed Index Annuity or Income Annuity, health questions are less critical — we'll focus more on your retirement timeline and income goals in your consultation.
+          </div>
+          <div class="fr" style="margin-top:14px"><div class="f"><label>Planned Retirement Age</label><input id="retage" type="number" placeholder="65"/></div><div class="f"><label>Current Retirement Savings</label><select id="retsav"><option>Under $100K</option><option>$100K–$250K</option><option>$250K–$500K</option><option>$500K–$1M</option><option>Over $1M</option></select></div></div>
+        </div>
+      </div>
+      <div class="sf"><button class="bb2" onclick="pv(3)">← Back</button><button class="bn2" onclick="nx(3)">Continue →</button></div>
+    </div>
+
+    <!-- STEP 4: Review & Submit -->
+    <div class="sp" id="s4">
+      <div class="sh"><div class="sn">4</div><div><div class="st">Review & Submit</div><div class="ss">Step 4 of 4 — Almost done!</div></div></div>
+      <div class="sb2">
+        <div id="rev"></div>
+        <div class="f" style="margin-top:16px"><label>Best Time to Contact You</label><select id="ctime"><option>Morning (8am–12pm)</option><option>Afternoon (12pm–5pm)</option><option>Evening (5pm–8pm)</option><option>Anytime</option></select></div>
+        <div class="f"><label>Preferred Contact Method</label><select id="cmethod"><option>Phone Call</option><option>Text Message</option></select></div>
+        <div class="f"><label>How did you hear about us?</label><select id="src"><option>Google / Search</option><option>Referral</option><option>Social Media</option><option>Agent Outreach</option><option>Other</option></select></div>
+        <div class="f"><label>Notes (optional)</label><textarea id="notes" placeholder="Anything else you'd like us to know…" rows="2"></textarea></div>
+        <div class="cb">By submitting, you agree to be contacted by Willie Ashford III at 1-708-742-7047 by phone or text regarding your quote. You may opt out at any time. We never sell your data.</div>
+        <button class="bsub" onclick="subForm()">🛡 Get My Free Quote →</button>
+      </div>
+      <div class="sf"><button class="bb2" onclick="pv(4)">← Back</button><span style="font-size:12px;color:var(--muted)">🔒 256-bit encrypted</span></div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="succ" id="succ">
+      <div class="si">✓</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:9px">You're all set!</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6;max-width:360px;margin:0 auto 20px" id="succmsg">Willie will contact you within 1 business hour with your personalized quote.</p>
+      <div class="ns">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">What happens next</div>
+        <div class="ni2"><div class="nn">1</div><div>Willie reviews your information and prepares your personalized quote.</div></div>
+        <div class="ni2"><div class="nn">2</div><div>You'll receive a confirmation email with your quote summary.</div></div>
+        <div class="ni2"><div class="nn">3</div><div>Schedule a free 15-minute call — zero pressure, just options.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp2" id="proof">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">What our clients say</div>
+    <div class="pi2"><div class="pav" style="background:#1e3a6e">DT</div><div><div style="color:#f59e0b;font-size:12px">★★★★★</div><div>"The process was incredibly easy. I had a quote in 10 minutes and my agent was so helpful."</div><div style="font-size:11px;color:var(--muted);margin-top:3px">David T. — Chicago, IL</div></div></div>
+    <div class="pi2"><div class="pav" style="background:#1a6641">MR</div><div><div style="color:#f59e0b;font-size:12px">★★★★★</div><div>"Saved $80/month vs my previous provider. ShieldLife made switching effortless."</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Maria R. — Naperville, IL</div></div></div>
+    <div class="pi2"><div class="pav" style="background:#7a3a10">CB</div><div><div style="color:#f59e0b;font-size:12px">★★★★★</div><div>"My FIA grew 11% last year with zero risk to principal. Best retirement decision I made."</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Carol B. — Naperville, IL</div></div></div>
+  </div>
+</div>
+
+<script>
+let cur=1;
+const progs=[0,25,50,75,100];
+
+function nx(from){
+  if(!validateStep(from))return;
+  cur=from+1;
+  if(cur===4)bldRev();
+  if(cur===3)chkAnn();
+  sw();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function validateStep(step){
+  clearErrors();
+  if(step===1){
+    const fn=document.getElementById('fn').value.trim();
+    const ln=document.getElementById('ln').value.trim();
+    const dob=document.getElementById('dob').value;
+    const gen=document.getElementById('gen').value;
+    const em=document.getElementById('em').value.trim();
+    const ph=document.getElementById('ph').value.trim();
+    const zip=document.getElementById('zip').value.trim();
+    const ms=document.getElementById('ms').value;
+    if(!fn){showErr('fn','First name is required');return false;}
+    if(!ln){showErr('ln','Last name is required');return false;}
+    if(!dob){showErr('dob','Date of birth is required');return false;}
+    if(!gen){showErr('gen','Please select a gender');return false;}
+    if(!em||!em.includes('@')){showErr('em','Valid email is required');return false;}
+    if(!ph){showErr('ph','Phone number is required');return false;}
+    if(!zip){showErr('zip','ZIP code is required');return false;}
+    if(!ms){showErr('ms','Please select your marital status');return false;}
+    return true;
+  }
+  if(step===2){
+    const pol=document.querySelector('input[name=pol]:checked');
+    if(!pol){alert('Please select a product/policy type to continue.');return false;}
+    const goal=document.getElementById('goal').value;
+    if(!goal){alert('Please select your primary goal to continue.');return false;}
+    return true;
+  }
+  if(step===3){
+    const hlt=document.querySelectorAll('#s3 .hrow')[0]?.querySelector('.hc.selected');
+    if(!hlt){alert('Please select your overall health rating to continue.');return false;}
+    const tob=document.querySelectorAll('#s3 .hrow')[1]?.querySelector('.hc.selected');
+    if(!tob){alert('Please select your tobacco use status to continue.');return false;}
+    return true;
+  }
+  return true;
+}
+function showErr(id,msg){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.style.border='1.5px solid #e53e3e';
+  let err=document.createElement('div');
+  err.className='field-err';
+  err.style.cssText='color:#e53e3e;font-size:11px;margin-top:3px';
+  err.textContent=msg;
+  el.parentNode.appendChild(err);
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function clearErrors(){
+  document.querySelectorAll('.field-err').forEach(e=>e.remove());
+  document.querySelectorAll('input,select').forEach(e=>e.style.border='');
+}
+function pv(from){cur=from-1;sw();window.scrollTo({top:0,behavior:'smooth'})}
+function sw(){document.querySelectorAll('.sp').forEach(s=>s.classList.remove('active'));const el=document.getElementById('s'+cur);if(el)el.classList.add('active');document.getElementById('prog').style.width=progs[cur]+'%'}
+function selP(el){document.querySelectorAll('.pc').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chkCovRange();chkAnn()}
+function selHC(el,g){el.parentElement.querySelectorAll('.hc').forEach(c=>c.classList.remove('selected'));el.classList.add('selected')}
+function tgHC(el){el.classList.toggle('selected')}
+function updCov(){const v=parseInt(document.getElementById('covsl').value);document.getElementById('covdisp').textContent=v>=1000000?'$'+(v/1000000).toFixed(1).replace('.0','')+'M':'$'+(v/1000).toFixed(0)+'K'}
+
+function chkCovRange(){
+  const pol=(document.querySelector('input[name=pol]:checked')||{value:''}).value;
+  const sl=document.getElementById('covsl');
+  const cl=document.getElementById('cov-label');
+  if(pol==='Mortgage Protection'){sl.min=50000;sl.max=1500000;sl.value=Math.min(sl.value,1500000);document.getElementById('rmin').textContent='$50K';document.getElementById('rmax').textContent='$1.5M';cl.textContent='Mortgage Balance / Coverage'}
+  else if(pol==='Fixed Index Annuity'||pol==='Income Annuity'){sl.min=25000;sl.max=1000000;sl.value=Math.min(sl.value,1000000);document.getElementById('rmin').textContent='$25K';document.getElementById('rmax').textContent='$1M';cl.textContent='Premium / Investment Amount'}
+  else{sl.min=25000;sl.max=5000000;document.getElementById('rmin').textContent='$25K';document.getElementById('rmax').textContent='$5M';cl.textContent='Coverage / Benefit Amount'}
+  updCov();
+}
+
+function chkAnn(){
+  const pol=(document.querySelector('input[name=pol]:checked')||{value:''}).value;
+  const show=pol==='Fixed Index Annuity'||pol==='Income Annuity';
+  document.getElementById('annuity-extra').style.display=show?'block':'none';
+}
+
+function bldRev(){
+  const fn=document.getElementById('fn').value||'N/A';
+  const ln=document.getElementById('ln').value||'';
+  const em=document.getElementById('em').value||'N/A';
+  const ph=document.getElementById('ph').value||'N/A';
+  const pol=(document.querySelector('input[name=pol]:checked')||{value:'N/A'}).value;
+  const cov=document.getElementById('covdisp').textContent;
+  const goal=document.getElementById('goal').value;
+  const hlt=document.querySelector('#s3 .hc.selected')?.textContent||'N/A';
+  document.getElementById('rev').innerHTML=`<div class="rg"><span class="rk">Name:</span><span class="rv2">${fn} ${ln}</span><span class="rk">Email:</span><span>${em}</span><span class="rk">Phone:</span><span>${ph}</span><span class="rk">Product:</span><span class="rv2">${pol}</span><span class="rk">Amount:</span><span class="rv2" style="color:#1e3a6e">${cov}</span><span class="rk">Goal:</span><span>${goal}</span><span class="rk">Health:</span><span>${hlt}</span></div>`;
+}
+
+function tgCond(el,targetId){
+  el.classList.toggle('selected');
+  const box=document.getElementById(targetId);
+  if(box)box.style.display=el.classList.contains('selected')?'block':'none';
+}
+function selMeds(el,val){
+  el.parentElement.querySelectorAll('.hc').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('meds-box').style.display=val==='yes'?'block':'none';
+}
+async function subForm(){
+  const fn=document.getElementById('fn').value||'there';
+  const ln=document.getElementById('ln').value||'';
+  const pol=(document.querySelector('input[name=pol]:checked')||{value:'your selected product'}).value;
+  const cov=document.getElementById('covdisp').textContent;
+  const goal=document.getElementById('goal').value;
+  const ctime=document.getElementById('ctime').value;
+  const cmethod=document.getElementById('cmethod').value;
+  const src=document.getElementById('src').value;
+  const notes=document.getElementById('notes').value;
+  const hchips=document.querySelectorAll('#s3 .hc.selected');
+  const hlt=hchips[0]?.textContent||'N/A';
+  const tob=hchips[1]?.textContent||'N/A';
+  const submitBtn=document.querySelector('.bsub');
+  submitBtn.textContent='Sending...';
+  submitBtn.disabled=true;
+  try{
+    await fetch('https://formspree.io/f/meevjplq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        name:fn+' '+ln,
+        email:document.getElementById('em').value,
+        phone:document.getElementById('ph').value,
+        dob:document.getElementById('dob').value,
+        zip:document.getElementById('zip').value,
+        policy_interest:pol,
+        coverage_amount:cov,
+        primary_goal:goal,
+        health:hlt,
+        tobacco:tob,
+        best_time_to_call:ctime,
+        preferred_contact:cmethod,
+        how_heard:src,
+        notes:notes,
+        submitted_at:new Date().toLocaleString()
+      })
+    });
+  }catch(e){console.log('Formspree error',e);}
+  document.getElementById('succmsg').textContent='Thanks, '+fn+'! Willie Ashford III will contact you within 1 hour with your personalized '+pol+' options. Check your email for confirmation.';
+  document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
+  document.getElementById('succ').style.display='block';
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('proof').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldLife — Life Insurance Application v2</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+:root{
+  --bg:#f7f5f0;--white:#ffffff;--dark:#0e0c0a;--text:#1a1714;--muted:#6b6560;
+  --border:#ddd9d2;--border2:#c8c3bb;--accent:#1a3a6b;--al:#e8eef8;
+  --gold:#b8832a;--gl:#fdf4e3;--red:#c0392b;--rl:#fdf0ee;
+  --green:#1a6b3a;--grl:#e8f4ed;--shadow:0 2px 12px rgba(0,0,0,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:var(--accent);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff}
+.hdr-phone{font-size:13px;color:rgba(255,255,255,.8)}
+.hero{background:linear-gradient(135deg,#1a3a6b 0%,#0e2244 100%);padding:44px 32px 56px;text-align:center;color:#fff}
+.hero-badge{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:36px;line-height:1.2;margin-bottom:10px}
+.hero-title em{font-style:italic;color:#c9b88a}
+.hero-sub{font-size:14px;opacity:.7;max-width:480px;margin:0 auto 20px;line-height:1.65}
+.trust{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.trust-item{font-size:11px;opacity:.65;display:flex;align-items:center;gap:5px}
+/* PROGRESS */
+.prog-wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.prog-bar-outer{height:4px;background:var(--border);border-radius:2px;margin-bottom:0}
+.prog-bar-inner{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+.steps-indicator{display:flex;justify-content:space-between;padding:10px 0 0;margin-bottom:0}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-dot-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--muted);transition:all .3s}
+.step-dot.done .step-dot-circle{background:var(--green);border-color:var(--green);color:#fff}
+.step-dot.active .step-dot-circle{background:var(--accent);border-color:var(--accent);color:#fff}
+.step-dot-label{font-size:9px;color:var(--muted);text-align:center;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+/* FORM */
+.fw{max-width:720px;margin:-24px auto 48px;padding:0 16px}
+.fc{background:var(--white);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.sh{padding:20px 26px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sn{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.st{font-size:15px;font-weight:600}
+.ss{font-size:12px;color:var(--muted);margin-top:2px}
+.sb{padding:22px 26px}
+/* FIELDS */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.f:last-child{margin-bottom:0}
+.f label{font-size:11px;font-weight:600;color:var(--text);letter-spacing:.4px;text-transform:uppercase}
+.req{color:var(--red);margin-left:2px}
+.f input,.f select,.f textarea{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,58,107,.07)}
+.f input::placeholder,.f textarea::placeholder{color:#bbb}
+.f textarea{resize:vertical;min-height:72px}
+.ferr{font-size:11px;color:var(--red);margin-top:3px;display:none}
+.f input.err,.f select.err{border-color:var(--red)!important}
+/* SECTION DIVIDER */
+.sdiv{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:7px;margin:20px 0 14px;display:flex;align-items:center;gap:8px}
+.sdiv::before{content:'';width:3px;height:14px;background:var(--accent);border-radius:2px;display:inline-block}
+/* YES/NO CHIPS */
+.yn{display:flex;gap:8px;margin-top:5px}
+.yn-btn{padding:8px 20px;border-radius:7px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--white);color:var(--muted)}
+.yn-btn:hover{border-color:var(--accent);color:var(--accent)}
+.yn-btn.yes.selected{background:var(--grl);border-color:var(--green);color:var(--green)}
+.yn-btn.no.selected{background:var(--rl);border-color:var(--red);color:var(--red)}
+/* EXPAND BOX */
+.expbox{background:#f9f8f5;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:10px;display:none}
+.expbox.show{display:block}
+/* INFO BOX */
+.info{background:var(--al);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--accent);line-height:1.6;margin-bottom:14px}
+.warn{background:var(--gl);border-radius:8px;padding:11px 14px;font-size:12px;color:#7a5a10;line-height:1.6;margin-bottom:14px}
+/* FOOTER */
+.sf{padding:16px 26px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:#fafaf8}
+.btn-back{background:none;border:1.5px solid var(--border2);border-radius:8px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer}
+.btn-back:hover{border-color:var(--accent);color:var(--accent)}
+.btn-next{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next:hover{background:#0e2244}
+.btn-submit{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:12px}
+.btn-submit:hover{background:#9a6e20}
+/* REVIEW */
+.rev-grid{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;background:#f9f8f5;border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.rk{font-size:12px;color:var(--muted);padding:3px 0}
+.rv{font-size:12px;font-weight:500;padding:3px 0;word-break:break-word}
+.rev-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.rev-section:first-child{margin-top:0;padding-top:0;border-top:none}
+/* SUCCESS */
+.succ{display:none;padding:48px 26px;text-align:center}
+.succ-icon{width:72px;height:72px;border-radius:50%;background:var(--grl);margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.next-steps{background:var(--al);border-radius:12px;padding:18px 22px;text-align:left;max-width:400px;margin:20px auto 0}
+.ns-item{display:flex;gap:10px;margin-bottom:10px;font-size:13px;line-height:1.5}
+.ns-item:last-child{margin-bottom:0}
+.ns-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px}
+/* PAGE */
+.sp{display:none}.sp.active{display:block}
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--red);color:#fff;border-radius:9px;padding:11px 16px;font-size:13px;z-index:999;display:none;max-width:280px}
+.toast.show{display:block;animation:su .3s ease}
+@keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(max-width:600px){.fr{grid-template-columns:1fr}.fr3{grid-template-columns:1fr}.hero{padding:32px 16px 48px}.hero-title{font-size:26px}.sb{padding:16px}.sh{padding:14px 16px 12px}.sf{padding:12px 16px}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">🛡 ShieldLife</div>
+  <div class="hdr-phone">Questions? 1-708-742-7047</div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">Confidential · Secure · HIPAA Compliant</div>
+  <h1 class="hero-title">Life Insurance <em>Application</em></h1>
+  <p class="hero-sub">Complete your full application below. All information is encrypted and kept strictly confidential. Willie Ashford III will personally review your application.</p>
+  <div class="trust">
+    <div class="trust-item">🔒 256-bit Encrypted</div>
+    <div class="trust-item">✓ A+ BBB Rating</div>
+    <div class="trust-item">✓ Licensed Agent</div>
+    <div class="trust-item">✓ No Obligation</div>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div style="height:20px"></div>
+  <div class="prog-bar-outer"><div class="prog-bar-inner" id="prog" style="width:14%"></div></div>
+  <div class="steps-indicator">
+    <div class="step-dot active" id="sd1"><div class="step-dot-circle">1</div><div class="step-dot-label">Personal</div></div>
+    <div class="step-dot" id="sd2"><div class="step-dot-circle">2</div><div class="step-dot-label">Coverage</div></div>
+    <div class="step-dot" id="sd3"><div class="step-dot-circle">3</div><div class="step-dot-label">Lifestyle</div></div>
+    <div class="step-dot" id="sd4"><div class="step-dot-circle">4</div><div class="step-dot-label">Medical</div></div>
+    <div class="step-dot" id="sd5"><div class="step-dot-circle">5</div><div class="step-dot-label">History</div></div>
+    <div class="step-dot" id="sd6"><div class="step-dot-circle">6</div><div class="step-dot-label">Family</div></div>
+    <div class="step-dot" id="sd7"><div class="step-dot-circle">7</div><div class="step-dot-label">Review</div></div>
+  </div>
+</div>
+
+<div class="fw">
+<div class="fc">
+
+<!-- STEP 1: Personal Information -->
+<div class="sp active" id="s1">
+  <div class="sh"><div class="sn">1</div><div><div class="st">Personal Information</div><div class="ss">Step 1 of 7 — Applicant details</div></div></div>
+  <div class="sb">
+    <div class="sdiv">Full Legal Name</div>
+    <div class="fr3">
+      <div class="f"><label>First Name <span class="req">*</span></label><input id="fn" placeholder="John"/><div class="ferr" id="fn-err">Required</div></div>
+      <div class="f"><label>Middle Name</label><input id="mn" placeholder="(optional)"/></div>
+      <div class="f"><label>Last Name <span class="req">*</span></label><input id="ln" placeholder="Smith"/><div class="ferr" id="ln-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Date of Birth <span class="req">*</span></label><input id="dob" type="date"/><div class="ferr" id="dob-err">Required</div></div>
+      <div class="f"><label>Age <span class="req">*</span></label><input id="age" type="number" min="18" max="85" placeholder="e.g. 42"/><div class="ferr" id="age-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Gender <span class="req">*</span></label>
+        <select id="gen"><option value="">Select...</option><option>Male</option><option>Female</option></select>
+        <div class="ferr" id="gen-err">Required</div>
+      </div>
+      <div class="f"><label>Marital Status <span class="req">*</span></label>
+        <select id="ms"><option value="">Select...</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option><option>Separated</option></select>
+        <div class="ferr" id="ms-err">Required</div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Social Security # <span class="req">*</span></label><input id="ssn" placeholder="XXX-XX-XXXX" maxlength="11"/><div class="ferr" id="ssn-err">Required</div></div>
+      <div class="f"><label>Driver's License #</label><input id="dl" placeholder="Optional"/></div>
+    </div>
+    <div class="sdiv">Contact Information</div>
+    <div class="f"><label>Street Address <span class="req">*</span></label><input id="addr" placeholder="123 Main Street"/><div class="ferr" id="addr-err">Required</div></div>
+    <div class="fr3">
+      <div class="f"><label>City <span class="req">*</span></label><input id="city" placeholder="Chicago"/><div class="ferr" id="city-err">Required</div></div>
+      <div class="f"><label>State <span class="req">*</span></label>
+        <select id="state"><option value="">Select...</option><option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option></select>
+        <div class="ferr" id="state-err">Required</div>
+      </div>
+      <div class="f"><label>ZIP Code <span class="req">*</span></label><input id="zip" placeholder="60601" maxlength="5"/><div class="ferr" id="zip-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Phone Number <span class="req">*</span></label><input id="ph" type="tel" placeholder="(708) 742-7047"/><div class="ferr" id="ph-err">Required</div></div>
+      <div class="f"><label>Email Address <span class="req">*</span></label><input id="em" type="email" placeholder="john@email.com"/><div class="ferr" id="em-err">Required</div></div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Occupation <span class="req">*</span></label><input id="occ" placeholder="e.g. Teacher, Engineer"/><div class="ferr" id="occ-err">Required</div></div>
+      <div class="f"><label>Employer / Company</label><input id="emp" placeholder="Company name (optional)"/></div>
+    </div>
+    <div class="f"><label>Annual Income <span class="req">*</span></label>
+      <select id="income"><option value="">Select range...</option><option>Under $25,000</option><option>$25,000 – $50,000</option><option>$50,000 – $75,000</option><option>$75,000 – $100,000</option><option>$100,000 – $150,000</option><option>$150,000 – $250,000</option><option>Over $250,000</option></select>
+      <div class="ferr" id="income-err">Required</div>
+    </div>
+    <div class="f"><label>Net Worth</label>
+      <select id="networth"><option value="">Select range (optional)...</option><option>Under $100,000</option><option>$100,000 – $250,000</option><option>$250,000 – $500,000</option><option>$500,000 – $1,000,000</option><option>Over $1,000,000</option></select>
+    </div>
+  </div>
+  <div class="sf"><span style="font-size:12px;color:var(--muted)">Step 1 of 7</span><button class="btn-next" onclick="nx(1)">Continue →</button></div>
+</div>
+
+<!-- STEP 2: Coverage Details -->
+<div class="sp" id="s2">
+  <div class="sh"><div class="sn">2</div><div><div class="st">Coverage Details</div><div class="ss">Step 2 of 7 — Policy and beneficiary information</div></div></div>
+  <div class="sb">
+    <div class="sdiv">Policy Information</div>
+    <div class="fr">
+      <div class="f"><label>Policy Type <span class="req">*</span></label>
+        <select id="poltype"><option value="">Select...</option><option>Term Life — 10 Year</option><option>Term Life — 20 Year</option><option>Term Life — 30 Year</option><option>Whole Life</option><option>Universal Life</option><option>Indexed Universal Life (IUL)</option><option>Final Expense</option><option>Mortgage Protection</option><option>Fixed Index Annuity</option><option>Income Annuity</option></select>
+        <div class="ferr" id="poltype-err">Required</div>
+      </div>
+      <div class="f"><label>Coverage Amount <span class="req">*</span></label>
+        <select id="covamt"><option value="">Select amount...</option><option>$25,000</option><option>$50,000</option><option>$75,000</option><option>$100,000</option><option>$150,000</option><option>$200,000</option><option>$250,000</option><option>$300,000</option><option>$400,000</option><option>$500,000</option><option>$750,000</option><option>$1,000,000</option><option>$1,500,000</option><option>$2,000,000</option><option>$3,000,000+</option></select>
+        <div class="ferr" id="covamt-err">Required</div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Purpose of Insurance <span class="req">*</span></label>
+        <select id="purpose"><option value="">Select...</option><option>Income replacement</option><option>Mortgage protection</option><option>Final expenses</option><option>Estate planning / Legacy</option><option>Business key-person</option><option>Retirement supplement</option><option>College funding</option><option>Debt coverage</option></select>
+        <div class="ferr" id="purpose-err">Required</div>
+      </div>
+      <div class="f"><label>Existing Life Insurance?</label>
+        <select id="existins"><option value="">Select...</option><option>No existing coverage</option><option>Yes — keeping existing</option><option>Yes — replacing existing</option></select>
+      </div>
+    </div>
+    <div class="f" id="replace-wrap" style="display:none">
+      <label>If replacing, current insurer and reason:</label>
+      <textarea id="replace-detail" placeholder="Company name and reason for replacement..."></textarea>
+    </div>
+    <div class="sdiv">Primary Beneficiary</div>
+    <div class="info">The primary beneficiary receives the death benefit. You may name multiple beneficiaries — list them in notes below.</div>
+    <div class="fr">
+      <div class="f"><label>Beneficiary Full Name <span class="req">*</span></label><input id="ben1name" placeholder="Full legal name"/><div class="ferr" id="ben1name-err">Required</div></div>
+      <div class="f"><label>Relationship <span class="req">*</span></label>
+        <select id="ben1rel"><option value="">Select...</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Partner</option><option>Trust</option><option>Other</option></select>
+        <div class="ferr" id="ben1rel-err">Required</div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Beneficiary Date of Birth</label><input id="ben1dob" type="date"/></div>
+      <div class="f"><label>Percentage of Benefit</label>
+        <select id="ben1pct"><option value="">Select...</option><option>100%</option><option>75%</option><option>50%</option><option>25%</option></select>
+      </div>
+    </div>
+    <div class="sdiv">Contingent Beneficiary (Optional)</div>
+    <div class="fr">
+      <div class="f"><label>Contingent Beneficiary Name</label><input id="ben2name" placeholder="Full legal name (optional)"/></div>
+      <div class="f"><label>Relationship</label>
+        <select id="ben2rel"><option value="">Select...</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Partner</option><option>Trust</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="f"><label>Additional Beneficiary Notes</label>
+      <textarea id="bennotes" placeholder="List any additional beneficiaries, special instructions, or trust details..."></textarea>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(2)">← Back</button><button class="btn-next" onclick="nx(2)">Continue →</button></div>
+</div>
+
+<!-- STEP 3: Lifestyle -->
+<div class="sp" id="s3">
+  <div class="sh"><div class="sn">3</div><div><div class="st">Lifestyle & Habits</div><div class="ss">Step 3 of 7 — Affects your premium rate</div></div></div>
+  <div class="sb">
+    <div class="sdiv">Height & Weight</div>
+    <div class="fr">
+      <div class="f"><label>Height <span class="req">*</span></label><input id="ht" placeholder='e.g. 5&apos;10"'/><div class="ferr" id="ht-err">Required</div></div>
+      <div class="f"><label>Weight (lbs) <span class="req">*</span></label><input id="wt" type="number" placeholder="e.g. 185"/><div class="ferr" id="wt-err">Required</div></div>
+    </div>
+    <div class="sdiv">Tobacco & Nicotine</div>
+    <div class="f"><label>Do you currently use tobacco or nicotine products? <span class="req">*</span></label>
+      <div class="yn" id="tob-yn">
+        <button class="yn-btn yes" onclick="ynSel('tob','yes','tob-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('tob','no','tob-detail')">No</button>
+      </div>
+      <div class="ferr" id="tob-err">Please select Yes or No</div>
+    </div>
+    <div class="expbox" id="tob-detail">
+      <div class="fr">
+        <div class="f"><label>Type of Product</label>
+          <select id="tob-type"><option value="">Select...</option><option>Cigarettes</option><option>Cigars</option><option>Chewing tobacco</option><option>Vaping / E-cigarettes</option><option>Nicotine patch/gum</option><option>Pipe</option><option>Other</option></select>
+        </div>
+        <div class="f"><label>How long / How much?</label><input id="tob-amt" placeholder="e.g. 1 pack/day for 5 years"/></div>
+      </div>
+    </div>
+    <div class="f" style="margin-top:10px"><label>Have you used tobacco/nicotine in the past 5 years? <span class="req">*</span></label>
+      <div class="yn" id="tob-past-yn">
+        <button class="yn-btn yes" onclick="ynSel('tob-past','yes','tob-past-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('tob-past','no','tob-past-detail')">No</button>
+      </div>
+      <div class="ferr" id="tob-past-err">Please select Yes or No</div>
+    </div>
+    <div class="expbox" id="tob-past-detail">
+      <div class="f"><label>When did you quit and what did you use?</label><input id="tob-past-info" placeholder="e.g. Quit cigarettes 3 years ago"/></div>
+    </div>
+    <div class="sdiv">Alcohol Use</div>
+    <div class="f"><label>Do you drink alcohol? <span class="req">*</span></label>
+      <div class="yn" id="alc-yn">
+        <button class="yn-btn yes" onclick="ynSel('alc','yes','alc-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('alc','no','alc-detail')">No</button>
+      </div>
+      <div class="ferr" id="alc-err">Please select Yes or No</div>
+    </div>
+    <div class="expbox" id="alc-detail">
+      <div class="fr">
+        <div class="f"><label>Drinks per week</label><input id="alc-amt" type="number" placeholder="e.g. 5"/></div>
+        <div class="f"><label>Type</label><select id="alc-type"><option value="">Select...</option><option>Beer</option><option>Wine</option><option>Spirits/Liquor</option><option>Mixed</option></select></div>
+      </div>
+    </div>
+    <div class="sdiv">Recreational Drug Use</div>
+    <div class="f"><label>Have you used recreational drugs in the past 10 years? <span class="req">*</span></label>
+      <div class="yn" id="drug-yn">
+        <button class="yn-btn yes" onclick="ynSel('drug','yes','drug-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('drug','no','drug-detail')">No</button>
+      </div>
+      <div class="ferr" id="drug-err">Please select Yes or No</div>
+    </div>
+    <div class="expbox" id="drug-detail">
+      <div class="f"><label>Please describe (type, frequency, last use):</label><textarea id="drug-info" placeholder="e.g. Marijuana occasionally, last used 2 years ago..."></textarea></div>
+    </div>
+    <div class="sdiv">Physical Activity & Hobbies</div>
+    <div class="f"><label>Do you participate in hazardous activities or sports?</label>
+      <div class="yn" id="haz-yn">
+        <button class="yn-btn yes" onclick="ynSel('haz','yes','haz-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('haz','no','haz-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="haz-detail">
+      <div class="f"><label>Please describe (skydiving, scuba, rock climbing, racing, etc.):</label><textarea id="haz-info" placeholder="Describe activities and frequency..."></textarea></div>
+    </div>
+    <div class="f"><label>Do you have a valid driver's license? <span class="req">*</span></label>
+      <div class="yn" id="drv-yn">
+        <button class="yn-btn yes" onclick="ynSel('drv','yes',null)">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('drv','no','drv-detail')">No</button>
+      </div>
+      <div class="ferr" id="drv-err">Please select Yes or No</div>
+    </div>
+    <div class="expbox" id="drv-detail">
+      <div class="f"><label>DUI/DWI convictions in past 5 years?</label>
+        <div class="yn" id="dui-yn">
+          <button class="yn-btn yes" onclick="ynSel('dui','yes','dui-detail')">Yes</button>
+          <button class="yn-btn no" onclick="ynSel('dui','no','dui-detail')">No</button>
+        </div>
+      </div>
+      <div class="expbox" id="dui-detail">
+        <div class="f"><label>Date and details:</label><input id="dui-info" placeholder="e.g. DUI June 2021"/></div>
+      </div>
+    </div>
+    <div class="sdiv">Travel</div>
+    <div class="f"><label>Do you plan to travel or live outside the US in the next 2 years?</label>
+      <div class="yn" id="travel-yn">
+        <button class="yn-btn yes" onclick="ynSel('travel','yes','travel-detail')">Yes</button>
+        <button class="yn-btn no" onclick="ynSel('travel','no','travel-detail')">No</button>
+      </div>
+    </div>
+    <div class="expbox" id="travel-detail">
+      <div class="f"><label>Destination(s) and duration:</label><input id="travel-info" placeholder="e.g. Mexico for 3 months annually"/></div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(3)">← Back</button><button class="btn-next" onclick="nx(3)">Continue →</button></div>
+</div>
+
+<!-- STEP 4: Current Medical -->
+<div class="sp" id="s4">
+  <div class="sh"><div class="sn">4</div><div><div class="st">Current Medical Conditions</div><div class="ss">Step 4 of 7 — Underwriting questions</div></div></div>
+  <div class="sb">
+    <div class="info">Answer all questions honestly. Misrepresentation may result in claim denial. All information is HIPAA-protected and confidential.</div>
+
+    <!-- CARDIOVASCULAR -->
+    <div class="sdiv">Cardiovascular</div>
+    <div class="f"><label>High Blood Pressure (Hypertension)? <span class="req">*</span></label>
+      <div class="yn" id="hbp-yn"><button class="yn-btn yes" onclick="ynSel('hbp','yes','hbp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hbp','no','hbp-detail')">No</button></div>
+      <div class="ferr" id="hbp-err">Required</div>
+    </div>
+    <div class="expbox" id="hbp-detail">
+      <div class="fr">
+        <div class="f"><label>Current Blood Pressure Reading</label><input id="hbp-reading" placeholder="e.g. 140/90"/></div>
+        <div class="f"><label>Highest BP reading ever recorded</label><input id="hbp-highest" placeholder="e.g. 180/110"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Year first diagnosed</label><input id="hbp-yr" placeholder="e.g. 2015"/></div>
+        <div class="f"><label>How many years have you had high blood pressure?</label><input id="hbp-duration" placeholder="e.g. 8 years"/></div>
+      </div>
+      <div class="f"><label>Are you currently taking medication for blood pressure?</label>
+        <div class="yn" id="hbp-meds-yn"><button class="yn-btn yes" onclick="ynSel('hbp-meds-yn','yes','hbp-meds-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hbp-meds-yn','no','hbp-meds-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="hbp-meds-detail">
+        <div class="f"><label>List all blood pressure medications, dosage, and how long you have taken them</label>
+          <textarea id="hbp-meds" placeholder="e.g. Lisinopril 10mg — taking for 5 years&#10;Amlodipine 5mg — taking for 3 years&#10;Hydrochlorothiazide 25mg — taking for 2 years"></textarea>
+        </div>
+      </div>
+      <div class="f"><label>Is your blood pressure currently controlled with medication?</label>
+        <div class="yn" id="hbp-ctrl-yn"><button class="yn-btn yes" onclick="ynSel('hbp-ctrl','yes',null)">Yes, well controlled</button><button class="yn-btn no" onclick="ynSel('hbp-ctrl','no',null)">No, still elevated</button></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Any hospitalizations due to blood pressure?</label>
+          <div class="yn" id="hbp-hosp-yn"><button class="yn-btn yes" onclick="ynSel('hbp-hosp','yes','hbp-hosp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hbp-hosp','no','hbp-hosp-detail')">No</button></div>
+        </div>
+        <div class="f"><label>Have you ever had a hypertensive crisis?</label>
+          <div class="yn" id="hbp-crisis-yn"><button class="yn-btn yes" onclick="ynSel('hbp-crisis','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('hbp-crisis','no',null)">No</button></div>
+        </div>
+      </div>
+      <div class="expbox" id="hbp-hosp-detail">
+        <div class="f"><label>Date and reason for hospitalization:</label><input id="hbp-hosp-info" placeholder="e.g. 2021 — hypertensive emergency"/></div>
+      </div>
+      <div class="f"><label>Has high blood pressure caused any organ damage? (heart, kidneys, eyes)</label>
+        <div class="yn" id="hbp-organ-yn"><button class="yn-btn yes" onclick="ynSel('hbp-organ','yes','hbp-organ-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hbp-organ','no','hbp-organ-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="hbp-organ-detail">
+        <div class="f"><label>Describe organ damage:</label><textarea id="hbp-organ-info" placeholder="e.g. Left ventricular hypertrophy, kidney disease stage 2, retinopathy..."></textarea></div>
+      </div>
+    </div>
+    <div class="f"><label>Heart Disease, Heart Attack, or Angina? <span class="req">*</span></label>
+      <div class="yn" id="heart-yn"><button class="yn-btn yes" onclick="ynSel('heart','yes','heart-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('heart','no','heart-detail')">No</button></div>
+      <div class="ferr" id="heart-err">Required</div>
+    </div>
+    <div class="expbox" id="heart-detail">
+      <div class="fr">
+        <div class="f"><label>Type of heart condition</label>
+          <select id="heart-type"><option value="">Select...</option><option>Heart attack (MI)</option><option>Angina (chest pain)</option><option>Congestive heart failure (CHF)</option><option>Atrial fibrillation (AFib)</option><option>Arrhythmia / irregular heartbeat</option><option>Coronary artery disease (CAD)</option><option>Heart valve disease</option><option>Cardiomyopathy</option><option>Pericarditis</option><option>Other</option></select>
+        </div>
+        <div class="f"><label>Year of diagnosis or event</label><input id="heart-date" placeholder="Month/Year"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Number of heart attacks (if any)</label><input id="heart-attacks" placeholder="e.g. 1, 2, None"/></div>
+        <div class="f"><label>Most recent cardiac event date</label><input id="heart-recent" placeholder="Month/Year"/></div>
+      </div>
+      <div class="f"><label>Surgeries or procedures performed</label>
+        <textarea id="heart-surgery" placeholder="e.g. Coronary bypass (CABG) 2019&#10;Stent placement 2021&#10;Pacemaker implant 2022&#10;Angioplasty 2020"></textarea>
+      </div>
+      <div class="f"><label>List all heart medications, dosage, and how long you have taken them</label>
+        <textarea id="heart-tx" placeholder="e.g. Metoprolol 50mg twice daily — 4 years&#10;Aspirin 81mg daily — 5 years&#10;Atorvastatin 40mg — 4 years&#10;Warfarin 5mg — 3 years"></textarea>
+      </div>
+      <div class="f"><label>Most recent ejection fraction (EF) if known</label><input id="heart-ef" placeholder="e.g. 55% (normal), 35% (reduced)"/></div>
+      <div class="f"><label>Do you see a cardiologist?</label>
+        <div class="yn" id="heart-cardio-yn"><button class="yn-btn yes" onclick="ynSel('heart-cardio','yes','heart-cardio-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('heart-cardio','no','heart-cardio-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="heart-cardio-detail">
+        <div class="f"><label>Cardiologist name and how often you are seen:</label><input id="heart-cardio-info" placeholder="e.g. Dr. Smith — every 6 months"/></div>
+      </div>
+    </div>
+    <div class="f"><label>Stroke or TIA (mini-stroke)? <span class="req">*</span></label>
+      <div class="yn" id="stroke-yn"><button class="yn-btn yes" onclick="ynSel('stroke','yes','stroke-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('stroke','no','stroke-detail')">No</button></div>
+      <div class="ferr" id="stroke-err">Required</div>
+    </div>
+    <div class="expbox" id="stroke-detail">
+      <div class="fr">
+        <div class="f"><label>Date of stroke</label><input id="stroke-date" placeholder="Month/Year"/></div>
+        <div class="f"><label>Any permanent disability?</label><select id="stroke-dis"><option value="">Select...</option><option>No permanent effects</option><option>Minor effects</option><option>Significant disability</option></select></div>
+      </div>
+    </div>
+
+    <!-- DIABETES -->
+    <div class="sdiv">Diabetes</div>
+    <div class="f"><label>Diabetes (Type 1 or Type 2)? <span class="req">*</span></label>
+      <div class="yn" id="diab-yn"><button class="yn-btn yes" onclick="ynSel('diab','yes','diab-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab','no','diab-detail')">No</button></div>
+      <div class="ferr" id="diab-err">Required</div>
+    </div>
+    <div class="expbox" id="diab-detail">
+      <div class="fr">
+        <div class="f"><label>Type of Diabetes</label>
+          <select id="diab-type"><option value="">Select...</option><option>Type 1</option><option>Type 2</option><option>Pre-diabetes / borderline</option><option>Gestational (fully resolved)</option></select>
+        </div>
+        <div class="f"><label>Year first diagnosed</label><input id="diab-yr" placeholder="e.g. 2015"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>How many years have you had diabetes?</label><input id="diab-duration" placeholder="e.g. 10 years"/></div>
+        <div class="f"><label>Are you currently seeing a doctor / endocrinologist?</label>
+          <div class="yn" id="diab-doc-yn"><button class="yn-btn yes" onclick="ynSel('diab-doc','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('diab-doc','no',null)">No</button></div>
+        </div>
+      </div>
+      <div class="sdiv" style="margin-top:10px">A1C Levels</div>
+      <div class="fr">
+        <div class="f"><label>Most recent A1C level</label><input id="diab-a1c" placeholder="e.g. 7.2"/></div>
+        <div class="f"><label>Date of most recent A1C test</label><input id="diab-a1c-date" placeholder="Month/Year"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>A1C level 1 year ago</label><input id="diab-a1c-1yr" placeholder="e.g. 7.8"/></div>
+        <div class="f"><label>Highest A1C ever recorded</label><input id="diab-a1c-high" placeholder="e.g. 10.5"/></div>
+      </div>
+      <div class="f"><label>Is your A1C currently well controlled (under 8.0)?</label>
+        <div class="yn" id="diab-ctrl-yn"><button class="yn-btn yes" onclick="ynSel('diab-ctrl','yes',null)">Yes, under 8.0</button><button class="yn-btn no" onclick="ynSel('diab-ctrl','no',null)">No, above 8.0</button></div>
+      </div>
+      <div class="sdiv" style="margin-top:10px">Medications & Insulin</div>
+      <div class="f"><label>Are you currently taking oral diabetes medications?</label>
+        <div class="yn" id="diab-oral-yn"><button class="yn-btn yes" onclick="ynSel('diab-oral','yes','diab-oral-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-oral','no','diab-oral-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-oral-detail">
+        <div class="f"><label>List all oral medications, dosage, and how long you have taken them</label>
+          <textarea id="diab-oral-meds" placeholder="e.g. Metformin 1000mg twice daily — 8 years&#10;Glipizide 10mg once daily — 3 years&#10;Jardiance 25mg once daily — 2 years"></textarea>
+        </div>
+      </div>
+      <div class="f"><label>Do you use insulin?</label>
+        <div class="yn" id="diab-insulin-yn"><button class="yn-btn yes" onclick="ynSel('diab-insulin','yes','diab-insulin-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-insulin','no','diab-insulin-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-insulin-detail">
+        <div class="fr">
+          <div class="f"><label>Type of insulin</label><select id="diab-insulin-type"><option value="">Select...</option><option>Long-acting (Lantus, Basaglar, Toujeo)</option><option>Short-acting (Humalog, NovoLog)</option><option>Both long and short acting</option><option>Insulin pump</option></select></div>
+          <div class="f"><label>Daily units / dosage</label><input id="diab-insulin-dose" placeholder="e.g. 20 units Lantus at bedtime"/></div>
+        </div>
+        <div class="f"><label>How many years have you been using insulin?</label><input id="diab-insulin-yrs" placeholder="e.g. 5 years"/></div>
+      </div>
+      <div class="sdiv" style="margin-top:10px">Complications</div>
+      <div class="f"><label>Diabetic neuropathy (nerve damage / numbness)?</label>
+        <div class="yn" id="diab-neuro-yn"><button class="yn-btn yes" onclick="ynSel('diab-neuro','yes','diab-neuro-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-neuro','no','diab-neuro-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-neuro-detail">
+        <div class="f"><label>Describe affected areas and severity:</label><input id="diab-neuro-info" placeholder="e.g. Numbness in both feet for 3 years"/></div>
+      </div>
+      <div class="f"><label>Diabetic retinopathy (eye disease)?</label>
+        <div class="yn" id="diab-eye-yn"><button class="yn-btn yes" onclick="ynSel('diab-eye','yes','diab-eye-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-eye','no','diab-eye-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-eye-detail">
+        <div class="f"><label>Stage and treatment:</label><input id="diab-eye-info" placeholder="e.g. Mild non-proliferative, annual monitoring"/></div>
+      </div>
+      <div class="f"><label>Diabetic nephropathy (kidney disease)?</label>
+        <div class="yn" id="diab-kidney-yn"><button class="yn-btn yes" onclick="ynSel('diab-kidney','yes','diab-kidney-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-kidney','no','diab-kidney-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-kidney-detail">
+        <div class="f"><label>Stage and treatment:</label><input id="diab-kidney-info" placeholder="e.g. Stage 2 CKD, managed with diet and medication"/></div>
+      </div>
+      <div class="f"><label>Any amputations due to diabetes?</label>
+        <div class="yn" id="diab-amp-yn"><button class="yn-btn yes" onclick="ynSel('diab-amp','yes','diab-amp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-amp','no','diab-amp-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-amp-detail">
+        <div class="f"><label>Describe (what, when):</label><input id="diab-amp-info" placeholder="e.g. Right toe amputation, 2020"/></div>
+      </div>
+      <div class="f"><label>Hospitalizations due to diabetes in past 5 years?</label>
+        <div class="yn" id="diab-hosp-yn"><button class="yn-btn yes" onclick="ynSel('diab-hosp','yes','diab-hosp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('diab-hosp','no','diab-hosp-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="diab-hosp-detail">
+        <div class="f"><label>Reason and dates:</label><textarea id="diab-hosp-info" placeholder="e.g. Diabetic ketoacidosis (DKA) — June 2022, 3-day hospital stay..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- CANCER -->
+    <div class="sdiv">Cancer</div>
+    <div class="f"><label>History of cancer or malignant tumor? <span class="req">*</span></label>
+      <div class="yn" id="cancer-yn"><button class="yn-btn yes" onclick="ynSel('cancer','yes','cancer-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('cancer','no','cancer-detail')">No</button></div>
+      <div class="ferr" id="cancer-err">Required</div>
+    </div>
+    <div class="expbox" id="cancer-detail">
+      <div class="fr">
+        <div class="f"><label>Type of cancer</label><input id="cancer-type" placeholder="e.g. Breast, Prostate, Skin"/></div>
+        <div class="f"><label>Stage at diagnosis</label><select id="cancer-stage"><option value="">Select...</option><option>Stage 0 / In situ</option><option>Stage I</option><option>Stage II</option><option>Stage III</option><option>Stage IV</option><option>Unknown</option></select></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>Year of diagnosis</label><input id="cancer-yr" placeholder="e.g. 2018"/></div>
+        <div class="f"><label>Current status</label><select id="cancer-status"><option value="">Select...</option><option>In remission — 1–2 years</option><option>In remission — 3–5 years</option><option>In remission — 5+ years</option><option>Currently in treatment</option><option>Recurrence</option></select></div>
+      </div>
+      <div class="f"><label>Treatment received</label><textarea id="cancer-tx" placeholder="Surgery, chemotherapy, radiation, immunotherapy..."></textarea></div>
+    </div>
+
+    <!-- RESPIRATORY -->
+    <div class="sdiv">Respiratory</div>
+    <div class="f"><label>COPD, emphysema, or chronic bronchitis? <span class="req">*</span></label>
+      <div class="yn" id="copd-yn"><button class="yn-btn yes" onclick="ynSel('copd','yes','copd-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('copd','no','copd-detail')">No</button></div>
+      <div class="ferr" id="copd-err">Required</div>
+    </div>
+    <div class="expbox" id="copd-detail">
+      <div class="fr">
+        <div class="f"><label>Diagnosis</label><input id="copd-dx" placeholder="COPD, emphysema, bronchitis"/></div>
+        <div class="f"><label>Medications / oxygen use?</label><input id="copd-meds" placeholder="Inhalers, oxygen, etc."/></div>
+      </div>
+    </div>
+    <div class="f"><label>Asthma? <span class="req">*</span></label>
+      <div class="yn" id="asthma-yn"><button class="yn-btn yes" onclick="ynSel('asthma','yes','asthma-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('asthma','no','asthma-detail')">No</button></div>
+      <div class="ferr" id="asthma-err">Required</div>
+    </div>
+    <div class="expbox" id="asthma-detail">
+      <div class="fr">
+        <div class="f"><label>Severity</label><select id="asthma-sev"><option value="">Select...</option><option>Mild / intermittent</option><option>Moderate</option><option>Severe</option></select></div>
+        <div class="f"><label>Hospitalizations in past 3 years?</label><input id="asthma-hosp" placeholder="e.g. None, or 1 in 2022"/></div>
+      </div>
+    </div>
+
+    <!-- KIDNEY & LIVER -->
+    <div class="sdiv">Kidney & Liver</div>
+    <div class="f"><label>Kidney disease, renal failure, or dialysis? <span class="req">*</span></label>
+      <div class="yn" id="kidney-yn"><button class="yn-btn yes" onclick="ynSel('kidney','yes','kidney-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('kidney','no','kidney-detail')">No</button></div>
+      <div class="ferr" id="kidney-err">Required</div>
+    </div>
+    <div class="expbox" id="kidney-detail">
+      <div class="f"><label>Details (stage, treatment, dialysis frequency):</label><textarea id="kidney-info" placeholder="Describe your kidney condition and treatment..."></textarea></div>
+    </div>
+    <div class="f"><label>Liver disease, cirrhosis, or hepatitis? <span class="req">*</span></label>
+      <div class="yn" id="liver-yn"><button class="yn-btn yes" onclick="ynSel('liver','yes','liver-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('liver','no','liver-detail')">No</button></div>
+      <div class="ferr" id="liver-err">Required</div>
+    </div>
+    <div class="expbox" id="liver-detail">
+      <div class="fr">
+        <div class="f"><label>Type</label><select id="liver-type"><option value="">Select...</option><option>Hepatitis A (resolved)</option><option>Hepatitis B</option><option>Hepatitis C</option><option>Cirrhosis</option><option>Fatty liver disease</option><option>Other</option></select></div>
+        <div class="f"><label>Current treatment</label><input id="liver-tx" placeholder="Medications, monitoring..."/></div>
+      </div>
+    </div>
+
+    <!-- NEUROLOGICAL -->
+    <div class="sdiv">Neurological & Mental Health</div>
+    <div class="f"><label>Alzheimer's disease or dementia? <span class="req">*</span></label>
+      <div class="yn" id="alz-yn"><button class="yn-btn yes" onclick="ynSel('alz','yes','alz-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('alz','no','alz-detail')">No</button></div>
+      <div class="ferr" id="alz-err">Required</div>
+    </div>
+    <div class="expbox" id="alz-detail">
+      <div class="fr">
+        <div class="f"><label>Type</label><select id="alz-type"><option value="">Select...</option><option>Alzheimer's disease</option><option>Vascular dementia</option><option>Lewy body dementia</option><option>Other dementia</option></select></div>
+        <div class="f"><label>Stage</label><select id="alz-stage"><option value="">Select...</option><option>Early / Mild</option><option>Moderate</option><option>Severe</option></select></div>
+      </div>
+    </div>
+    <div class="f"><label>Multiple sclerosis, Parkinson's, or other neurological disorder? <span class="req">*</span></label>
+      <div class="yn" id="neuro-yn"><button class="yn-btn yes" onclick="ynSel('neuro','yes','neuro-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('neuro','no','neuro-detail')">No</button></div>
+      <div class="ferr" id="neuro-err">Required</div>
+    </div>
+    <div class="expbox" id="neuro-detail">
+      <div class="f"><label>Describe condition and current status:</label><textarea id="neuro-info" placeholder="Diagnosis, progression, treatment..."></textarea></div>
+    </div>
+    <div class="f"><label>Depression, anxiety, bipolar disorder, or other mental health condition? <span class="req">*</span></label>
+      <div class="yn" id="mh-yn"><button class="yn-btn yes" onclick="ynSel('mh','yes','mh-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('mh','no','mh-detail')">No</button></div>
+      <div class="ferr" id="mh-err">Required</div>
+    </div>
+    <div class="expbox" id="mh-detail">
+      <div class="fr">
+        <div class="f"><label>Diagnosis</label><input id="mh-dx" placeholder="e.g. Depression, Anxiety, Bipolar"/></div>
+        <div class="f"><label>Medications</label><input id="mh-meds" placeholder="List current medications"/></div>
+      </div>
+      <div class="f"><label>Hospitalization for mental health in past 5 years?</label>
+        <div class="yn" id="mh-hosp-yn"><button class="yn-btn yes" onclick="ynSel('mh-hosp','yes','mh-hosp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('mh-hosp','no','mh-hosp-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="mh-hosp-detail">
+        <div class="f"><label>Date and reason:</label><input id="mh-hosp-info" placeholder="e.g. 2021 — depressive episode"/></div>
+      </div>
+    </div>
+    <div class="f"><label>Attempted suicide or self-harm in the past 10 years? <span class="req">*</span></label>
+      <div class="yn" id="si-yn"><button class="yn-btn yes" onclick="ynSel('si','yes','si-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('si','no','si-detail')">No</button></div>
+      <div class="ferr" id="si-err">Required</div>
+    </div>
+    <div class="expbox" id="si-detail">
+      <div class="f"><label>Date and details (kept strictly confidential):</label><textarea id="si-info" placeholder="Please describe..."></textarea></div>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(4)">← Back</button><button class="btn-next" onclick="nx(4)">Continue →</button></div>
+</div>
+
+<!-- STEP 5: Additional Medical -->
+<div class="sp" id="s5">
+  <div class="sh"><div class="sn">5</div><div><div class="st">Additional Medical History</div><div class="ss">Step 5 of 7 — Continued underwriting questions</div></div></div>
+  <div class="sb">
+
+    <!-- HIV/AIDS -->
+    <div class="sdiv">HIV / AIDS</div>
+    <div class="f"><label>Have you ever tested positive for HIV or been diagnosed with AIDS? <span class="req">*</span></label>
+      <div class="yn" id="hiv-yn"><button class="yn-btn yes" onclick="ynSel('hiv','yes','hiv-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hiv','no','hiv-detail')">No</button></div>
+      <div class="ferr" id="hiv-err">Required</div>
+    </div>
+    <div class="expbox" id="hiv-detail">
+      <div class="fr">
+        <div class="f"><label>Diagnosis (HIV+ or AIDS)</label><select id="hiv-dx"><option value="">Select...</option><option>HIV positive (asymptomatic)</option><option>HIV positive (symptomatic)</option><option>AIDS diagnosis</option></select></div>
+        <div class="f"><label>Year of diagnosis</label><input id="hiv-yr" placeholder="e.g. 2018"/></div>
+      </div>
+      <div class="f"><label>Current viral load / CD4 count</label><input id="hiv-labs" placeholder="e.g. Undetectable / CD4 850"/></div>
+      <div class="f"><label>Current antiretroviral medications:</label><input id="hiv-meds" placeholder="List ARV medications..."/></div>
+    </div>
+    <div class="f"><label>Have you had an HIV test in the past 3 years? <span class="req">*</span></label>
+      <div class="yn" id="hiv-test-yn"><button class="yn-btn yes" onclick="ynSel('hiv-test','yes','hiv-test-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hiv-test','no','hiv-test-detail')">No</button></div>
+      <div class="ferr" id="hiv-test-err">Required</div>
+    </div>
+    <div class="expbox" id="hiv-test-detail">
+      <div class="fr">
+        <div class="f"><label>Test result</label><select id="hiv-result"><option value="">Select...</option><option>Negative</option><option>Positive</option><option>Inconclusive</option></select></div>
+        <div class="f"><label>Date of test</label><input id="hiv-test-date" placeholder="Month/Year"/></div>
+      </div>
+    </div>
+
+    <!-- SURGERIES -->
+    <div class="sdiv">Surgeries & Hospitalizations</div>
+    <div class="f"><label>Any surgeries in the past 5 years? <span class="req">*</span></label>
+      <div class="yn" id="surg-yn"><button class="yn-btn yes" onclick="ynSel('surg','yes','surg-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('surg','no','surg-detail')">No</button></div>
+      <div class="ferr" id="surg-err">Required</div>
+    </div>
+    <div class="expbox" id="surg-detail">
+      <div class="f"><label>List surgeries (type, year, outcome):</label><textarea id="surg-info" placeholder="e.g. Appendectomy 2021 — full recovery; Knee replacement 2022..."></textarea></div>
+    </div>
+    <div class="f"><label>Any hospitalizations in the past 5 years (non-surgical)? <span class="req">*</span></label>
+      <div class="yn" id="hosp-yn"><button class="yn-btn yes" onclick="ynSel('hosp','yes','hosp-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('hosp','no','hosp-detail')">No</button></div>
+      <div class="ferr" id="hosp-err">Required</div>
+    </div>
+    <div class="expbox" id="hosp-detail">
+      <div class="f"><label>Reason, dates, and outcome:</label><textarea id="hosp-info" placeholder="e.g. Pneumonia, January 2022, 4-day stay, full recovery..."></textarea></div>
+    </div>
+
+    <!-- MUSCULOSKELETAL -->
+    <div class="sdiv">Musculoskeletal & Disability</div>
+    <div class="f"><label>Back or spinal disorder, chronic pain, or disability? <span class="req">*</span></label>
+      <div class="yn" id="back-yn"><button class="yn-btn yes" onclick="ynSel('back','yes','back-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('back','no','back-detail')">No</button></div>
+      <div class="ferr" id="back-err">Required</div>
+    </div>
+    <div class="expbox" id="back-detail">
+      <div class="f"><label>Describe condition and current limitations:</label><textarea id="back-info" placeholder="Herniated disc, chronic back pain, wheelchair use, etc..."></textarea></div>
+    </div>
+    <div class="f"><label>Currently receiving disability benefits? <span class="req">*</span></label>
+      <div class="yn" id="dis-yn"><button class="yn-btn yes" onclick="ynSel('dis','yes','dis-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('dis','no','dis-detail')">No</button></div>
+      <div class="ferr" id="dis-err">Required</div>
+    </div>
+    <div class="expbox" id="dis-detail">
+      <div class="fr">
+        <div class="f"><label>Type of disability benefit</label><select id="dis-type"><option value="">Select...</option><option>Social Security Disability (SSDI)</option><option>SSI</option><option>Workers compensation</option><option>Private disability insurance</option><option>Other</option></select></div>
+        <div class="f"><label>Reason for disability</label><input id="dis-reason" placeholder="Primary diagnosis for disability..."/></div>
+      </div>
+    </div>
+
+    <!-- MEDICATIONS -->
+    <div class="sdiv">Current Medications</div>
+    <div class="f"><label>Are you currently taking any prescription medications? <span class="req">*</span></label>
+      <div class="yn" id="meds-yn"><button class="yn-btn yes" onclick="ynSel('meds','yes','meds-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('meds','no','meds-detail')">No</button></div>
+      <div class="ferr" id="meds-err">Required</div>
+    </div>
+    <div class="expbox" id="meds-detail">
+      <div class="f"><label>List ALL current prescription medications below. Include: medication name, dosage, frequency, reason, and how long you have been taking it.</label>
+        <textarea id="meds-list" placeholder="Medication Name | Dosage | How Often | Reason | How Long Taking&#10;e.g. Lisinopril | 10mg | Once daily | High blood pressure | 5 years&#10;Metformin | 500mg | Twice daily | Type 2 diabetes | 8 years&#10;Atorvastatin | 20mg | Once daily at bedtime | High cholesterol | 4 years&#10;Levothyroxine | 50mcg | Once daily | Hypothyroidism | 10 years&#10;Sertraline | 100mg | Once daily | Depression | 3 years" style="min-height:160px"></textarea>
+      </div>
+      <div class="f"><label>Do you take any over-the-counter medications regularly? (aspirin, ibuprofen, antacids, etc.)</label>
+        <div class="yn" id="otc-yn"><button class="yn-btn yes" onclick="ynSel('otc','yes','otc-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('otc','no','otc-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="otc-detail">
+        <div class="f"><label>List over-the-counter medications and supplements:</label>
+          <textarea id="otc-list" placeholder="e.g. Aspirin 81mg daily, Fish oil 1000mg daily, Vitamin D 2000 IU daily..."></textarea>
+        </div>
+      </div>
+      <div class="f"><label>Have you had any adverse reactions or allergies to medications?</label>
+        <div class="yn" id="meds-allergy-yn"><button class="yn-btn yes" onclick="ynSel('meds-allergy','yes','meds-allergy-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('meds-allergy','no','meds-allergy-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="meds-allergy-detail">
+        <div class="f"><label>List medication allergies and reactions:</label>
+          <textarea id="meds-allergy-info" placeholder="e.g. Penicillin — severe rash, Sulfa drugs — hives..."></textarea>
+        </div>
+      </div>
+      <div class="f"><label>Have you taken any medications for weight loss in the past 5 years? (Ozempic, Wegovy, phentermine, etc.)</label>
+        <div class="yn" id="wt-meds-yn"><button class="yn-btn yes" onclick="ynSel('wt-meds','yes','wt-meds-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('wt-meds','no','wt-meds-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="wt-meds-detail">
+        <div class="f"><label>Medication, dosage, and dates used:</label><input id="wt-meds-info" placeholder="e.g. Ozempic 1mg weekly, started Jan 2023"/></div>
+      </div>
+    </div>
+
+    <!-- OTHER CONDITIONS -->
+    <div class="sdiv">Other Conditions</div>
+    <div class="f"><label>Thyroid disorder? <span class="req">*</span></label>
+      <div class="yn" id="thy-yn"><button class="yn-btn yes" onclick="ynSel('thy','yes','thy-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('thy','no','thy-detail')">No</button></div>
+      <div class="ferr" id="thy-err">Required</div>
+    </div>
+    <div class="expbox" id="thy-detail">
+      <div class="fr">
+        <div class="f"><label>Type</label><select id="thy-type"><option value="">Select...</option><option>Hypothyroidism</option><option>Hyperthyroidism</option><option>Thyroid cancer (history)</option><option>Hashimoto's</option><option>Graves disease</option></select></div>
+        <div class="f"><label>Medications</label><input id="thy-meds" placeholder="e.g. Levothyroxine"/></div>
+      </div>
+    </div>
+    <div class="f"><label>Cholesterol disorder or high triglycerides? <span class="req">*</span></label>
+      <div class="yn" id="chol-yn"><button class="yn-btn yes" onclick="ynSel('chol','yes','chol-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('chol','no','chol-detail')">No</button></div>
+      <div class="ferr" id="chol-err">Required</div>
+    </div>
+    <div class="expbox" id="chol-detail">
+      <div class="fr">
+        <div class="f"><label>Total cholesterol level (mg/dL)</label><input id="chol-total" placeholder="e.g. 220"/></div>
+        <div class="f"><label>LDL ("bad") cholesterol</label><input id="chol-ldl" placeholder="e.g. 145"/></div>
+      </div>
+      <div class="fr">
+        <div class="f"><label>HDL ("good") cholesterol</label><input id="chol-hdl" placeholder="e.g. 45"/></div>
+        <div class="f"><label>Triglycerides</label><input id="chol-trig" placeholder="e.g. 180"/></div>
+      </div>
+      <div class="f"><label>Date of most recent cholesterol panel</label><input id="chol-date" placeholder="Month/Year"/></div>
+      <div class="f"><label>Are you on cholesterol medication (statins)?</label>
+        <div class="yn" id="chol-meds-yn"><button class="yn-btn yes" onclick="ynSel('chol-meds-yn','yes','chol-meds-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('chol-meds-yn','no','chol-meds-detail')">No</button></div>
+      </div>
+      <div class="expbox" id="chol-meds-detail">
+        <div class="f"><label>List cholesterol medications, dosage, and how long taking:</label>
+          <textarea id="chol-meds" placeholder="e.g. Atorvastatin (Lipitor) 40mg once daily — 5 years&#10;Ezetimibe 10mg once daily — 2 years"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="f"><label>Sleep apnea? <span class="req">*</span></label>
+      <div class="yn" id="sleep-yn"><button class="yn-btn yes" onclick="ynSel('sleep','yes','sleep-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('sleep','no','sleep-detail')">No</button></div>
+      <div class="ferr" id="sleep-err">Required</div>
+    </div>
+    <div class="expbox" id="sleep-detail">
+      <div class="fr">
+        <div class="f"><label>CPAP/BiPAP use?</label><select id="sleep-cpap"><option value="">Select...</option><option>Yes — compliant use</option><option>Yes — non-compliant</option><option>No CPAP</option></select></div>
+        <div class="f"><label>Severity</label><select id="sleep-sev"><option value="">Select...</option><option>Mild</option><option>Moderate</option><option>Severe</option></select></div>
+      </div>
+    </div>
+    <div class="f"><label>Autoimmune disorder (lupus, rheumatoid arthritis, Crohn's, MS, etc.)? <span class="req">*</span></label>
+      <div class="yn" id="auto-yn"><button class="yn-btn yes" onclick="ynSel('auto','yes','auto-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('auto','no','auto-detail')">No</button></div>
+      <div class="ferr" id="auto-err">Required</div>
+    </div>
+    <div class="expbox" id="auto-detail">
+      <div class="f"><label>Diagnosis and current medications:</label><textarea id="auto-info" placeholder="Type of autoimmune condition, treatment, current status..."></textarea></div>
+    </div>
+    <div class="f"><label>Any other medical condition not listed above? <span class="req">*</span></label>
+      <div class="yn" id="other-yn"><button class="yn-btn yes" onclick="ynSel('other','yes','other-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('other','no','other-detail')">No</button></div>
+      <div class="ferr" id="other-err">Required</div>
+    </div>
+    <div class="expbox" id="other-detail">
+      <div class="f"><label>Please describe all other conditions:</label><textarea id="other-info" placeholder="List any other diagnoses, treatments, or medical history not covered above..." style="min-height:90px"></textarea></div>
+    </div>
+
+    <!-- DOCTOR INFO -->
+    <div class="sdiv">Physician Information</div>
+    <div class="f"><label>Primary Care Physician Name</label><input id="doc-name" placeholder="Dr. First Last"/></div>
+    <div class="fr">
+      <div class="f"><label>Physician Phone</label><input id="doc-ph" placeholder="(xxx) xxx-xxxx"/></div>
+      <div class="f"><label>Date of Last Physical Exam</label><input id="last-exam" type="date"/></div>
+    </div>
+    <div class="f"><label>Physician Address / Practice</label><input id="doc-addr" placeholder="Practice name and address"/></div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(5)">← Back</button><button class="btn-next" onclick="nx(5)">Continue →</button></div>
+</div>
+
+<!-- STEP 6: Family History -->
+<div class="sp" id="s6">
+  <div class="sh"><div class="sn">6</div><div><div class="st">Family Medical History</div><div class="ss">Step 6 of 7 — Genetic and hereditary factors</div></div></div>
+  <div class="sb">
+    <div class="info">Family history helps underwriters assess hereditary risk factors. Please answer for biological parents and siblings only.</div>
+    <div class="sdiv">Parents</div>
+    <div class="fr">
+      <div class="f"><label>Father — Living or Deceased?</label>
+        <select id="dad-status"><option value="">Select...</option><option>Living</option><option>Deceased</option></select>
+      </div>
+      <div class="f"><label>Father's Age / Age at Death</label><input id="dad-age" placeholder="e.g. 72 (living) or 68 (heart disease)"/></div>
+    </div>
+    <div class="f"><label>Father's significant health conditions:</label>
+      <input id="dad-hx" placeholder="e.g. Heart disease, diabetes, cancer (type)..."/>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Mother — Living or Deceased?</label>
+        <select id="mom-status"><option value="">Select...</option><option>Living</option><option>Deceased</option></select>
+      </div>
+      <div class="f"><label>Mother's Age / Age at Death</label><input id="mom-age" placeholder="e.g. 70 (living) or 62 (cancer)"/></div>
+    </div>
+    <div class="f"><label>Mother's significant health conditions:</label>
+      <input id="mom-hx" placeholder="e.g. Breast cancer, hypertension, Alzheimer's..."/>
+    </div>
+    <div class="sdiv">Siblings</div>
+    <div class="fr">
+      <div class="f"><label>Number of brothers</label><input id="bro-num" type="number" min="0" placeholder="0"/></div>
+      <div class="f"><label>Number of sisters</label><input id="sis-num" type="number" min="0" placeholder="0"/></div>
+    </div>
+    <div class="f"><label>Any sibling(s) with serious medical conditions?</label>
+      <div class="yn" id="sib-yn"><button class="yn-btn yes" onclick="ynSel('sib','yes','sib-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('sib','no','sib-detail')">No</button></div>
+    </div>
+    <div class="expbox" id="sib-detail">
+      <div class="f"><label>Describe sibling conditions (age, diagnosis):</label><textarea id="sib-info" placeholder="e.g. Brother, 45, Type 2 diabetes; Sister, 50, breast cancer in remission..."></textarea></div>
+    </div>
+    <div class="sdiv">Family History of Specific Conditions</div>
+    <div class="warn">Please indicate if any immediate family member (parent or sibling) has been diagnosed with these conditions before age 60.</div>
+    <div class="fr">
+      <div class="f"><label>Heart disease before age 60?</label>
+        <div class="yn" id="fam-heart-yn"><button class="yn-btn yes" onclick="ynSel('fam-heart','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('fam-heart','no',null)">No</button></div>
+      </div>
+      <div class="f"><label>Diabetes?</label>
+        <div class="yn" id="fam-diab-yn"><button class="yn-btn yes" onclick="ynSel('fam-diab','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('fam-diab','no',null)">No</button></div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Cancer (any type)?</label>
+        <div class="yn" id="fam-cancer-yn"><button class="yn-btn yes" onclick="ynSel('fam-cancer','yes','fam-cancer-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('fam-cancer','no','fam-cancer-detail')">No</button></div>
+        <div class="expbox" id="fam-cancer-detail"><div class="f"><label>Type(s) of cancer:</label><input id="fam-cancer-type" placeholder="e.g. Breast, colon, prostate..."/></div></div>
+      </div>
+      <div class="f"><label>Stroke before age 60?</label>
+        <div class="yn" id="fam-stroke-yn"><button class="yn-btn yes" onclick="ynSel('fam-stroke','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('fam-stroke','no',null)">No</button></div>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="f"><label>Alzheimer's or dementia?</label>
+        <div class="yn" id="fam-alz-yn"><button class="yn-btn yes" onclick="ynSel('fam-alz','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('fam-alz','no',null)">No</button></div>
+      </div>
+      <div class="f"><label>HIV / AIDS?</label>
+        <div class="yn" id="fam-hiv-yn"><button class="yn-btn yes" onclick="ynSel('fam-hiv','yes',null)">Yes</button><button class="yn-btn no" onclick="ynSel('fam-hiv','no',null)">No</button></div>
+      </div>
+    </div>
+    <div class="sdiv">Legal & Financial</div>
+    <div class="f"><label>Any felony convictions in the past 10 years? <span class="req">*</span></label>
+      <div class="yn" id="fel-yn"><button class="yn-btn yes" onclick="ynSel('fel','yes','fel-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('fel','no','fel-detail')">No</button></div>
+      <div class="ferr" id="fel-err">Required</div>
+    </div>
+    <div class="expbox" id="fel-detail">
+      <div class="f"><label>Please describe:</label><textarea id="fel-info" placeholder="Type of conviction, year, current status (probation, parole, etc.)..."></textarea></div>
+    </div>
+    <div class="f"><label>Filed for bankruptcy in the past 5 years?</label>
+      <div class="yn" id="bk-yn"><button class="yn-btn yes" onclick="ynSel('bk','yes','bk-detail')">Yes</button><button class="yn-btn no" onclick="ynSel('bk','no','bk-detail')">No</button></div>
+    </div>
+    <div class="expbox" id="bk-detail">
+      <div class="fr">
+        <div class="f"><label>Chapter type</label><select id="bk-type"><option value="">Select...</option><option>Chapter 7</option><option>Chapter 11</option><option>Chapter 13</option></select></div>
+        <div class="f"><label>Year filed / discharged</label><input id="bk-yr" placeholder="e.g. Filed 2020, discharged 2021"/></div>
+      </div>
+    </div>
+    <div class="sdiv">Additional Notes</div>
+    <div class="f"><label>Is there anything else you would like the underwriter to know?</label>
+      <textarea id="addl-notes" placeholder="Any additional medical, financial, or personal information that may be relevant to your application..." style="min-height:80px"></textarea>
+    </div>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(6)">← Back</button><button class="btn-next" onclick="nx(6)">Continue →</button></div>
+</div>
+
+<!-- STEP 7: Review & Submit -->
+<div class="sp" id="s7">
+  <div class="sh"><div class="sn">7</div><div><div class="st">Review & Submit</div><div class="ss">Step 7 of 7 — Almost done!</div></div></div>
+  <div class="sb">
+    <div id="rev-content"></div>
+    <div class="sdiv">Authorization & Signature</div>
+    <div class="warn">By submitting this application, you authorize Willie Ashford III and ShieldLife to obtain medical records, prescription history, and credit information as needed for underwriting purposes. All information provided is subject to verification.</div>
+    <div class="f"><label>Electronic Signature — Type Your Full Legal Name <span class="req">*</span></label>
+      <input id="esig" placeholder="Type your full legal name as your electronic signature"/>
+      <div class="ferr" id="esig-err">Electronic signature required</div>
+    </div>
+    <div class="f"><label>Today's Date <span class="req">*</span></label>
+      <input id="sigdate" type="date"/>
+      <div class="ferr" id="sigdate-err">Required</div>
+    </div>
+    <div style="background:#f9f8f5;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px">
+      By electronically signing and submitting this application, I certify that all information provided is true, complete, and accurate to the best of my knowledge. I understand that any misrepresentation or omission may result in denial or cancellation of coverage. I authorize ShieldLife and Willie Ashford III (1-708-742-7047) to contact me by phone or text regarding this application.
+    </div>
+    <button class="btn-submit" onclick="subApp()">🛡 Submit Application →</button>
+  </div>
+  <div class="sf"><button class="btn-back" onclick="pv(7)">← Back</button><span style="font-size:12px;color:var(--muted)">🔒 Encrypted & Secure</span></div>
+</div>
+
+<!-- SUCCESS -->
+<div class="succ" id="succ">
+  <div class="succ-icon">✓</div>
+  <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px">Application Submitted!</h2>
+  <p style="color:var(--muted);font-size:14px;line-height:1.65;max-width:400px;margin:0 auto 20px" id="succ-msg">Willie Ashford III will personally review your application and contact you within 1 business day.</p>
+  <div class="next-steps">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">What happens next</div>
+    <div class="ns-item"><div class="ns-num">1</div><div>Willie reviews your application and verifies all information with underwriters.</div></div>
+    <div class="ns-item"><div class="ns-num">2</div><div>You may be contacted for a phone interview or medical exam (if required).</div></div>
+    <div class="ns-item"><div class="ns-num">3</div><div>Receive your official quote and policy decision — typically within 1–5 business days.</div></div>
+  </div>
+  <div style="margin-top:20px;font-size:13px;color:var(--muted)">Questions? Call Willie directly: <strong style="color:var(--accent)">1-708-742-7047</strong></div>
+</div>
+
+</div><!-- /fc -->
+</div><!-- /fw -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cur=1;
+const STEPS=7;
+const ynVals={};
+
+function updProg(){
+  const pct=Math.round(((cur-1)/STEPS)*100);
+  document.getElementById('prog').style.width=pct+'%';
+  for(let i=1;i<=STEPS;i++){
+    const sd=document.getElementById('sd'+i);
+    if(!sd)continue;
+    sd.classList.remove('active','done');
+    if(i<cur)sd.classList.add('done');
+    else if(i===cur)sd.classList.add('active');
+  }
+}
+
+function sw(){
+  document.querySelectorAll('.sp').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('s'+cur);
+  if(el)el.classList.add('active');
+  updProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nx(from){
+  if(!validate(from))return;
+  cur=from+1;
+  if(cur===7)bldRev();
+  sw();
+}
+function pv(from){cur=from-1;sw();}
+
+function ynSel(key,val,expandId){
+  ynVals[key]=val;
+  const row=document.getElementById(key+'-yn');
+  if(row){row.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('selected'));const btn=row.querySelector('.yn-btn.'+val);if(btn)btn.classList.add('selected');}
+  if(expandId){const box=document.getElementById(expandId);if(box)box.classList.toggle('show',val==='yes');}
+  const err=document.getElementById(key+'-err');if(err)err.style.display='none';
+}
+
+// VALIDATION
+function validate(step){
+  clearErrs();
+  let ok=true;
+  let firstErr=null;
+
+  function req(id,msg){
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(!el.value||!el.value.trim()){
+      el.style.border='1.5px solid #c0392b';
+      const e=document.getElementById(id+'-err');
+      if(e){e.textContent=msg||'Required';e.style.display='block';}
+      if(!firstErr)firstErr=el;
+      ok=false;
+    }
+  }
+
+  function reqYN(key,msg){
+    if(!ynVals[key]){
+      const e=document.getElementById(key+'-err');
+      if(e){e.textContent=msg||'Please select Yes or No';e.style.display='block';}
+      if(!firstErr){
+        const row=document.getElementById(key+'-yn');
+        if(row)firstErr=row;
+      }
+      ok=false;
+    }
+  }
+
+  if(step===1){
+    req('fn','First name required');
+    req('ln','Last name required');
+    req('dob','Date of birth required');
+    req('age','Age required');
+    req('gen','Please select gender');
+    req('ms','Please select marital status');
+    req('ssn','SSN required');
+    req('addr','Address required');
+    req('city','City required');
+    req('state','State required');
+    req('zip','ZIP required');
+    req('ph','Phone required');
+    req('em','Email required');
+    req('occ','Occupation required');
+    req('income','Please select income range');
+  }
+  if(step===2){
+    req('poltype','Please select policy type');
+    req('covamt','Please select coverage amount');
+    req('purpose','Please select purpose');
+    req('ben1name','Beneficiary name required');
+    req('ben1rel','Beneficiary relationship required');
+  }
+  if(step===3){
+    req('ht','Height required');
+    req('wt','Weight required');
+    reqYN('tob','Please answer tobacco question');
+    reqYN('tob-past','Please answer past tobacco question');
+    reqYN('alc','Please answer alcohol question');
+    reqYN('drug','Please answer drug use question');
+    reqYN('drv','Please answer driver license question');
+  }
+  if(step===4){
+    reqYN('hbp','Required — please select Yes or No');
+    reqYN('heart','Required — please select Yes or No');
+    reqYN('stroke','Required — please select Yes or No');
+    reqYN('diab','Required — please select Yes or No');
+    reqYN('cancer','Required — please select Yes or No');
+    reqYN('copd','Required — please select Yes or No');
+    reqYN('asthma','Required — please select Yes or No');
+    reqYN('kidney','Required — please select Yes or No');
+    reqYN('liver','Required — please select Yes or No');
+    reqYN('alz','Required — please select Yes or No');
+    reqYN('neuro','Required — please select Yes or No');
+    reqYN('mh','Required — please select Yes or No');
+    reqYN('si','Required — please select Yes or No');
+  }
+  if(step===5){
+    reqYN('hiv','Required — please select Yes or No');
+    reqYN('hiv-test','Required — please select Yes or No');
+    reqYN('surg','Required — please select Yes or No');
+    reqYN('hosp','Required — please select Yes or No');
+    reqYN('back','Required — please select Yes or No');
+    reqYN('dis','Required — please select Yes or No');
+    reqYN('meds','Required — please select Yes or No');
+    reqYN('thy','Required — please select Yes or No');
+    reqYN('chol','Required — please select Yes or No');
+    reqYN('sleep','Required — please select Yes or No');
+    reqYN('auto','Required — please select Yes or No');
+    reqYN('other','Required — please select Yes or No');
+  }
+  if(step===6){
+    reqYN('fel','Required — please select Yes or No');
+  }
+  if(step===7){
+    req('esig','Electronic signature required');
+    req('sigdate','Date required');
+  }
+
+  if(!ok){
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    showToast('Please complete all highlighted fields before continuing.');
+  }
+  return ok;
+}
+
+function clearErrs(){
+  document.querySelectorAll('.ferr').forEach(e=>e.style.display='none');
+  document.querySelectorAll('.err').forEach(e=>e.classList.remove('err'));
+  document.querySelectorAll('input,select,textarea').forEach(e=>e.style.border='');
+}
+
+function bldRev(){
+  const g=id=>document.getElementById(id)?.value||'—';
+  const yn=k=>ynVals[k]||'—';
+  document.getElementById('rev-content').innerHTML=`
+    <div class="rev-grid">
+      <div class="rev-section">Personal Information</div>
+      <span class="rk">Name:</span><span class="rv">${g('fn')} ${g('mn')} ${g('ln')}</span>
+      <span class="rk">DOB / Age:</span><span class="rv">${g('dob')} / ${g('age')}</span>
+      <span class="rk">Gender / Status:</span><span class="rv">${g('gen')} / ${g('ms')}</span>
+      <span class="rk">Address:</span><span class="rv">${g('addr')}, ${g('city')}, ${g('state')} ${g('zip')}</span>
+      <span class="rk">Phone / Email:</span><span class="rv">${g('ph')} / ${g('em')}</span>
+      <span class="rk">Occupation:</span><span class="rv">${g('occ')} — ${g('income')}</span>
+      <div class="rev-section">Coverage</div>
+      <span class="rk">Policy Type:</span><span class="rv">${g('poltype')}</span>
+      <span class="rk">Coverage Amount:</span><span class="rv">${g('covamt')}</span>
+      <span class="rk">Purpose:</span><span class="rv">${g('purpose')}</span>
+      <span class="rk">Beneficiary:</span><span class="rv">${g('ben1name')} (${g('ben1rel')})</span>
+      <div class="rev-section">Lifestyle</div>
+      <span class="rk">Height / Weight:</span><span class="rv">${g('ht')} / ${g('wt')} lbs</span>
+      <span class="rk">Tobacco (current):</span><span class="rv">${yn('tob')}</span>
+      <span class="rk">Alcohol:</span><span class="rv">${yn('alc')}</span>
+      <span class="rk">Recreational drugs:</span><span class="rv">${yn('drug')}</span>
+      <div class="rev-section">Medical Conditions</div>
+      <span class="rk">High Blood Pressure:</span><span class="rv">${yn('hbp')}</span>
+      <span class="rk">Heart Disease:</span><span class="rv">${yn('heart')}</span>
+      <span class="rk">Stroke:</span><span class="rv">${yn('stroke')}</span>
+      <span class="rk">Diabetes:</span><span class="rv">${yn('diab')}${yn('diab')==='yes'?' — A1C: '+g('diab-a1c'):''}</span>
+      <span class="rk">Cancer:</span><span class="rv">${yn('cancer')}${yn('cancer')==='yes'?' — '+g('cancer-type'):''}</span>
+      <span class="rk">HIV/AIDS:</span><span class="rv">${yn('hiv')}</span>
+      <span class="rk">Mental Health:</span><span class="rv">${yn('mh')}</span>
+      <span class="rk">Medications:</span><span class="rv">${yn('meds')}${yn('meds')==='yes'?'<br><small>'+g('meds-list')+'</small>':''}</span>
+      <div class="rev-section">Family History</div>
+      <span class="rk">Father:</span><span class="rv">${g('dad-status')} — ${g('dad-hx')||'No conditions noted'}</span>
+      <span class="rk">Mother:</span><span class="rv">${g('mom-status')} — ${g('mom-hx')||'No conditions noted'}</span>
+      <span class="rk">Felony conviction:</span><span class="rv">${yn('fel')}</span>
+    </div>`;
+}
+
+async function subApp(){
+  if(!validate(7))return;
+  const btn=document.querySelector('.btn-submit');
+  btn.textContent='Submitting...';btn.disabled=true;
+  const getVal=id=>document.getElementById(id)?.value||'';
+  const yn=k=>ynVals[k]||'no';
+  try{
+    await fetch('https://formspree.io/f/meevjplq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:'New Life Insurance Application — '+getVal('fn')+' '+getVal('ln'),
+        applicant_name:getVal('fn')+' '+getVal('mn')+' '+getVal('ln'),
+        dob:getVal('dob'),age:getVal('age'),gender:getVal('gen'),marital_status:getVal('ms'),
+        ssn:getVal('ssn'),address:getVal('addr')+', '+getVal('city')+', '+getVal('state')+' '+getVal('zip'),
+        phone:getVal('ph'),email:getVal('em'),occupation:getVal('occ'),income:getVal('income'),
+        policy_type:getVal('poltype'),coverage_amount:getVal('covamt'),purpose:getVal('purpose'),
+        beneficiary:getVal('ben1name')+' ('+getVal('ben1rel')+')',
+        height:getVal('ht'),weight:getVal('wt'),
+        tobacco_current:yn('tob'),tobacco_past:yn('tob-past'),tobacco_detail:getVal('tob-type')+' '+getVal('tob-amt'),
+        alcohol:yn('alc'),alcohol_detail:getVal('alc-amt')+' '+getVal('alc-type'),
+        recreational_drugs:yn('drug'),drug_detail:getVal('drug-info'),
+        high_blood_pressure:yn('hbp'),bp_reading:getVal('hbp-reading'),bp_meds:getVal('hbp-meds'),
+        heart_disease:yn('heart'),heart_detail:getVal('heart-type')+' '+getVal('heart-date'),
+        stroke:yn('stroke'),stroke_date:getVal('stroke-date'),
+        diabetes:yn('diab'),diabetes_type:getVal('diab-type'),a1c:getVal('diab-a1c'),diabetes_meds:getVal('diab-meds'),
+        cancer:yn('cancer'),cancer_type:getVal('cancer-type'),cancer_stage:getVal('cancer-stage'),cancer_status:getVal('cancer-status'),
+        copd:yn('copd'),asthma:yn('asthma'),
+        kidney_disease:yn('kidney'),kidney_detail:getVal('kidney-info'),
+        liver_disease:yn('liver'),liver_type:getVal('liver-type'),
+        alzheimers_dementia:yn('alz'),alzheimers_type:getVal('alz-type'),
+        neurological:yn('neuro'),neuro_detail:getVal('neuro-info'),
+        mental_health:yn('mh'),mh_diagnosis:getVal('mh-dx'),mh_meds:getVal('mh-meds'),
+        suicide_attempt:yn('si'),si_detail:getVal('si-info'),
+        hiv_aids:yn('hiv'),hiv_diagnosis:getVal('hiv-dx'),hiv_labs:getVal('hiv-labs'),hiv_meds:getVal('hiv-meds'),
+        surgeries:yn('surg'),surgery_detail:getVal('surg-info'),
+        hospitalizations:yn('hosp'),hosp_detail:getVal('hosp-info'),
+        disability:yn('dis'),disability_type:getVal('dis-type'),
+        current_medications:yn('meds'),medication_list:getVal('meds-list'),
+        thyroid:yn('thy'),thyroid_type:getVal('thy-type'),
+        cholesterol:yn('chol'),cholesterol_level:getVal('chol-lvl'),
+        sleep_apnea:yn('sleep'),
+        autoimmune:yn('auto'),autoimmune_detail:getVal('auto-info'),
+        other_conditions:yn('other'),other_detail:getVal('other-info'),
+        physician:getVal('doc-name'),physician_phone:getVal('doc-ph'),last_exam:getVal('last-exam'),
+        father_status:getVal('dad-status'),father_history:getVal('dad-hx'),
+        mother_status:getVal('mom-status'),mother_history:getVal('mom-hx'),
+        family_cancer:yn('fam-cancer'),family_cancer_type:getVal('fam-cancer-type'),
+        family_heart:yn('fam-heart'),family_alzheimers:yn('fam-alz'),family_hiv:yn('fam-hiv'),
+        felony:yn('fel'),felony_detail:getVal('fel-info'),
+        additional_notes:getVal('addl-notes'),
+        electronic_signature:getVal('esig'),signature_date:getVal('sigdate'),
+        submitted_at:new Date().toLocaleString()
+      })
+    });
+  }catch(e){console.log('Submit error',e);}
+  document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
+  document.getElementById('succ').style.display='block';
+  document.getElementById('prog').style.width='100%';
+  document.querySelectorAll('.step-dot').forEach(d=>d.classList.add('done'));
+  const name=getVal('fn');
+  document.getElementById('succ-msg').textContent=`Thank you, ${name}! Willie Ashford III will personally review your application and contact you within 1 business day at ${getVal('ph') || 'the number you provided'}.`;
+  window.scrollTo({top:0,behavior:'smooth'});
+
+}
+
+// Handle existing insurance show/hide
+document.getElementById('existins').addEventListener('change',function(){
+  document.getElementById('replace-wrap').style.display=this.value.includes('replacing')?'block':'none';
+});
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+// Set today's date as default for signature date
+document.getElementById('sigdate').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>

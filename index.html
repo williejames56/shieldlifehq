@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldLife CRM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+:root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f2f8;--muted:#8b8fa8;--accent:#4f6ef7;--ag:rgba(79,110,247,0.15);--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--gold:#d4a942;--purple:#a78bfa;--teal:#14b8a6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+.sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto}
+.logo{padding:20px 20px 16px;border-bottom:1px solid var(--border)}
+.logo-icon{font-family:'DM Serif Display',serif;font-size:20px}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.nav{padding:12px 10px;flex:1}
+.ns{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:8px 10px 4px}
+.ni{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;margin-bottom:2px}
+.ni:hover{background:var(--surface2);color:var(--text)}
+.ni.active{background:var(--ag);color:var(--accent)}
+.ni svg{width:15px;height:15px;flex-shrink:0}
+.sfooter{padding:14px;border-top:1px solid var(--border)}
+.acard{display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface2);border-radius:10px}
+.aav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#fff}
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:50}
+.tr{display:flex;align-items:center;gap:10px}
+.btn{padding:7px 14px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s}
+.bp{background:var(--accent);color:#fff}.bp:hover{background:#3d5ce8}
+.bg{background:transparent;color:var(--muted);border:1px solid var(--border2)}.bg:hover{color:var(--text);background:var(--surface)}
+.bgn{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.2)}.bgn:hover{background:rgba(34,197,94,0.25)}
+.content{padding:24px;flex:1}
+.sr{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.sl{font-size:11px;color:var(--muted);margin-bottom:7px}
+.sv{font-size:24px;font-weight:300;letter-spacing:-1px}
+.sd{font-size:11px;margin-top:4px}
+.du{color:var(--green)}.dd{color:var(--red)}
+.g2{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.ch{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ct{font-size:14px;font-weight:500}
+.cs{font-size:12px;color:var(--muted);margin-top:2px}
+.lt{width:100%}
+.lt thead tr{border-bottom:1px solid var(--border)}
+.lt th{padding:8px 14px;text-align:left;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase}
+.lt tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s}
+.lt tbody tr:hover{background:var(--surface2)}
+.lt tbody tr:last-child{border-bottom:none}
+.lt td{padding:10px 14px;font-size:13px}
+.ln{display:flex;align-items:center;gap:8px}
+.lav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.bn{background:rgba(79,110,247,0.12);color:#4f6ef7}
+.ba{background:rgba(167,139,250,0.12);color:#a78bfa}
+.bi{background:rgba(20,184,166,0.12);color:#14b8a6}
+.bb{background:rgba(212,169,66,0.12);color:#d4a942}
+.bh{background:rgba(239,68,68,0.12);color:#ef4444}
+.bw{background:rgba(245,158,11,0.12);color:#f59e0b}
+.bc{background:rgba(139,143,168,0.12);color:#8b8fa8}
+.bco{background:rgba(34,197,94,0.12);color:#22c55e}
+.pcol{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.pch{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pi{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;margin-bottom:7px;cursor:pointer;transition:border-color 0.15s;font-size:12px}
+.pi:hover{border-color:var(--accent)}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.mo.open{display:flex}
+.md{background:var(--surface);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:580px;margin:auto}
+.mdl{max-width:760px}
+.mh{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;border-radius:16px 16px 0 0}
+.mb{padding:20px 22px}
+.mf{padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.f label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+.f input,.f select,.f textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent)}
+.f select option{background:var(--surface)}
+.f textarea{resize:vertical;min-height:65px}
+.tc{display:none}.tc.active{display:block}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;font-size:13px;z-index:999;display:none;max-width:300px}
+.toast.show{display:block;animation:su 0.3s ease}
+@keyframes su{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.lp{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 11px;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.lp:hover{border-color:var(--accent);color:var(--accent)}
+.aib{display:inline-flex;align-items:center;gap:5px;background:var(--ag);color:var(--accent);border:1px solid rgba(79,110,247,0.2);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:500;margin-bottom:6px}
+.aid{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.aim{margin-bottom:9px;padding:10px 13px;border-radius:10px;font-size:13px;line-height:1.5}
+.aim.ai{background:var(--ag);border:1px solid rgba(79,110,247,0.15)}
+.aim.agent{background:var(--surface2);border:1px solid var(--border)}
+.ml{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.aim.ai .ml{color:var(--accent)}
+.agb{background:var(--ag);border:1px solid rgba(79,110,247,0.2);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:13px;line-height:1.6;display:none}
+.agb.show{display:block}
+.agl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+/* WORKFLOW */
+.wfc{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.wfh{padding:13px 17px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.wfh:hover{background:var(--surface2)}
+.wft{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500}
+.wfi{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.wfm{font-size:11px;color:var(--muted);margin-top:2px;font-weight:400}
+.wftog{width:38px;height:20px;border-radius:10px;background:var(--green);position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s}
+.wftog.off{background:var(--surface2);border:1px solid var(--border2)}
+.wftog::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;right:3px;transition:transform 0.2s}
+.wftog.off::after{transform:translateX(-18px)}
+.wfb{padding:0 17px 14px;border-top:1px solid var(--border)}
+.tr2{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ti{font-size:14px;width:26px;text-align:center}
+.tdl{font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:5px}
+.ts2{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.ts2.pend{background:var(--amber)}
+.mp{background:var(--surface2);border-radius:7px;padding:9px 11px;margin-top:7px;font-size:12px;line-height:1.5;color:var(--muted)}
+/* APPT */
+.apc{height:360px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:7px}
+.apb{max-width:82%;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.5}
+.apb.ai{background:var(--ag);border:1px solid rgba(79,110,247,0.15);align-self:flex-start;border-radius:4px 12px 12px 12px}
+.apb.user{background:var(--surface2);border:1px solid var(--border);align-self:flex-end;border-radius:12px 4px 12px 12px}
+.apr{padding:10px 13px;border-top:1px solid var(--border);display:flex;gap:8px}
+.apr input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.apr input:focus{border-color:var(--accent)}
+.apr input::placeholder{color:var(--muted)}
+.sb{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 13px;cursor:pointer;font-size:13px}
+.typ{display:flex;align-items:center;gap:4px;padding:8px 12px;background:var(--ag);border:1px solid rgba(79,110,247,0.15);border-radius:4px 12px 12px 12px;align-self:flex-start;display:none}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:bou 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bou{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.asl{display:inline-block;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:5px 10px;font-size:12px;cursor:pointer;margin:3px 3px 0 0;transition:all 0.15s}
+.asl:hover,.asl.selected{background:var(--ag);border-color:var(--accent);color:var(--accent)}
+/* IMPORT */
+.dz{border:2px dashed var(--border2);border-radius:12px;padding:36px;text-align:center;cursor:pointer;transition:all 0.2s}
+.dz:hover,.dz.active{border-color:var(--accent);background:var(--ag)}
+/* NOTIF */
+.noti{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.noti:last-child{border-bottom:none}
+.noic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+/* ACTIVITY */
+.acti{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.acti:last-child{border-bottom:none}
+.actd{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.sbar{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 11px}
+.sbar input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;width:170px}
+.sbar input::placeholder{color:var(--muted)}
+.sl2{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo"><div class="logo-icon">🛡 ShieldLife</div><div class="logo-sub">CRM Platform</div></div>
+  <div class="nav">
+    <div class="ns">Main</div>
+    <div class="ni active" onclick="showTab('dashboard',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</div>
+    <div class="ni" onclick="showTab('leads',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>All Leads</div>
+    <div class="ni" onclick="showTab('pipeline',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline</div>
+    <div class="ns" style="margin-top:8px">Automation</div>
+    <div class="ni" onclick="showTab('workflows',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workflows</div>
+    <div class="ni" onclick="showTab('notifications',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Sent Log</div>
+    <div class="ni" onclick="showTab('ai',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>AI Follow-Up</div>
+    <div class="ni" onclick="showTab('appointments',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>AI Appointments</div>
+    <div class="ns" style="margin-top:8px">Tools</div>
+    <div class="ni" onclick="showTab('import',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Bulk Import</div>
+    <div class="ni" onclick="openIntakeLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Intake Form Link</div>
+  </div>
+  <div class="sfooter"><div class="acard"><div class="aav" id="sidebar-av">WA</div><div><div style="font-size:13px;font-weight:500" id="sidebar-name">Willie Ashford III</div><div style="font-size:11px;color:var(--muted)" id="sidebar-role">Admin · Senior Agent</div></div></div></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div style="font-size:16px;font-weight:500" id="page-title">Dashboard</div>
+    <div class="tr">
+      <span class="lp" onclick="openIntakeLink()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Intake Form</span>
+      <button class="btn bg" onclick="showTab('import',null)">⬆ Import</button>
+      <button class="btn bp" onclick="openAddLead()">+ Add Lead</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard" class="tc active">
+      <div class="sr">
+        <div class="sc"><div class="sl">Total Leads</div><div class="sv" id="st">47</div><div class="sd du">↑ 12 this week</div></div>
+        <div class="sc"><div class="sl">New Inbound</div><div class="sv" id="si">12</div><div class="sd du">↑ 4 today</div></div>
+        <div class="sc"><div class="sl">Aged Leads</div><div class="sv" id="sag">18</div><div class="sd" style="color:var(--purple)">Re-engagement on</div></div>
+        <div class="sc"><div class="sl">Workflows Fired</div><div class="sv">284</div><div class="sd du">↑ 31 today</div></div>
+        <div class="sc"><div class="sl">Appts Booked</div><div class="sv">9</div><div class="sd du">↑ 3 this week</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="ch"><div><div class="ct">Recent Leads</div><div class="cs">All sources</div></div><button class="btn bg" onclick="showTab('leads',null)">View all →</button></div>
+          <table class="lt"><thead><tr><th>Name</th><th>Type</th><th>Policy</th><th>Workflow</th></tr></thead><tbody id="rlb"></tbody></table>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column">
+          <div class="ch"><div><div class="aib"><div class="aid"></div>Live</div><div class="ct">Workflow Activity</div></div></div>
+          <div style="padding:12px 16px;flex:1;overflow-y:auto;max-height:320px" id="da"></div>
+        </div>
+      </div>
+      <div class="sl2">Pipeline</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px" id="pipeline-mini"></div>
+    </div>
+
+    <!-- ALL LEADS -->
+    <div id="tab-leads" class="tc">
+      <div class="card">
+        <div class="ch">
+          <div><div class="ct">All Leads</div><div class="cs" id="lcs">47 contacts</div></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <div class="sbar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search…" id="ls" oninput="filterLeads()"/></div>
+            <select id="tf" onchange="filterLeads()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:13px;outline:none"><option value="">All Types</option><option value="new">New</option><option value="aged">Aged</option><option value="inbound">Inbound</option><option value="bulk">Bulk</option></select>
+            <button class="btn bp" onclick="openAddLead()">+ Add</button>
+          </div>
+        </div>
+        <table class="lt"><thead><tr><th>Name</th><th>Type</th><th>Policy</th><th>Phone</th><th>Last Contact</th><th>Stage</th><th>Actions</th></tr></thead><tbody id="alb"></tbody></table>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div id="tab-pipeline" class="tc">
+      <div class="sl2">Kanban Pipeline</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px" id="pipeline-full"></div>
+    </div>
+
+    <!-- WORKFLOWS -->
+    <div id="tab-workflows" class="tc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div><div style="font-size:15px;font-weight:500;margin-bottom:2px">Automation Workflows</div><div style="font-size:13px;color:var(--muted)">Automatic SMS + Email triggered by lead type</div></div>
+        <button class="btn bp">+ New Workflow</button>
+      </div>
+
+      <div class="wfc">
+        <div class="wfh" onclick="twf('w1')">
+          <div class="wft"><div class="wfi" style="background:rgba(79,110,247,0.15)">🏷</div><div><div>New Lead (Agent-Tagged)</div><div class="wfm">Triggers when you tag or add a lead as "New" · SMS + Email sequence</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--green)">Active · 47 fired</span><div class="wftog" id="tw1" onclick="event.stopPropagation();tws('w1')"></div></div>
+        </div>
+        <div id="w1" style="display:none"><div class="wfb">
+          <div style="font-size:11px;color:var(--muted);margin:10px 0 7px">Trigger: Lead status set to "New" by agent</div>
+          <div class="tr2"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — Immediate</strong> · Intro text</span><span class="tdl">0 min</span><div class="ts2"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name]! I'm Willie with ShieldLife Insurance. You recently showed interest in [Policy] coverage — I'd love to help protect your family. Reply YES to get a free quote, or (312) 555-0100.</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — 2 min</strong> · Welcome + intro</span><span class="tdl">2 min</span><div class="ts2"></div></div>
+          <div class="mp"><strong>Subject:</strong> Your ShieldLife Quote — Let's Get You Covered 🛡<br><strong>Body:</strong> Hi [Name], I'm Willie, your dedicated ShieldLife agent. I've prepared initial thoughts on [Policy] coverage that fits your situation. Click below to schedule a free 15-min call...</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — Day 2</strong> · Nudge</span><span class="tdl">2 days</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name], just checking in! Did you get a chance to look at that info? I have a [Policy] option starting at $[Rate]/mo. Want to jump on a quick call? 📞</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — Day 5</strong> · Social proof</span><span class="tdl">5 days</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>Subject:</strong> Why Families Like Yours Choose ShieldLife<br><strong>Body:</strong> Hi [Name], I wanted to share a quick story about a client similar to you who got protected with a [Policy] policy and saved $80/month vs their previous provider...</div>
+          <div style="margin-top:10px;display:flex;gap:8px"><button class="btn bgn" onclick="fw('new')">▶ Fire Test</button><button class="btn bg">Edit</button></div>
+        </div></div>
+      </div>
+
+      <div class="wfc">
+        <div class="wfh" onclick="twf('w2')">
+          <div class="wft"><div class="wfi" style="background:rgba(167,139,250,0.15)">⏳</div><div><div>Aged Lead Re-Engagement</div><div class="wfm">Triggers when you tag a lead as "Aged" · Win-back sequence</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--green)">Active · 38 fired</span><div class="wftog" id="tw2" onclick="event.stopPropagation();tws('w2')"></div></div>
+        </div>
+        <div id="w2" style="display:none"><div class="wfb">
+          <div style="font-size:11px;color:var(--muted);margin:10px 0 7px">Trigger: Lead tagged as "Aged" (dormant/old lead you're reviving)</div>
+          <div class="tr2"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — Immediate</strong> · No-pressure re-engage</span><span class="tdl">0 min</span><div class="ts2"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name], it's Willie from ShieldLife. I know it's been a while — life gets busy! Rates for [Policy] have actually improved recently. No pressure at all — just wanted you to have the latest info. 😊</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — Day 1</strong> · Updated quote + new rates</span><span class="tdl">1 day</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>Subject:</strong> Good news — your [Policy] rates have changed<br><strong>Body:</strong> Hi [Name], since we last spoke, premiums in your category have decreased and we've added flexible payment options. I'd love to show you what's changed...</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — Day 7</strong> · Final soft touch</span><span class="tdl">7 days</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name] — last check-in, I promise! 😄 If life insurance ever gets back on your radar, I'm your person. Direct line: (312) 555-0100. Take care!</div>
+          <div style="margin-top:10px;display:flex;gap:8px"><button class="btn bgn" onclick="fw('aged')">▶ Fire Test</button><button class="btn bg">Edit</button></div>
+        </div></div>
+      </div>
+
+      <div class="wfc">
+        <div class="wfh" onclick="twf('w3')">
+          <div class="wft"><div class="wfi" style="background:rgba(20,184,166,0.15)">🌐</div><div><div>New Inbound Lead (Form Submission)</div><div class="wfm">Triggers instantly when prospect completes the intake form · Hot lead</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--green)">Active · 94 fired</span><div class="wftog" id="tw3" onclick="event.stopPropagation();tws('w3')"></div></div>
+        </div>
+        <div id="w3" style="display:none"><div class="wfb">
+          <div style="font-size:11px;color:var(--muted);margin:10px 0 7px">Trigger: Form submitted at life-insurance-intake.html</div>
+          <div class="tr2"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — 30 sec</strong> · Instant hot-lead response</span><span class="tdl">30 sec</span><div class="ts2"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name]! This is Willie from ShieldLife — I just received your [Policy] quote request. I'm reviewing it now. Is this a good time to connect? 📞 (312) 555-0100</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — 2 min</strong> · Confirmation + next steps</span><span class="tdl">2 min</span><div class="ts2"></div></div>
+          <div class="mp"><strong>Subject:</strong> ✓ Quote Request Received — Here's What Happens Next<br><strong>Body:</strong> Hi [Name], Thank you! I'm preparing personalized [Policy] options. You can expect: ① A call from me within 1 hour ② Your personalized quote via email ③ Zero pressure, just great options...</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">🔔</span><span style="flex:1;font-size:13px"><strong>Agent Alert — Instant</strong> · You get notified</span><span class="tdl">0 sec</span><div class="ts2"></div></div>
+          <div class="mp"><strong>To Agent:</strong> 🔥 New inbound lead: [Name] — [Policy] — [Coverage]. Call within 5 minutes for best conversion!</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — 1 hr</strong> · If no contact yet</span><span class="tdl">1 hr</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name]! Still working on your quote — want to make sure I get you the best rate. Is tomorrow at 10am good to go over your options?</div>
+          <div style="margin-top:10px;display:flex;gap:8px"><button class="btn bgn" onclick="fw('inbound')">▶ Fire Test</button><button class="btn bg">Edit</button></div>
+        </div></div>
+      </div>
+
+      <div class="wfc">
+        <div class="wfh" onclick="twf('w4')">
+          <div class="wft"><div class="wfi" style="background:rgba(212,169,66,0.15)">📦</div><div><div>Bulk Import Campaign</div><div class="wfm">Triggers when leads are imported via CSV · Staggered drip sequence</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--green)">Active · 105 fired</span><div class="wftog" id="tw4" onclick="event.stopPropagation();tws('w4')"></div></div>
+        </div>
+        <div id="w4" style="display:none"><div class="wfb">
+          <div style="font-size:11px;color:var(--muted);margin:10px 0 7px">Trigger: Lead added via Bulk Import tool · Sends staggered to avoid spam flags</div>
+          <div class="tr2"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — Day 1</strong> · Cold introduction</span><span class="tdl">Staggered</span><div class="ts2"></div></div>
+          <div class="mp"><strong>Subject:</strong> Quick question about your life insurance, [Name]<br><strong>Body:</strong> Hi [Name], I'm Willie with ShieldLife Insurance in Chicago. I believe I can save you money on life insurance — or help you get covered if you're not yet protected. Open to a quick 10-min call?</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📱</span><span style="flex:1;font-size:13px"><strong>SMS — Day 3</strong> · Short warm text</span><span class="tdl">3 days</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>SMS:</strong> Hi [Name], this is Willie from ShieldLife. I sent an email a couple days ago about [Policy] options. Did you get a chance to see it? Happy to answer any questions — totally free.</div>
+          <div class="tr2" style="margin-top:7px"><span class="ti">📧</span><span style="flex:1;font-size:13px"><strong>Email — Day 7</strong> · Value content</span><span class="tdl">7 days</span><div class="ts2 pend"></div></div>
+          <div class="mp"><strong>Subject:</strong> The #1 mistake families make with life insurance<br><strong>Body:</strong> Hi [Name], 40% of American families are underinsured. Here's a quick guide on the most common mistakes and how to avoid them — no sales pitch, just useful info...</div>
+          <div style="margin-top:10px;display:flex;gap:8px"><button class="btn bgn" onclick="fw('bulk')">▶ Fire Test</button><button class="btn bg">Edit</button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SENT LOG -->
+    <div id="tab-notifications" class="tc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div><div style="font-size:15px;font-weight:500">SMS & Email Log</div><div style="font-size:13px;color:var(--muted)">All automated messages sent</div></div>
+        <div style="display:flex;gap:8px">
+          <select style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:13px;outline:none"><option>All Channels</option><option>SMS Only</option><option>Email Only</option></select>
+          <select style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:13px;outline:none"><option>All Workflows</option><option>New Lead</option><option>Aged Lead</option><option>Inbound</option><option>Bulk</option></select>
+        </div>
+      </div>
+      <div class="card"><div style="padding:4px 16px" id="nl"></div></div>
+    </div>
+
+    <!-- AI FOLLOW-UP -->
+    <div id="tab-ai" class="tc">
+      <div class="g2">
+        <div class="card">
+          <div class="ch"><div><div class="aib"><div class="aid"></div>AI Engine</div><div class="ct" style="margin-top:4px">Generate Follow-Up Messages</div></div></div>
+          <div style="padding:16px 18px">
+            <div class="f"><label>Select Lead</label><select id="asl2"><option value="">Choose a lead...</option></select></div>
+            <div class="f"><label>Message Type</label><select id="amt"><option>Initial outreach</option><option>Follow-up after quote</option><option>Re-engagement (aged lead)</option><option>Policy renewal reminder</option><option>Referral request</option><option>Appointment reminder</option></select></div>
+            <div class="f"><label>Channel</label><select id="ach"><option>Email</option><option>SMS</option><option>Phone script</option></select></div>
+            <div class="f"><label>Context (optional)</label><textarea id="actx" placeholder="e.g. Has 2 kids, recently bought a home…"></textarea></div>
+            <button class="btn bp" style="width:100%" onclick="genFU()">✦ Generate AI Message</button>
+            <div class="agb" id="aout"><div class="agl">✦ AI Generated</div><div id="aouttxt"></div><div style="display:flex;gap:8px;margin-top:9px"><button class="btn bg" onclick="cpMsg()">Copy</button><button class="btn bp" onclick="lgFU()">Mark Sent</button></div></div>
+          </div>
+        </div>
+        <div class="card"><div class="ch"><div class="ct">Activity Feed</div></div><div style="padding:12px 16px" id="aff"></div></div>
+      </div>
+    </div>
+
+    <!-- AI APPOINTMENTS -->
+    <div id="tab-appointments" class="tc">
+      <div class="g2">
+        <div class="card" style="display:flex;flex-direction:column">
+          <div class="ch"><div><div class="aib"><div class="aid"></div>AI Appointment Setter</div><div class="ct" style="margin-top:4px">Book Appointments Automatically</div><div class="cs">AI converses with your lead to find a time</div></div></div>
+          <div style="padding:13px 16px;border-bottom:1px solid var(--border)">
+            <div class="f" style="margin-bottom:9px"><label>Lead to contact</label><select id="als" onchange="updAL()"><option value="">Select lead...</option></select></div>
+            <div style="display:flex;gap:8px"><button class="btn bp" onclick="startAppt()">▶ Start AI Session</button><button class="btn bg" onclick="resetAppt()">Reset</button></div>
+          </div>
+          <div class="apc" id="apc"><div class="apb ai">Select a lead above and click "Start AI Session" to begin.</div></div>
+          <div id="aptyp" class="typ"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+          <div class="apr"><input type="text" id="api" placeholder="Reply as the lead, or let AI handle it…" onkeydown="if(event.key==='Enter')sndAM()"/><button class="sb" onclick="sndAM()">→</button></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card"><div class="ch"><div class="ct">Upcoming Appointments</div></div><div style="padding:12px 16px" id="aplist"></div></div>
+          <div class="card"><div class="ch"><div class="ct">Available Slots</div><div class="cs">Click to mark as booked</div></div><div style="padding:12px 16px" id="apslots"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BULK IMPORT -->
+    <div id="tab-import" class="tc">
+      <div style="max-width:620px">
+        <div style="font-size:15px;font-weight:500;margin-bottom:3px">Bulk Lead Import</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:18px">Import leads from CSV. Workflow automation triggers on import.</div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="padding:18px">
+            <div class="dz" id="dz" onclick="document.getElementById('cf').click()" ondragover="event.preventDefault();this.classList.add('active')" ondragleave="this.classList.remove('active')" ondrop="hDrop(event)">
+              <div style="font-size:28px;margin-bottom:8px">📂</div>
+              <div id="dzlabel" style="font-size:14px;font-weight:500;margin-bottom:4px">Drop your CSV file here</div>
+              <div style="font-size:12px;color:var(--muted)">or click to browse · .csv or .xlsx</div>
+              <input type="file" id="cf" accept=".csv" style="display:none" onchange="hFS(event)"/>
+            </div>
+            <div id="ip" style="display:none;margin-top:12px">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px">Preview (first 5 rows)</div>
+              <div id="ir"></div>
+              <div style="margin-top:12px;padding:12px;background:var(--surface2);border-radius:8px">
+                <div style="font-size:12px;font-weight:500;margin-bottom:8px">Assign Workflow</div>
+                <div class="f" style="margin-bottom:8px"><label>Lead Type</label>
+                  <select id="itype"><option value="bulk">Bulk Import (drip campaign)</option><option value="aged">Aged Leads (re-engagement)</option><option value="new">New Leads (immediate outreach)</option></select>
+                </div>
+                <button class="btn bp" onclick="importLeads()">⬆ Import & Trigger Workflows</button>
+              </div>
+            </div>
+            <div style="margin-top:14px;padding:12px;background:var(--surface2);border-radius:8px">
+              <div style="font-size:12px;font-weight:500;margin-bottom:6px">Required CSV columns</div>
+              <div style="font-family:monospace;font-size:11px;color:var(--muted);line-height:1.8">first_name, last_name, email, phone, policy_interest, coverage_amount, notes</div>
+              <button class="btn bg" style="margin-top:9px;font-size:12px" onclick="dlTpl()">⬇ Download Template</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+<!-- EDIT LEAD MODAL -->
+<div class="mo" id="elm">
+  <div class="md">
+    <div class="mh"><div style="font-size:15px;font-weight:500">✏️ Edit Lead</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px" onclick="cmod('elm')">×</button></div>
+    <div class="mb">
+      <div class="fr"><div class="f"><label>First Name</label><input id="e-fn" placeholder="First"/></div><div class="f"><label>Last Name</label><input id="e-ln" placeholder="Last"/></div></div>
+      <div class="fr"><div class="f"><label>Email</label><input id="e-em" type="email"/></div><div class="f"><label>Phone</label><input id="e-ph"/></div></div>
+      <div class="fr">
+        <div class="f"><label>Policy Interest</label><select id="e-pol"><option>Term Life</option><option>Whole Life</option><option>Universal Life</option><option>Final Expense</option><option>Indexed Universal Life</option><option>Mortgage Protection</option><option>Fixed Index Annuity</option><option>Income Annuity</option></select></div>
+        <div class="f"><label>Lead Type</label><select id="e-lt"><option value="new">New</option><option value="aged">Aged</option><option value="inbound">Inbound</option><option value="bulk">Bulk</option></select></div>
+      </div>
+      <div class="fr"><div class="f"><label>Coverage</label><input id="e-cov"/></div><div class="f"><label>Pipeline Stage</label><select id="e-pipe"><option>New Lead</option><option>Quoted</option><option>Proposal</option><option>Negotiating</option><option>Closed Won</option></select></div></div>
+      <div class="fr"><div class="f"><label>Annual Value</label><input id="e-val" placeholder="$0/yr"/></div><div class="f"><label>Age</label><input id="e-age" type="number"/></div></div>
+      <div class="f"><label>Notes</label><textarea id="e-notes" style="min-height:60px"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn bg" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="deleteLead()">🗑 Delete Lead</button>
+      <div style="display:flex;gap:8px"><button class="btn bg" onclick="cmod('elm')">Cancel</button><button class="btn bp" onclick="saveEdit()">Save Changes</button></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ADD LEAD MODAL -->
+<div class="mo" id="alm">
+  <div class="md">
+    <div class="mh"><div style="font-size:15px;font-weight:500">Add New Lead</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px" onclick="cmod('alm')">×</button></div>
+    <div class="mb">
+      <div class="fr"><div class="f"><label>First Name</label><input id="fn" placeholder="John"/></div><div class="f"><label>Last Name</label><input id="ln" placeholder="Smith"/></div></div>
+      <div class="fr"><div class="f"><label>Email</label><input id="em" type="email" placeholder="john@email.com"/></div><div class="f"><label>Phone</label><input id="ph" placeholder="(312) 555-0100"/></div></div>
+      <div class="fr">
+        <div class="f"><label>Policy Interest</label>
+          <select id="pol">
+            <option>Term Life</option><option>Whole Life</option><option>Universal Life</option><option>Final Expense</option>
+            <option>Indexed Universal Life</option><option>Mortgage Protection</option><option>Fixed Index Annuity</option><option>Income Annuity</option>
+          </select>
+        </div>
+        <div class="f"><label>Lead Type</label>
+          <select id="lt" onchange="updWFH()">
+            <option value="new">New (Agent-Tagged)</option><option value="aged">Aged Lead</option><option value="inbound">Inbound (Form)</option><option value="bulk">Bulk Import</option>
+          </select>
+        </div>
+      </div>
+      <div class="fr"><div class="f"><label>Coverage</label><input id="cov" placeholder="$500,000"/></div><div class="f"><label>Age</label><input id="age" type="number" placeholder="38"/></div></div>
+      <div class="f"><label>Notes</label><textarea id="notes" placeholder="Source, notes…"></textarea></div>
+      <div id="wfh" style="background:var(--ag);border:1px solid rgba(79,110,247,0.2);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--accent)">⚡ <strong>New Lead sequence</strong> will trigger — SMS immediately, email in 2 min, Day 2 follow-up scheduled.</div>
+    </div>
+    <div class="mf"><button class="btn bg" onclick="cmod('alm')">Cancel</button><button class="btn bp" onclick="saveLead()">Save & Trigger Workflow</button></div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="mo" id="ldm">
+  <div class="md"><div class="mh"><div style="font-size:15px;font-weight:500" id="dt">Lead Details</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px" onclick="cmod('ldm')">×</button></div>
+  <div class="mb" id="db"></div></div>
+</div>
+
+<div class="toast" id="toast"><div style="font-weight:500;margin-bottom:3px" id="tt"></div><div style="color:var(--muted);font-size:12px" id="tm"></div></div>
+
+<script>
+const AVC=[['#4f6ef7','#1a2a7a'],['#22c55e','#0a4a1e'],['#f59e0b','#5a3600'],['#8b5cf6','#3b1a7a'],['#ef4444','#5a0a0a'],['#06b6d4','#033a4a'],['#14b8a6','#043a35'],['#a78bfa','#3b1a7a']];
+let leads=[
+  {id:1,fn:'Marcus',ln:'Thompson',email:'m.t@email.com',phone:'(312) 555-0142',policy:'Term Life',leadType:'new',age:38,cov:'$750,000',notes:'3 kids, self-employed.',lc:'Today',ai:true,pipe:'Proposal',val:'$4,200/yr'},
+  {id:2,fn:'Patricia',ln:'Nguyen',email:'p.n@gmail.com',phone:'(773) 555-0287',policy:'Whole Life',leadType:'aged',age:52,cov:'$250,000',notes:'Cash value interest.',lc:'2 days ago',ai:true,pipe:'Quoted',val:'$3,800/yr'},
+  {id:3,fn:'Derek',ln:'Williams',email:'d.w@corp.com',phone:'(847) 555-0093',policy:'Mortgage Protection',leadType:'inbound',age:44,cov:'$1,000,000',notes:'New homeowner, form submission.',lc:'Today',ai:true,pipe:'New Lead',val:'$9,600/yr'},
+  {id:4,fn:'Sarah',ln:'Kim',email:'s.k@email.com',phone:'(630) 555-0341',policy:'Fixed Index Annuity',leadType:'aged',age:58,cov:'$200,000',notes:'Near retirement, wants income.',lc:'3 weeks ago',ai:true,pipe:'New Lead',val:'$2,400/yr'},
+  {id:5,fn:'Robert',ln:'Carter',email:'r.c@biz.com',phone:'(312) 555-0512',policy:'Indexed Universal Life',leadType:'new',age:47,cov:'$2,000,000',notes:'Business key-person.',lc:'Yesterday',ai:true,pipe:'Negotiating',val:'$18,400/yr'},
+  {id:6,fn:'Angela',ln:'Davis',email:'a.d@home.net',phone:'(708) 555-0678',policy:'Income Annuity',leadType:'bulk',age:67,cov:'$150,000',notes:'Fixed income, guaranteed monthly.',lc:'4 days ago',ai:false,pipe:'Quoted',val:'$3,200/yr'},
+  {id:7,fn:'Jason',ln:'Park',email:'j.p@tech.io',phone:'(312) 555-0789',policy:'Mortgage Protection',leadType:'inbound',age:31,cov:'$400,000',notes:'New homeowner, first child.',lc:'Today',ai:true,pipe:'New Lead',val:'$1,800/yr'},
+  {id:8,fn:'Brenda',ln:'Morris',email:'b.m@mail.com',phone:'(847) 555-0234',policy:'Fixed Index Annuity',leadType:'bulk',age:61,cov:'$300,000',notes:'Pre-retiree, broker list import.',lc:'1 week ago',ai:false,pipe:'New Lead',val:'$2,800/yr'},
+];
+let nlog=[
+  {ch:'sms',lead:'Jason Park',wf:'inbound',msg:'Hi Jason! This is Willie from ShieldLife — just got your Mortgage Protection quote request…',time:'10 min ago'},
+  {ch:'email',lead:'Jason Park',wf:'inbound',msg:'Subject: ✓ Quote Request Received — Here\'s What Happens Next',time:'12 min ago'},
+  {ch:'sms',lead:'Marcus Thompson',wf:'new',msg:'Hi Marcus! I\'m Willie with ShieldLife. You showed interest in Term Life coverage…',time:'2 hrs ago'},
+  {ch:'email',lead:'Patricia Nguyen',wf:'aged',msg:'Subject: Good news — your Whole Life rates have changed',time:'1 day ago'},
+  {ch:'sms',lead:'Brenda Morris',wf:'bulk',msg:'Hi Brenda, this is Willie from ShieldLife. I sent an email about Fixed Index Annuity options…',time:'3 days ago'},
+  {ch:'email',lead:'Angela Davis',wf:'bulk',msg:'Subject: The #1 mistake families make with life insurance',time:'5 days ago'},
+];
+let acts=[
+  {lead:'Jason Park',type:'📱 SMS',msg:'Inbound workflow fired — instant SMS sent',time:'10 min ago',color:'#14b8a6'},
+  {lead:'Marcus Thompson',type:'📧 Email',msg:'New lead sequence: welcome email sent',time:'2 hrs ago',color:'#4f6ef7'},
+  {lead:'Patricia Nguyen',type:'📱 SMS',msg:'Aged re-engagement Day 1 SMS sent',time:'1 day ago',color:'#a78bfa'},
+  {lead:'Brenda Morris',type:'📧 Email',msg:'Bulk import drip Day 7 email sent',time:'3 days ago',color:'#d4a942'},
+];
+let appts=[
+  {lead:'Marcus Thompson',time:'Thu Apr 17 · 10:00 AM',policy:'Term Life',type:'Discovery Call'},
+  {lead:'Robert Carter',time:'Fri Apr 18 · 2:00 PM',policy:'IUL',type:'Policy Review'},
+];
+const slots=[{day:'Mon Apr 14',s:['9:00 AM','10:00 AM','2:00 PM']},{day:'Tue Apr 15',s:['9:00 AM','11:00 AM']},{day:'Wed Apr 16',s:['10:00 AM','2:00 PM']}];
+let apptStage=0,curLead=null,selSlot=null;
+const pcols=['New Lead','Quoted','Proposal','Negotiating','Closed Won'];
+
+function ini(fn,ln){return(fn[0]+(ln?ln[0]:'')).toUpperCase()}
+function avEl(fn,ln,i){const[bg,fg]=AVC[i%AVC.length];return`<div class="lav" style="background:${bg};color:${fg}">${ini(fn,ln)}</div>`}
+function tbdg(t){const m={new:'bn New',aged:'ba Aged',inbound:'bi Inbound',bulk:'bb Bulk',hot:'bh Hot',warm:'bw Warm',cold:'bc Cold',closed:'bco Closed'};const p=(m[t]||'bn '+t).split(' ');return`<span class="badge ${p[0]}">${p.slice(1).join(' ')}</span>`}
+
+function showTab(t,el){
+  try{
+    document.querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+    var tabEl=document.getElementById('tab-'+t);
+    if(tabEl)tabEl.classList.add('active');
+    if(el)el.classList.add('active');
+    const tmap={dashboard:'Dashboard',leads:'All Leads',pipeline:'Pipeline',workflows:'Automation Workflows',notifications:'SMS & Email Log',ai:'AI Follow-Up',appointments:'AI Appointments',import:'Bulk Import'};
+    var pt=document.getElementById('page-title');
+    if(pt)pt.textContent=tmap[t]||t;
+    if(t==='leads')rlAll();
+    if(t==='pipeline')rPipe('pipeline-full');
+    if(t==='ai'){rActs();popAISel();}
+    if(t==='appointments'){popApptSel();rAppts();rSlots();}
+    if(t==='notifications')rNotif();
+    if(t==='dashboard'){rRecent();rDashActs();rPipe('pipeline-mini');}
+  }catch(e){console.error('showTab error:',e);}
+}
+
+function rRecent(){
+  document.getElementById('rlb').innerHTML=leads.slice(0,6).map((l,i)=>`<tr onclick="openDet(${l.id})"><td><div class="ln">${avEl(l.fn,l.ln,i)}<span>${l.fn} ${l.ln}</span></div></td><td>${tbdg(l.leadType)}</td><td style="font-size:12px">${l.policy}</td><td>${l.ai?'<span style="color:#4f6ef7;font-size:12px">⚡ Active</span>':'<span style="color:#555">—</span>'}</td></tr>`).join('');
+}
+function rlAll(data){
+  const d=data||leads;
+  document.getElementById('lcs').textContent=d.length+' contacts';
+  document.getElementById('alb').innerHTML=d.map((l,i)=>`<tr onclick="openDet(${l.id})"><td><div class="ln">${avEl(l.fn,l.ln,i)}<span>${l.fn} ${l.ln}</span></div></td><td>${tbdg(l.leadType)}</td><td style="font-size:12px">${l.policy}</td><td style="color:var(--muted);font-size:12px">${l.phone}</td><td style="color:var(--muted);font-size:12px">${l.lc}</td><td style="font-size:12px;color:var(--muted)">${l.pipe}</td><td><div style="display:flex;gap:5px"><button class="btn bg" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();trigWF(${l.id})">⚡</button><button class="btn bg" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();goAppt(${l.id})">📅</button><button class="btn bg" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();openEdit(${l.id})">✏️</button></div></td></tr>`).join('');
+}
+function filterLeads(){
+  const q=document.getElementById('ls').value.toLowerCase();
+  const t=document.getElementById('tf').value;
+  rlAll(leads.filter(l=>`${l.fn} ${l.ln} ${l.policy} ${l.leadType}`.toLowerCase().includes(q)&&(!t||l.leadType===t)));
+}
+function rPipe(id){
+  document.getElementById(id).innerHTML=pcols.map(col=>{
+    const items=leads.filter(l=>l.pipe===col);
+    return`<div class="pcol"><div class="pch"><span style="font-size:12px;font-weight:500">${col}</span><span style="font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:20px">${items.length}</span></div><div style="padding:8px">${items.map(l=>`<div class="pi" onclick="openDet(${l.id})"><div style="font-weight:500;margin-bottom:2px">${l.fn} ${l.ln}</div><div style="color:var(--muted);font-size:11px">${l.policy}</div><div style="color:var(--gold);font-size:11px;margin-top:2px">${l.val}</div></div>`).join('')||'<div style="font-size:11px;color:var(--muted);padding:5px">Empty</div>'}</div></div>`;
+  }).join('');
+}
+function rActs(){document.getElementById('aff').innerHTML=acts.map(a=>`<div class="acti"><div class="actd" style="background:${a.color}"></div><div><div style="font-size:13px"><strong>${a.lead}</strong> — ${a.msg}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${a.type} · ${a.time}</div></div></div>`).join('')}
+function rDashActs(){document.getElementById('da').innerHTML=acts.map(a=>`<div class="acti"><div class="actd" style="background:${a.color}"></div><div><div style="font-size:13px"><strong>${a.lead}</strong><br><span style="font-size:12px;color:var(--muted)">${a.msg}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px">${a.type} · ${a.time}</div></div></div>`).join('')}
+function rNotif(){document.getElementById('nl').innerHTML=nlog.map(n=>`<div class="noti"><div class="noic" style="background:${n.ch==='sms'?'rgba(34,197,94,0.12)':'rgba(79,110,247,0.12)'}">${n.ch==='sms'?'📱':'📧'}</div><div style="flex:1"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px"><span style="font-size:13px;font-weight:500">${n.lead}</span>${tbdg(n.wf)}<span style="font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(34,197,94,0.12);color:var(--green);font-weight:500">Sent</span></div><div style="font-size:12px;color:var(--muted);line-height:1.4">${n.msg}</div></div><div style="font-size:11px;color:var(--muted);white-space:nowrap">${n.time}</div></div>`).join('')}
+function rAppts(){document.getElementById('aplist').innerHTML=appts.length?appts.map(a=>`<div style="padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:500">${a.lead}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${a.time} · ${a.type}</div><div style="font-size:12px;color:var(--gold);margin-top:2px">${a.policy}</div></div>`).join(''):'<div style="font-size:13px;color:var(--muted)">No appointments yet.</div>'}
+function rSlots(){document.getElementById('apslots').innerHTML=slots.map(d=>`<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px">${d.day}</div><div style="display:flex;flex-wrap:wrap;gap:5px">${d.s.map(s=>`<span class="asl">${s}</span>`).join('')}</div></div>`).join('')}
+function popAISel(){document.getElementById('asl2').innerHTML='<option value="">Choose a lead...</option>'+leads.map(l=>`<option value="${l.id}">${l.fn} ${l.ln} — ${l.policy}</option>`).join('')}
+function popApptSel(){document.getElementById('als').innerHTML='<option value="">Select lead...</option>'+leads.map(l=>`<option value="${l.id}">${l.fn} ${l.ln} — ${l.policy}</option>`).join('')}
+
+function openDet(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  document.getElementById('dt').textContent=`${l.fn} ${l.ln}`;
+  const[bg]=AVC[l.id%AVC.length];
+  document.getElementById('db').innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="width:44px;height:44px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#fff">${ini(l.fn,l.ln)}</div><div><div style="font-size:16px;font-weight:500">${l.fn} ${l.ln}</div><div style="color:var(--muted);font-size:12px">${l.email}</div></div>${tbdg(l.leadType)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px"><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Policy</div><div style="font-weight:500;font-size:13px">${l.policy}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Coverage</div><div style="font-weight:500;font-size:13px">${l.cov}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Value</div><div style="font-weight:500;font-size:13px;color:var(--gold)">${l.val}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Stage</div><div style="font-weight:500;font-size:13px">${l.pipe}</div></div></div><div style="margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Notes</div><div style="font-size:13px;line-height:1.6">${l.notes}</div></div><div style="display:flex;gap:8px"><button class="btn bp" style="flex:1" onclick="goAppt(${l.id});cmod('ldm')">📅 Book</button><button class="btn bg" style="flex:1" onclick="trigWF(${l.id});cmod('ldm')">⚡ Workflow</button></div><div style="margin-top:8px"><button class="btn bg" style="width:100%;justify-content:center;display:flex;align-items:center;gap:6px" onclick="openEdit(${l.id})">✏️ Edit / Correct Lead Info</button></div>`;
+  document.getElementById('ldm').classList.add('open');
+}
+
+function trigWF(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  nlog.unshift({ch:'sms',lead:`${l.fn} ${l.ln}`,wf:l.leadType,msg:`Hi ${l.fn}! I'm Willie with ShieldLife. Reaching out about your ${l.policy} interest…`,time:'Just now'});
+  nlog.unshift({ch:'email',lead:`${l.fn} ${l.ln}`,wf:l.leadType,msg:'Subject: Your ShieldLife Quote — Let\'s Get You Covered',time:'Just now'});
+  acts.unshift({lead:`${l.fn} ${l.ln}`,type:'⚡ Workflow',msg:`${l.leadType} workflow triggered — SMS + email sent`,time:'Just now',color:'#4f6ef7'});
+  l.ai=true;
+  showToast(`⚡ Workflow Fired`,`${l.fn} ${l.ln} — SMS + email sent now!`);
+}
+
+function goAppt(id){
+  showTab('appointments',null);
+  setTimeout(()=>{document.getElementById('als').value=id;updAL();},150);
+}
+
+// APPOINTMENT SETTER
+const ascript=[
+  l=>`Hi ${l.fn}! 👋 I'm the ShieldLife scheduling assistant. Your agent Willie wanted to find a good time to walk you through your ${l.policy} options — completely free, no obligation. Does that sound okay?`,
+  l=>`Great! Here are some times Willie has open this week:<br><div style="margin-top:7px"><span class="asl" onclick="pickS(this,'Mon Apr 14 · 10:00 AM')">Mon 10am</span><span class="asl" onclick="pickS(this,'Tue Apr 15 · 9:00 AM')">Tue 9am</span><span class="asl" onclick="pickS(this,'Wed Apr 16 · 2:00 PM')">Wed 2pm</span><span class="asl" onclick="pickS(this,'Thu Apr 17 · 11:00 AM')">Thu 11am</span></div>`,
+  l=>`Perfect! Would you prefer a <span class="asl" onclick="pickM(this,'phone call')">📞 Phone Call</span> or a <span class="asl" onclick="pickM(this,'Zoom meeting')">💻 Zoom</span>?`,
+  l=>`Almost done! Is there anything specific you'd like Willie to prepare? For example, a rate comparison, info on ${l.policy} benefits, or payment options?`,
+  l=>`You're all set, ${l.fn}! 🎉<br><br><strong>Agent:</strong> Willie Ashford III · ShieldLife<br><strong>When:</strong> ${selSlot||'TBD'}<br><strong>Topic:</strong> ${l.policy} Review<br><br>Willie will send a calendar confirmation shortly. See you then! 📞`,
+];
+
+function updAL(){const id=document.getElementById('als').value;curLead=leads.find(x=>x.id==id)||null;apptStage=0;resetAppt()}
+function startAppt(){if(!curLead){showToast('Select a lead','Please select a lead first.');return}resetAppt();apptStage=0;aiSay(ascript[0](curLead))}
+function resetAppt(){document.getElementById('apc').innerHTML='<div class="apb ai">Select a lead and click "Start AI Session" to begin.</div>';apptStage=0;selSlot=null}
+
+function aiSay(msg){
+  const chat=document.getElementById('apc');
+  const typ=document.getElementById('aptyp');
+  typ.style.display='flex';chat.appendChild(typ);chat.scrollTop=chat.scrollHeight;
+  setTimeout(()=>{typ.style.display='none';const b=document.createElement('div');b.className='apb ai';b.innerHTML=msg;chat.appendChild(b);chat.scrollTop=chat.scrollHeight;},900);
+}
+
+function sndAM(){
+  const inp=document.getElementById('api');const v=inp.value.trim();if(!v||!curLead)return;inp.value='';
+  const chat=document.getElementById('apc');const b=document.createElement('div');b.className='apb user';b.textContent=v;chat.appendChild(b);chat.scrollTop=chat.scrollHeight;
+  apptStage++;
+  if(apptStage<ascript.length)aiSay(ascript[apptStage](curLead));
+  else{aiSay('You\'re confirmed! 🎉 Willie will send a calendar invite shortly.');bkAppt()}
+}
+
+function pickS(el,slot){selSlot=slot;el.parentElement.querySelectorAll('.asl').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');setTimeout(()=>{apptStage++;if(apptStage<ascript.length)aiSay(ascript[apptStage](curLead));},300)}
+function pickM(el,mode){el.parentElement.querySelectorAll('.asl').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');setTimeout(()=>{apptStage++;if(apptStage<ascript.length)aiSay(ascript[apptStage](curLead));},300)}
+function bkAppt(){if(!curLead)return;appts.unshift({lead:`${curLead.fn} ${curLead.ln}`,time:selSlot||'TBD',policy:curLead.policy,type:'Discovery Call'});rAppts();showToast('Appointment Booked! 📅',`${curLead.fn} ${curLead.ln} — ${selSlot||'TBD'}`)}
+
+// WORKFLOWS
+function twf(id){const el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none'}
+function tws(id){const el=document.getElementById('t'+id);el.classList.toggle('off');showToast(el.classList.contains('off')?'Workflow paused':'Workflow active','Saved.')}
+function fw(type){const l=leads.find(x=>x.leadType===type)||leads[0];showToast(`⚡ Test fired`,`${type} workflow SMS + email sent to ${l.fn} ${l.ln}.`)}
+
+// ADD LEAD
+function openAddLead(){document.getElementById('alm').classList.add('open')}
+function cmod(id){document.getElementById(id).classList.remove('open')}
+function updWFH(){const t=document.getElementById('lt').value;const hints={new:'New Lead sequence will fire — SMS now, email in 2 min.',aged:'Aged re-engagement fires — no-pressure SMS + rates email.',inbound:'Inbound sequence fires — instant confirmation + agent alert.',bulk:'Bulk drip fires — staggered emails + SMS over 7 days.'};document.getElementById('wfh').innerHTML=`⚡ <strong>${hints[t]}</strong>`}
+function saveLead(){
+  const fn=document.getElementById('fn').value,ln=document.getElementById('ln').value;
+  if(!fn||!ln){showToast('Missing info','Enter first and last name.');return}
+  const lt=document.getElementById('lt').value;
+  const nl={id:leads.length+1,fn,ln,email:document.getElementById('em').value,phone:document.getElementById('ph').value,policy:document.getElementById('pol').value,leadType:lt,age:document.getElementById('age').value,cov:document.getElementById('cov').value,notes:document.getElementById('notes').value,lc:'Just now',ai:true,pipe:'New Lead',val:'—'};
+  leads.unshift(nl);
+  nlog.unshift({ch:'sms',lead:`${fn} ${ln}`,wf:lt,msg:`Hi ${fn}! I'm Willie with ShieldLife. You showed interest in ${nl.policy}…`,time:'Just now'});
+  nlog.unshift({ch:'email',lead:`${fn} ${ln}`,wf:lt,msg:'Subject: Your ShieldLife Quote — Let\'s Get You Covered',time:'Just now'});
+  acts.unshift({lead:`${fn} ${ln}`,type:'⚡ Workflow',msg:`${lt} workflow triggered — SMS + email sent`,time:'Just now',color:'#4f6ef7'});
+  cmod('alm');rRecent();rlAll();document.getElementById('st').textContent=leads.length;
+  showToast(`Lead added + workflow fired ⚡`,`${fn} ${ln} added. SMS & email sent!`);
+  ['fn','ln','em','ph','age','cov','notes'].forEach(id=>document.getElementById(id).value='');
+}
+
+// AI FOLLOW-UP
+const ait={
+  'Initial outreach':l=>`Hi ${l.fn}! This is Willie from ShieldLife. I noticed you're interested in ${l.policy} coverage — I'd love to help your family get protected. I have excellent options starting as low as $30/month. Do you have 15 minutes for a quick call this week?`,
+  'Follow-up after quote':l=>`Hi ${l.fn}, just following up on the ${l.policy} quote. I know it's a big decision. The ${l.cov} coverage we discussed would give your family real peace of mind at a very competitive rate. Any questions I can answer?`,
+  'Re-engagement (aged lead)':l=>`Hi ${l.fn}, it's Willie from ShieldLife. I know it's been a while — totally okay! I'm reaching out because ${l.policy} rates have actually improved. No pressure at all, just wanted you to have the latest info. Want a fresh look?`,
+  'Policy renewal reminder':l=>`Hi ${l.fn}! Your ${l.policy} policy review window is coming up. This is a great time to make sure coverage still fits your life. A quick 20-min review could save you money. Want to schedule?`,
+  'Referral request':l=>`Hi ${l.fn}, thank you for being a ShieldLife client! I'm growing my practice and would love to help people you care about. If you know anyone who might benefit from ${l.policy} or retirement planning, I'd be grateful for the intro. We offer referral rewards too!`,
+  'Appointment reminder':l=>`Hi ${l.fn}! Reminder about our upcoming appointment to review your ${l.policy} options. Looking forward to it! If you need to reschedule, reply or (312) 555-0100. See you soon!`,
+};
+async function genFU(){
+  const id=document.getElementById('asl2').value;
+  const type=document.getElementById('amt').value;
+  const ch=document.getElementById('ach').value;
+  const ctx=document.getElementById('actx').value;
+  let l=leads.find(x=>x.id==id);
+  if(!l){showToast('Select a lead','Please choose a lead first.');return;}
+  const btn=document.querySelector('#tab-ai .btn.bp');
+  btn.textContent='✦ Generating...';btn.disabled=true;
+  try{
+    const res=await fetch('https://shieldlife-ai.washfordiii.workers.dev',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        leadName:l.fn+' '+l.ln,
+        policy:l.policy,
+        msgType:type,
+        channel:ch
+      })
+    });
+    const data=await res.json();
+    let msg=data.message||'Unable to generate message. Please try again.';
+    if(ctx)msg+='\n\nP.S. '+ctx;
+    document.getElementById('aouttxt').textContent=msg;
+    document.getElementById('aout').classList.add('show');
+  }catch(e){
+    showToast('Connection error','Could not reach AI. Check your Worker is deployed.');
+    console.error(e);
+  }
+  btn.textContent='✦ Generate AI Message';btn.disabled=false;
+}
+function cpMsg(){navigator.clipboard.writeText(document.getElementById('aouttxt').textContent).then(()=>showToast('Copied!',''))}
+function lgFU(){showToast('Logged ✓','Follow-up marked sent.');document.getElementById('aout').classList.remove('show')}
+
+// BULK IMPORT
+function hFS(e){const f=e.target.files[0];if(f)procFile(f)}
+function hDrop(e){e.preventDefault();document.getElementById('dz').classList.remove('active');const f=e.dataTransfer.files[0];if(f)procFile(f)}
+function procFile(f){
+  const rows=[{n:'Carol Johnson',e:'carol@mail.com',p:'(312) 555-1001',pol:'Mortgage Protection'},{n:'Tony Rivera',e:'trevera@mail.com',p:'(773) 555-2002',pol:'Fixed Index Annuity'},{n:'Linda Chen',e:'lchen@corp.com',p:'(847) 555-3003',pol:'Term Life'},{n:'George Brown',e:'gbrown@net.com',p:'(708) 555-4004',pol:'Income Annuity'},{n:'Amy Foster',e:'afoster@mail.com',p:'(312) 555-5005',pol:'Whole Life'}];
+  document.getElementById('ir').innerHTML=rows.map((r,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 10px;background:var(--surface2);border-radius:7px;margin-bottom:5px;font-size:12px"><div style="width:14px;height:14px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;flex-shrink:0">✓</div><span style="flex:1;font-weight:500">${r.n}</span><span style="color:var(--muted)">${r.pol}</span><span style="color:var(--muted)">${r.p}</span></div>`).join('')+`<div style="font-size:12px;color:var(--muted);margin-top:7px">5 leads ready · 0 errors · ${f.name}</div>`;
+  document.getElementById('ip').style.display='block';
+  document.getElementById('dzlabel').textContent=`✓ ${f.name} loaded`;
+}
+function importLeads(){
+  const t=document.getElementById('itype').value;
+  leads.unshift({id:leads.length+1,fn:'Carol',ln:'Johnson',email:'carol@mail.com',phone:'(312) 555-1001',policy:'Mortgage Protection',leadType:t,age:45,cov:'$350,000',notes:'Bulk import.',lc:'Just now',ai:true,pipe:'New Lead',val:'$2,100/yr'});
+  leads.unshift({id:leads.length+1,fn:'Tony',ln:'Rivera',email:'trevera@mail.com',phone:'(773) 555-2002',policy:'Fixed Index Annuity',leadType:t,age:59,cov:'$250,000',notes:'Bulk import.',lc:'Just now',ai:false,pipe:'New Lead',val:'$3,000/yr'});
+  document.getElementById('st').textContent=leads.length;
+  document.getElementById('ip').style.display='none';
+  document.getElementById('dzlabel').textContent='Drop your CSV file here';
+  showToast(`5 leads imported ⚡`,`${t} workflow triggered for all leads.`);
+  rRecent();rlAll();
+}
+function dlTpl(){const csv='first_name,last_name,email,phone,policy_interest,coverage_amount,notes\nJohn,Smith,john@email.com,(312) 555-0100,Mortgage Protection,$400000,New homeowner\nJane,Doe,jane@email.com,(773) 555-0200,Fixed Index Annuity,$200000,Pre-retiree';const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='shieldlife_template.csv';a.click();showToast('Template downloaded','')}
+
+function openIntakeLink(){window.open('life-insurance-intake.html','_blank')}
+function showToast(t,m){document.getElementById('tt').textContent=t;document.getElementById('tm').textContent=m;const el=document.getElementById('toast');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000)}
+
+function saveEdit(){
+  const l=leads.find(x=>x.id===editId);if(!l)return;
+  l.fn=document.getElementById('e-fn').value;
+  l.ln=document.getElementById('e-ln').value;
+  l.email=document.getElementById('e-em').value;
+  l.phone=document.getElementById('e-ph').value;
+  l.policy=document.getElementById('e-pol').value;
+  l.leadType=document.getElementById('e-lt').value;
+  l.cov=document.getElementById('e-cov').value;
+  l.val=document.getElementById('e-val').value;
+  l.age=document.getElementById('e-age').value;
+  l.notes=document.getElementById('e-notes').value;
+  l.pipe=document.getElementById('e-pipe').value;
+  l.lc='Just updated';
+  cmod('elm');
+  cmod('ldm');
+  rRecent();rlAll();
+  rPipe('pipeline-mini');
+  showToast('Lead updated ✓',`${l.fn} ${l.ln} has been saved.`);
+}
+function deleteLead(){
+  const l=leads.find(x=>x.id===editId);if(!l)return;
+  if(!confirm(`Delete ${l.fn} ${l.ln}? This cannot be undone.`))return;
+  leads=leads.filter(x=>x.id!==editId);
+  cmod('elm');cmod('ldm');
+  rRecent();rlAll();
+  document.getElementById('st').textContent=leads.length;
+  showToast('Lead deleted',`${l.fn} ${l.ln} removed.`);
+}
+
+// INIT
+try{rRecent();rlAll();rPipe('pipeline-mini');rDashActs();}catch(e){console.error('Init error:',e);}
+
+
+
+</script>
+</body>
+</html>
