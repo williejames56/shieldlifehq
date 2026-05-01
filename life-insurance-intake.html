@@ -401,6 +401,21 @@ async function subForm(){
       })
     });
   }catch(e){console.log('Formspree error',e);}
+  // Bridge to CRM auto-import
+  try{
+    const existing=JSON.parse(localStorage.getItem('shieldlife_new_leads')||'[]');
+    existing.push({
+      form_type:'Intake Form',
+      first_name:document.getElementById('fn').value,
+      last_name:document.getElementById('ln').value,
+      email:document.getElementById('em').value,
+      phone:document.getElementById('ph').value,
+      policy_interest:(document.querySelector('input[name=pol]:checked')||{value:'Life Insurance'}).value,
+      coverage_amount:document.getElementById('covdisp').textContent,
+      notes:'From online intake form'
+    });
+    localStorage.setItem('shieldlife_new_leads',JSON.stringify(existing));
+  }catch(e){}
   document.getElementById('succmsg').textContent='Thanks, '+fn+'! Willie Ashford III will contact you within 1 hour with your personalized '+pol+' options. Check your email for confirmation.';
   document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
   document.getElementById('succ').style.display='block';

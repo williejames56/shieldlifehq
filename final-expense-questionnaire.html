@@ -377,6 +377,11 @@ async function subForm(){
       agent:'Willie Ashford III — 1-708-742-7047'
     })});
   }catch(e){console.log(e);}
+  try{
+    const ex=JSON.parse(localStorage.getItem('shieldlife_new_leads')||'[]');
+    ex.push({form_type:'Final Expense',first_name:g('fn'),last_name:g('ln'),email:g('em'),phone:g('ph'),policy_interest:'Final Expense',coverage_amount:'$'+parseInt(cov).toLocaleString(),notes:'From final expense form'});
+    localStorage.setItem('shieldlife_new_leads',JSON.stringify(ex));
+  }catch(e){}
   document.querySelectorAll('.sp').forEach(s=>s.style.display='none');
   document.getElementById('succ').style.display='block';
   document.getElementById('prog').style.width='100%';

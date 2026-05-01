@@ -712,6 +712,42 @@ function deleteLead(){
 // INIT
 try{rRecent();rlAll();rPipe('pipeline-mini');rDashActs();}catch(e){console.error('Init error:',e);}
 
+// CHECK FOR NEW LEADS FROM FORMS (via localStorage bridge)
+function checkFormLeads(){
+  try{
+    const pending=JSON.parse(localStorage.getItem('shieldlife_new_leads')||'[]');
+    if(pending.length>0){
+      pending.forEach(d=>{
+        const exists=leads.find(l=>l.em===d.email||l.ph===d.phone);
+        if(!exists){
+          const nl={
+            id:leads.length+1,
+            fn:d.first_name||d.fn||'New',
+            ln:d.last_name||d.ln||'Lead',
+            email:d.email||d.em||'',
+            phone:d.phone||d.ph||'',
+            policy:d.policy_interest||d.policy||'Life Insurance',
+            leadType:'inbound',
+            age:d.age||'',
+            cov:d.coverage_amount||'',
+            notes:'Auto-added from '+( d.form_type||'intake form')+'. '+( d.notes||''),
+            lc:'Just now',ai:true,pipe:'New Lead',val:'—'
+          };
+          leads.unshift(nl);
+          nlog.unshift({ch:'email',lead:nl.fn+' '+nl.ln,wf:'inbound',msg:'New lead added from form submission: '+nl.policy,time:'Just now'});
+          acts.unshift({lead:nl.fn+' '+nl.ln,type:'🌐 Form',msg:'New inbound lead from online form — added to CRM',time:'Just now',color:'#14b8a6'});
+        }
+      });
+      localStorage.removeItem('shieldlife_new_leads');
+      rRecent();rlAll();
+      document.getElementById('st').textContent=leads.length;
+      if(pending.length>0)showToast('🌐 '+pending.length+' new lead(s) from form!','Added to All Leads automatically.');
+    }
+  }catch(e){console.log('Form lead check:',e);}
+}
+checkFormLeads();
+setInterval(checkFormLeads,30000);
+
 
 
 </script>
