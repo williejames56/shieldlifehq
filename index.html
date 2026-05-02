@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShieldLife CRM</title>
+<title>ShieldLife CRM v2.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
 :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f2f8;--muted:#8b8fa8;--accent:#4f6ef7;--ag:rgba(79,110,247,0.15);--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--gold:#d4a942;--purple:#a78bfa;--teal:#14b8a6}
@@ -445,8 +445,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <!-- DETAIL MODAL -->
 <div class="mo" id="ldm">
-  <div class="md"><div class="mh"><div style="font-size:15px;font-weight:500" id="dt">Lead Details</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px" onclick="cmod('ldm')">×</button></div>
-  <div class="mb" id="db"></div></div>
+  <div class="md mdl"><div class="mh"><div style="font-size:15px;font-weight:500" id="dt">Lead Details</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px" onclick="cmod('ldm')">×</button></div>
+  <div class="mb" id="db" style="max-height:80vh;overflow-y:auto"></div></div>
 </div>
 
 <div class="toast" id="toast"><div style="font-weight:500;margin-bottom:3px" id="tt"></div><div style="color:var(--muted);font-size:12px" id="tm"></div></div>
@@ -537,19 +537,193 @@ function popApptSel(){document.getElementById('als').innerHTML='<option value=""
 
 function openDet(id){
   const l=leads.find(x=>x.id===id);if(!l)return;
-  document.getElementById('dt').textContent=`${l.fn} ${l.ln}`;
+  document.getElementById('dt').textContent=l.fn+' '+l.ln+' — Lead Details';
   const[bg]=AVC[l.id%AVC.length];
-  document.getElementById('db').innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="width:44px;height:44px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#fff">${ini(l.fn,l.ln)}</div><div><div style="font-size:16px;font-weight:500">${l.fn} ${l.ln}</div><div style="color:var(--muted);font-size:12px">${l.email}</div></div>${tbdg(l.leadType)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px"><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Policy</div><div style="font-weight:500;font-size:13px">${l.policy}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Coverage</div><div style="font-weight:500;font-size:13px">${l.cov}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Value</div><div style="font-weight:500;font-size:13px;color:var(--gold)">${l.val}</div></div><div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Stage</div><div style="font-weight:500;font-size:13px">${l.pipe}</div></div></div><div style="margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Notes</div><div style="font-size:13px;line-height:1.6">${l.notes}</div></div><div style="display:flex;gap:8px"><button class="btn bp" style="flex:1" onclick="goAppt(${l.id});cmod('ldm')">📅 Book</button><button class="btn bg" style="flex:1" onclick="trigWF(${l.id});cmod('ldm')">⚡ Workflow</button></div><div style="margin-top:8px"><button class="btn bg" style="width:100%;justify-content:center;display:flex;align-items:center;gap:6px" onclick="openEdit(${l.id})">✏️ Edit / Correct Lead Info</button></div>`;
+  // Build comprehensive form data display
+  const fd=l.formData||{};
+  function fdRow(label,val){
+    if(!val||val==='—'||val==='')return'';
+    return`<tr><td style="font-size:11px;color:var(--muted);padding:5px 8px;white-space:nowrap;vertical-align:top">${label}</td><td style="font-size:12px;padding:5px 8px;color:var(--text)">${val}</td></tr>`;
+  }
+  // Policy-specific workflow messages
+  const wfMsgs={
+    'Term Life':'Hi [Name]! Willie here from ShieldLife. I saw you were interested in Term Life insurance to protect your family. Term Life gives your family up to $2M in coverage at the most affordable rates — starting as low as $15/month. I would love to walk you through your options. Can we set up a quick 15-min call this week?',
+    'Whole Life':'Hi [Name]! This is Willie with ShieldLife. You asked about Whole Life insurance — great choice! Unlike term, Whole Life covers you forever AND builds cash value you can use while you are alive. I have some great options I want to show you. Are you free for a quick call?',
+    'Indexed Universal Life':'Hi [Name]! Willie from ShieldLife here. You asked about IUL — one of the most powerful financial tools available. An IUL gives you life insurance protection PLUS tax-free retirement income. I have clients earning $3,000–$10,000/month tax-free in retirement. Want to see how it works for you?',
+    'Final Expense':'Hi [Name]! This is Willie Ashford III from ShieldLife. I received your final expense inquiry. I know this is a sensitive topic but planning ahead is the greatest gift you can give your family. I have plans from just $20/month with NO medical exam required. Can I share your options?',
+    'Mortgage Protection':'Hi [Name]! Willie here from ShieldLife. I see you are interested in protecting your home. Mortgage Protection pays off your mortgage if something happens to you — your family never loses the house. I have plans that match your exact mortgage balance. Can we talk this week?',
+    'Fixed Index Annuity':'Hi [Name]! This is Willie from ShieldLife. You asked about Fixed Index Annuities — smart move for retirement planning! A FIA grows your money when markets go up but NEVER loses when they go down. Plus it can generate guaranteed lifetime income. I would love to show you the numbers.',
+    'Income Annuity':'Hi [Name]! Willie Ashford III here from ShieldLife. You inquired about income annuities — perfect for creating a retirement paycheck you cannot outlive. I can show you how to turn a lump sum into guaranteed monthly income for life. When is a good time to connect?',
+    'Mortgage Protection':'Hi [Name]! Willie here. I received your mortgage protection request. This coverage pays your mortgage if you pass away or become disabled — your family keeps the home no matter what. I can match coverage to your exact mortgage balance. Are you free for a quick 15-min call?'
+  };
+  const wfMsg=wfMsgs[l.policy]||`Hi ${l.fn}! This is Willie Ashford III from ShieldLife Insurance. I received your ${l.policy} inquiry and would love to discuss your coverage options. Can we set up a quick call this week?`;
+  const personalizedMsg=wfMsg.replace('[Name]',l.fn);
+
+  document.getElementById('db').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px;background:var(--surface2);border-radius:10px">
+      <div style="width:50px;height:50px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#fff;flex-shrink:0">${ini(l.fn,l.ln)}</div>
+      <div style="flex:1">
+        <div style="font-size:17px;font-weight:600">${l.fn} ${l.ln}</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:2px">${l.email||'No email'} · ${l.phone||'No phone'}</div>
+        <div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap">${tbdg(l.leadType)}<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(79,110,247,0.15);color:var(--accent)">${l.policy}</span><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(212,169,66,0.15);color:var(--gold)">${l.pipe}</span></div>
+      </div>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px">
+      <button class="btn bp" style="font-size:12px;padding:8px" onclick="window.open('https://calendly.com/info-46996/life-insurance-consultation','_blank')">📅 Book Appointment</button>
+      <button class="btn bg" style="font-size:12px;padding:8px" onclick="trigWFDet(${l.id})">⚡ Fire Workflow</button>
+      <button class="btn bg" style="font-size:12px;padding:8px" onclick="cmod('ldm');openEdit(${l.id})">✏️ Edit Lead</button>
+    </div>
+
+    <!-- Contact Info -->
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">📋 Contact Information</div>
+      <table style="width:100%;border-collapse:collapse">
+        ${fdRow('Full Name',l.fn+' '+l.ln)}
+        ${fdRow('Phone',l.phone)}
+        ${fdRow('Email',l.email)}
+        ${fdRow('Address',l.address||fd.address||'—')}
+        ${fdRow('Age',l.age)}
+        ${fdRow('Gender',l.gender||fd.gender||'—')}
+        ${fdRow('Marital Status',l.marital||fd.marital_status||'—')}
+        ${fdRow('Occupation',l.occ||fd.occupation||'—')}
+        ${fdRow('Annual Income',l.income||fd.annual_income||'—')}
+      </table>
+    </div>
+
+    <!-- Policy Info -->
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">🛡 Policy Information</div>
+      <table style="width:100%;border-collapse:collapse">
+        ${fdRow('Policy Type',l.policy)}
+        ${fdRow('Coverage Amount',l.cov)}
+        ${fdRow('Annual Value',l.val)}
+        ${fdRow('Pipeline Stage',l.pipe)}
+        ${fdRow('Lead Type',l.leadType)}
+        ${fdRow('Last Contact',l.lc)}
+        ${fdRow('Beneficiary',l.beneficiary||fd.beneficiary||'—')}
+        ${fdRow('Purpose',fd.purpose||'—')}
+      </table>
+    </div>
+
+    <!-- Health Info (if available) -->
+    ${(l.tobacco||l.hbp||l.diabetes||l.a1c||l.medications)?`
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">🏥 Health Information</div>
+      <table style="width:100%;border-collapse:collapse">
+        ${fdRow('Tobacco',l.tobacco||fd.tobacco||'—')}
+        ${fdRow('Height / Weight',(l.height||fd.height||'')+(l.weight?' / '+l.weight+' lbs':''))}
+        ${fdRow('High Blood Pressure',l.hbp||fd.high_blood_pressure||'—')}
+        ${fdRow('Diabetes',l.diabetes||fd.diabetes||'—')}
+        ${fdRow('A1C Level',l.a1c||fd.a1c||'—')}
+        ${fdRow('Heart Disease',l.heart||fd.heart||'—')}
+        ${fdRow('Cancer',l.cancer||fd.cancer||'—')}
+        ${fdRow('Medications',l.medications||fd.medications||'—')}
+        ${fdRow('Other Health',fd.other_health||'—')}
+      </table>
+    </div>`:''}
+
+    <!-- Mortgage Info (if applicable) -->
+    ${(l.mortgage_balance||fd.mortgage_balance)?`
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">🏠 Mortgage Information</div>
+      <table style="width:100%;border-collapse:collapse">
+        ${fdRow('Mortgage Balance',l.mortgage_balance||fd.mortgage_balance||'—')}
+        ${fdRow('Monthly Payment',fd.monthly_payment||'—')}
+        ${fdRow('Loan Type',fd.loan_type||'—')}
+        ${fdRow('Years Remaining',fd.years_remaining||'—')}
+      </table>
+    </div>`:''}
+
+    <!-- IUL/Financial Info (if applicable) -->
+    ${(fd.monthly_budget||fd.retirement_age)?`
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">💰 Financial / IUL Information</div>
+      <table style="width:100%;border-collapse:collapse">
+        ${fdRow('Monthly Budget',fd.monthly_budget||'—')}
+        ${fdRow('Retirement Age',fd.retirement_age||'—')}
+        ${fdRow('Target Monthly Income',fd.target_monthly_income||'—')}
+        ${fdRow('Current Retirement Savings',fd.retirement_savings||'—')}
+        ${fdRow('Primary Goals',fd.primary_goals||'—')}
+      </table>
+    </div>`:''}
+
+    <!-- Notes -->
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)">📝 Notes</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--text)">${l.notes||'No notes yet.'}</div>
+    </div>
+
+    <!-- Policy-Specific Workflow Message -->
+    <div style="margin-bottom:12px;background:rgba(79,110,247,0.08);border:1px solid rgba(79,110,247,0.2);border-radius:10px;padding:13px">
+      <div style="font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px">⚡ Recommended ${l.policy} Follow-Up Message</div>
+      <div style="font-size:12px;line-height:1.7;color:var(--text)">${personalizedMsg}</div>
+      <div style="display:flex;gap:7px;margin-top:10px">
+        <button class="btn bg" style="font-size:11px;padding:6px 10px" onclick="cpyMsg('${personalizedMsg.replace(/'/g,"\'")}')">📋 Copy SMS</button>
+        <button class="btn bg" style="font-size:11px;padding:6px 10px" onclick="window.open('https://calendly.com/info-46996/life-insurance-consultation','_blank')">📅 Send Calendly Link</button>
+        <button class="btn bg" style="font-size:11px;padding:6px 10px" onclick="trigWFDet(${l.id})">⚡ Auto-Send</button>
+      </div>
+    </div>
+
+    <!-- TCPA Consent Status -->
+    <div style="background:${l.tcpa?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)'};border:1px solid ${l.tcpa?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)'};border-radius:8px;padding:9px 12px;font-size:12px;color:${l.tcpa?'var(--green)':'var(--red)'}">
+      ${l.tcpa?'✅ TCPA Consent: Agreed — Safe to call, text, and email':'⚠️ TCPA Status: Unknown — Confirm consent before automated messaging'}
+    </div>
+  `;
   document.getElementById('ldm').classList.add('open');
+}
+
+function trigWFDet(id){
+  trigWF(id);
+  showToast('⚡ Workflow Fired!','SMS + Email sent with policy-specific message.');
+}
+
+function cpyMsg(msg){
+  navigator.clipboard.writeText(msg).then(()=>showToast('📋 Copied!','Message copied to clipboard.')).catch(()=>showToast('Copy failed','Please copy manually.'));
 }
 
 function trigWF(id){
   const l=leads.find(x=>x.id===id);if(!l)return;
-  nlog.unshift({ch:'sms',lead:`${l.fn} ${l.ln}`,wf:l.leadType,msg:`Hi ${l.fn}! I'm Willie with ShieldLife. Reaching out about your ${l.policy} interest…`,time:'Just now'});
-  nlog.unshift({ch:'email',lead:`${l.fn} ${l.ln}`,wf:l.leadType,msg:'Subject: Your ShieldLife Quote — Let\'s Get You Covered',time:'Just now'});
-  acts.unshift({lead:`${l.fn} ${l.ln}`,type:'⚡ Workflow',msg:`${l.leadType} workflow triggered — SMS + email sent`,time:'Just now',color:'#4f6ef7'});
+  const CALENDLY='https://calendly.com/info-46996/life-insurance-consultation';
+  const smsMsgs={
+    'Term Life':'Hi '+l.fn+'! Willie here from ShieldLife. You asked about Term Life — I can get your family protected for as low as $15/month. Book a free 15-min call: '+CALENDLY+' Reply STOP to opt out.',
+    'Whole Life':'Hi '+l.fn+'! This is Willie with ShieldLife. Whole Life = lifetime coverage + tax-free cash value. Options from $50/month. See your numbers: '+CALENDLY+' Reply STOP to opt out.',
+    'Indexed Universal Life':'Hi '+l.fn+'! Willie from ShieldLife. An IUL can generate $3K-$10K/month tax-free in retirement with zero market risk. Let me show you: '+CALENDLY+' Reply STOP to opt out.',
+    'Final Expense':'Hi '+l.fn+'! Willie from ShieldLife. Final expense plans from $20/month — NO medical exam. Your family protected: '+CALENDLY+' Reply STOP to opt out.',
+    'Mortgage Protection':'Hi '+l.fn+'! Willie here from ShieldLife. Mortgage Protection pays off your home if something happens to you. Book a call: '+CALENDLY+' Reply STOP to opt out.',
+    'Fixed Index Annuity':'Hi '+l.fn+'! Willie from ShieldLife. A FIA grows your money in up markets and never loses in down markets. See the numbers: '+CALENDLY+' Reply STOP to opt out.',
+    'Income Annuity':'Hi '+l.fn+'! Willie from ShieldLife. Turn your savings into guaranteed monthly income for life. Book a call: '+CALENDLY+' Reply STOP to opt out.'
+  };
+  const emailSubjects={
+    'Term Life':'Your Term Life Quote — Protect Your Family Starting at $15/Month',
+    'Whole Life':'Whole Life Insurance — Lifetime Protection + Tax-Free Cash Value',
+    'Indexed Universal Life':'Your IUL Illustration — Tax-Free Retirement Income Strategy',
+    'Final Expense':'Your Final Expense Plan — No Medical Exam Required',
+    'Mortgage Protection':'Protect Your Home — Mortgage Protection Options',
+    'Fixed Index Annuity':'Your FIA Quote — Guaranteed Growth, Zero Market Loss',
+    'Income Annuity':'Guaranteed Lifetime Income — Your Annuity Options'
+  };
+  const smsMsg=smsMsgs[l.policy]||'Hi '+l.fn+'! This is Willie from ShieldLife. I received your '+l.policy+' inquiry. Book a free call: '+CALENDLY+' Reply STOP to opt out.';
+  const emailSubj=emailSubjects[l.policy]||'Your '+l.policy+' Quote from ShieldLife Insurance';
+  nlog.unshift({ch:'sms',lead:l.fn+' '+l.ln,wf:l.leadType,msg:smsMsg,time:'Just now'});
+  nlog.unshift({ch:'email',lead:l.fn+' '+l.ln,wf:l.leadType,msg:'Subject: '+emailSubj,time:'Just now'});
+  acts.unshift({lead:l.fn+' '+l.ln,type:'⚡ '+l.policy+' Workflow',msg:l.policy+' workflow fired — policy-specific SMS + email sent',time:'Just now',color:'#4f6ef7'});
   l.ai=true;
-  showToast(`⚡ Workflow Fired`,`${l.fn} ${l.ln} — SMS + email sent now!`);
+  if(l.phone||l.email){
+    const ph=l.phone?('+1'+l.phone.replace(/\D/g,'')).replace('+11',''):null;
+    fetch('https://shieldlife-ai.washfordiii.workers.dev/',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'both',leadName:l.fn+' '+l.ln,leadPhone:ph,leadEmail:l.email||null,policy:l.policy,customMessage:null})
+    }).then(r=>r.json()).then(d=>{
+      showToast('Workflow Fired!',l.fn+' '+l.ln+' — '+l.policy+' SMS + email sent!');
+    }).catch(()=>{
+      showToast('Workflow Logged',l.fn+' '+l.ln+' — check worker credentials');
+    });
+  } else {
+    showToast('Workflow Fired',l.fn+' '+l.ln+' — '+l.policy+' workflow logged');
+  }
+  if(document.getElementById('tab-notifications')&&document.getElementById('tab-notifications').classList.contains('active'))rNotif();
 }
 
 function goAppt(id){
@@ -717,11 +891,12 @@ function checkFormLeads(){
   try{
     const pending=JSON.parse(localStorage.getItem('shieldlife_new_leads')||'[]');
     if(pending.length>0){
+      let added=0;
       pending.forEach(d=>{
-        const exists=leads.find(l=>l.em===d.email||l.ph===d.phone);
+        const exists=leads.find(l=>l.email===d.email||l.phone===d.phone);
         if(!exists){
           const nl={
-            id:leads.length+1,
+            id:Date.now()+Math.random(),
             fn:d.first_name||d.fn||'New',
             ln:d.last_name||d.ln||'Lead',
             email:d.email||d.em||'',
@@ -730,18 +905,42 @@ function checkFormLeads(){
             leadType:'inbound',
             age:d.age||'',
             cov:d.coverage_amount||'',
-            notes:'Auto-added from '+( d.form_type||'intake form')+'. '+( d.notes||''),
-            lc:'Just now',ai:true,pipe:'New Lead',val:'—'
+            notes:('From: '+(d.form_type||'online form')+'. '+(d.notes||'')).trim(),
+            lc:'Just now',ai:true,pipe:'New Lead',val:'—',
+            tcpa:d.tcpa_consent==='YES — agreed'||d.tcpa==='yes',
+            // Store ALL form data for detail view
+            address:d.address||'',
+            gender:d.gender||'',
+            marital:d.marital_status||'',
+            occ:d.occupation||'',
+            income:d.annual_income||'',
+            tobacco:d.tobacco||'',
+            height:d.height||'',
+            weight:d.weight||'',
+            hbp:d.high_blood_pressure||'',
+            diabetes:d.diabetes||'',
+            a1c:d.a1c||'',
+            heart:d.heart||'',
+            cancer:d.cancer||'',
+            medications:d.medications||d.medication_list||'',
+            beneficiary:d.beneficiary||'',
+            mortgage_balance:d.mortgage_balance||'',
+            formData:d  // store everything
           };
           leads.unshift(nl);
-          nlog.unshift({ch:'email',lead:nl.fn+' '+nl.ln,wf:'inbound',msg:'New lead added from form submission: '+nl.policy,time:'Just now'});
-          acts.unshift({lead:nl.fn+' '+nl.ln,type:'🌐 Form',msg:'New inbound lead from online form — added to CRM',time:'Just now',color:'#14b8a6'});
+          nlog.unshift({ch:'email',lead:nl.fn+' '+nl.ln,wf:'inbound',msg:'New '+nl.policy+' lead added from '+( d.form_type||'form'),time:'Just now'});
+          acts.unshift({lead:nl.fn+' '+nl.ln,type:'🌐 Form',msg:'New inbound '+nl.policy+' lead — auto-added from '+( d.form_type||'online form'),time:'Just now',color:'#14b8a6'});
+          added++;
+          // Auto-fire policy workflow for new form leads
+          setTimeout(()=>trigWF(nl.id),2000);
         }
       });
       localStorage.removeItem('shieldlife_new_leads');
-      rRecent();rlAll();
-      document.getElementById('st').textContent=leads.length;
-      if(pending.length>0)showToast('🌐 '+pending.length+' new lead(s) from form!','Added to All Leads automatically.');
+      if(added>0){
+        rRecent();rlAll();
+        document.getElementById('st').textContent=leads.length;
+        showToast('🌐 '+added+' new lead(s) added!','Policy-specific workflow firing automatically.');
+      }
     }
   }catch(e){console.log('Form lead check:',e);}
 }
